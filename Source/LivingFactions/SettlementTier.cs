@@ -33,6 +33,14 @@ namespace LivingFactions
         // Las tribus pelean en número: más oleadas, más pequeñas.
         public float[] tribalWaveThresholds = new float[0];
 
+        // Defensa distribuida: puestos en el perímetro (LordJob_DefendPoint) con esta fracción de la guarnición.
+        public int perimeterPosts;
+        public float perimeterShare = 0.4f;
+
+        // Torretas pesadas además de las mini torretas vanilla (solo tecnología industrial o más).
+        public int autocannons;
+        public int sniperTurrets;
+
         public float[] WaveThresholdsFor(FactionStyle style)
         {
             return style == FactionStyle.Tribal && tribalWaveThresholds.Length > 0 ? tribalWaveThresholds : waveThresholds;
@@ -67,7 +75,9 @@ namespace LivingFactions
             minBarracks = 2,
             garrisonShare = 0.6f,
             waveThresholds = new[] { 0.4f, 0.7f },
-            tribalWaveThresholds = new[] { 0.3f, 0.55f, 0.75f }
+            tribalWaveThresholds = new[] { 0.3f, 0.55f, 0.75f },
+            perimeterPosts = 2,
+            autocannons = 2
         };
 
         public static readonly TierData Capital = new TierData
@@ -82,7 +92,10 @@ namespace LivingFactions
             minBarracks = 3,
             garrisonShare = 0.4f,
             waveThresholds = new[] { 0.3f, 0.55f, 0.75f },
-            tribalWaveThresholds = new[] { 0.25f, 0.45f, 0.6f, 0.75f }
+            tribalWaveThresholds = new[] { 0.25f, 0.45f, 0.6f, 0.75f },
+            perimeterPosts = 4,
+            autocannons = 6,
+            sniperTurrets = 3
         };
 
         public static TierData For(SettlementTier tier)
