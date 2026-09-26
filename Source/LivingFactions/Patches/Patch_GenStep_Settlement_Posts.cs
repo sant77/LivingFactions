@@ -20,6 +20,7 @@ namespace LivingFactions.Patches
         private const float PostWanderRadius = 5f;
         private const float PostDefendRadius = 14f;
         private const float RationNutrition = 4f;
+        private const int MinPawnsPerPost = 3;
 
         private static void Postfix(Map map)
         {
@@ -58,7 +59,13 @@ namespace LivingFactions.Patches
                 ? gateInsides.Select(g => StandableNear(map, g)).Where(c => c.IsValid).ToList()
                 : PostPositions(map, rect, data).ToList();
             int toMove = (int)(mainLord.ownedPawns.Count * data.perimeterShare);
-            if (posts.Count == 0 || toMove < posts.Count)
+            // Mínimo de pawns por puesto: si no alcanza para todos, se hacen menos puestos.
+            int maxPosts = toMove / MinPawnsPerPost;
+            if (maxPosts < posts.Count)
+            {
+                posts = posts.InRandomOrder().Take(maxPosts).ToList();
+            }
+            if (posts.Count == 0)
             {
                 return;
             }

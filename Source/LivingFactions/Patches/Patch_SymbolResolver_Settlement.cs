@@ -65,6 +65,12 @@ namespace LivingFactions.Patches
             if (data.walled && rp.rect.Width > WallMargin * 4 && rp.rect.Height > WallMargin * 4)
             {
                 pendingWallRect = rp.rect;
+                // Antes de construir: sin roca natural dentro (ni bajo la muralla), así nada queda cortado.
+                int rockCleared = FortBuildUtility.ClearNaturalRock(map, rp.rect.ExpandedBy(1));
+                if (Prefs.DevMode && rockCleared > 0)
+                {
+                    Log.Message($"[Living Factions] Roca despejada dentro de la muralla: {rockCleared} casillas.");
+                }
                 rp.rect = rp.rect.ContractedBy(WallMargin);
                 rp.edgeDefenseTurretsCount ??= 0;
                 // Ancho 3 como mínimo: con ancho 2 SymbolResolver_EdgeDefense fija los morteros en 0.

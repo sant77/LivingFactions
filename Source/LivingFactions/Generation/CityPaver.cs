@@ -27,7 +27,8 @@ namespace LivingFactions.Generation
                     avenue = Named("PackedDirt");
                     break;
                 case FactionStyle.Pirate:
-                    general = Named("Gravel");
+                    // La grava tiene casi el color de la tierra; el asfalto roto se nota y va con los piratas.
+                    general = Named("BrokenAsphalt") ?? Named("Gravel");
                     avenue = Named("Concrete");
                     break;
                 case FactionStyle.Empire:

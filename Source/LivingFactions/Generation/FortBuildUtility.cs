@@ -88,6 +88,30 @@ namespace LivingFactions.Generation
             }
         }
 
+        /// <summary>
+        /// Ciudad excavada en la colina: quita la roca natural y el techo de montaña dentro del área, para que
+        /// los edificios y la muralla ocupen ese espacio en vez de quedar cortados. Devuelve las casillas despejadas.
+        /// </summary>
+        public static int ClearNaturalRock(Map map, CellRect area)
+        {
+            int cleared = 0;
+            foreach (IntVec3 c in area.ClipInsideMap(map))
+            {
+                Building edifice = c.GetEdifice(map);
+                if (edifice != null && edifice.def.mineable)
+                {
+                    edifice.Destroy(DestroyMode.Vanish);
+                    cleared++;
+                }
+                RoofDef roof = c.GetRoof(map);
+                if (roof != null && roof.isThickRoof)
+                {
+                    map.roofGrid.SetRoof(c, null);
+                }
+            }
+            return cleared;
+        }
+
         public static bool IsNaturalRock(Map map, IntVec3 c)
         {
             Building edifice = c.GetEdifice(map);
