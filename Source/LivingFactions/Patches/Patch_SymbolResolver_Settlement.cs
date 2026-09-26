@@ -49,6 +49,18 @@ namespace LivingFactions.Patches
                 BaseGen.globalSettings.minBarracks = data.minBarracks;
             }
 
+            MapComponent_SettlementInfo info = BaseGen.globalSettings.map.GetComponent<MapComponent_SettlementInfo>();
+            if (info != null)
+            {
+                info.generated = true;
+                info.tier = tier.Value;
+                info.defenderPoints = rp.settlementPawnGroupPoints ?? 0f;
+                info.size = new IntVec2(rp.rect.Width, rp.rect.Height);
+                info.turrets = rp.edgeDefenseTurretsCount ?? 0;
+                info.mortars = rp.edgeDefenseMortarsCount ?? 0;
+                info.guards = rp.edgeDefenseGuardsCount ?? 0;
+            }
+
             if (Prefs.DevMode)
             {
                 Log.Message($"[Living Factions] Generando {tier.Value} de {rp.faction?.Name}: " +

@@ -39,6 +39,10 @@ directamente lo que compilas. Se activa en el menú Mods, después de Harmony.
 Con el modo desarrollador activo: menú de depuración → **Living Factions → List settlement tiers**
 escribe en el log todos los asentamientos con su rango.
 
+**Living Factions → Measure performance (30 s)** mide durante 30 segundos reales el TPS, el tiempo
+por tick, los pawns del mapa y los datos de la base, y lo escribe en `Player.log`
+(`%USERPROFILE%\AppData\LocalLow\Ludeon Studios\RimWorld by Ludeon Studios\`).
+
 ## Flujo de ramas
 
 ```

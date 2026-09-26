@@ -26,5 +26,11 @@ namespace LivingFactions
             }
             Log.Message(sb.ToString());
         }
+
+        [DebugAction("Living Factions", "Measure performance (30 s)", actionType = DebugActionType.Action, allowedGameStates = AllowedGameStates.PlayingOnMap)]
+        private static void MeasurePerformance()
+        {
+            PerformanceMeter.Start();
+        }
     }
 }
