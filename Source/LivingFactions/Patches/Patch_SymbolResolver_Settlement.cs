@@ -48,6 +48,15 @@ namespace LivingFactions.Patches
             {
                 BaseGen.globalSettings.minBarracks = data.minBarracks;
             }
+
+            if (Prefs.DevMode)
+            {
+                Log.Message($"[Living Factions] Generando {tier.Value} de {rp.faction?.Name}: " +
+                    $"tamaño {rp.rect.Width}x{rp.rect.Height}, defensores {rp.settlementPawnGroupPoints:F0} pts, " +
+                    $"botín {rp.lootMarketValue:F0}, perímetro {rp.edgeDefenseWidth?.ToString() ?? "vanilla"}, " +
+                    $"torretas {rp.edgeDefenseTurretsCount?.ToString() ?? "vanilla"}, morteros {rp.edgeDefenseMortarsCount?.ToString() ?? "vanilla"}, " +
+                    $"guardias {rp.edgeDefenseGuardsCount ?? 0}");
+            }
         }
     }
 }
