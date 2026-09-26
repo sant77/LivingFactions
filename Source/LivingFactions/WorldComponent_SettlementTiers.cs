@@ -54,10 +54,19 @@ namespace LivingFactions
             return faction != null && !faction.IsPlayer;
         }
 
-        /// <summary>Rango del asentamiento, o null si no aplica (jugador, sitio, etc.).</summary>
+        /// <summary>
+        /// Solo bases en la superficie. Las orbitales (Odyssey, ej. Gremio de Comerciantes) usan otro
+        /// generador de mapas (SettlementPlatform) que los parches de la Fase 1 no modifican.
+        /// </summary>
+        public static bool IsEligible(Settlement settlement)
+        {
+            return settlement != null && IsEligible(settlement.Faction) && settlement.Tile.Layer.IsRootSurface;
+        }
+
+        /// <summary>Rango del asentamiento, o null si no aplica (jugador, órbita, sitio, etc.).</summary>
         public SettlementTier? TierOf(Settlement settlement)
         {
-            if (settlement == null || !IsEligible(settlement.Faction))
+            if (!IsEligible(settlement))
             {
                 return null;
             }
@@ -81,12 +90,13 @@ namespace LivingFactions
 
         private static IEnumerable<Settlement> SettlementsOf(Faction faction)
         {
-            return Find.WorldObjects.Settlements.Where(s => s.Faction == faction);
+            return Find.WorldObjects.Settlements.Where(s => s.Faction == faction && IsEligible(s));
         }
 
         private void RemoveMissingSettlements()
         {
-            HashSet<int> alive = new HashSet<int>(Find.WorldObjects.Settlements.Select(s => s.ID));
+            // También limpia rangos que partidas anteriores asignaron a bases orbitales.
+            HashSet<int> alive = new HashSet<int>(Find.WorldObjects.Settlements.Where(IsEligible).Select(s => s.ID));
             foreach (int id in tiers.Keys.Where(id => !alive.Contains(id)).ToList())
             {
                 tiers.Remove(id);

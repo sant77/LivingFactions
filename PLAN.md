@@ -47,6 +47,9 @@ Cada asentamiento NPC tiene un **rango**.
   - Piratas: fortaleza caótica con trampas.
   - Imperio: salas del trono, pistas de aterrizaje, guardia cataphract.
 - Opciones: activar/desactivar, multiplicador de defensores y botín, máximo de ciudades.
+- **Solo bases en la superficie.** Las bases orbitales de Odyssey (ej. Gremio de Comerciantes)
+  usan otro generador (`SettlementPlatform`) y quedan como en vanilla. Sus rangos propios se harán
+  junto con el mod compañero de naves capitales.
 
 **Estado:**
 - [x] Rangos, tamaño, defensores, botín y perímetro.
@@ -160,7 +163,8 @@ buen ánimo. Boost **fuerte** en negociaciones.
 
 ### Naves capitales
 
-Gravships de Odyssey como capital móvil de una facción.
+Gravships de Odyssey como capital móvil de una facción. Incluye rangos para las bases orbitales
+(plataformas más grandes y mejor defendidas).
 
 ---
 
