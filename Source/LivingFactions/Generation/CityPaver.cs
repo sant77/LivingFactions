@@ -65,6 +65,7 @@ namespace LivingFactions.Generation
                 if (floor != null && c.InBounds(map) && CanPave(map, c))
                 {
                     RemoveWildPlants(map, c);
+                    // Si hay un puente (cimiento en 1.6), el suelo se pone encima y el puente lo sostiene.
                     map.terrainGrid.SetTerrain(c, floor);
                     paved++;
                 }
@@ -95,15 +96,24 @@ namespace LivingFactions.Generation
             return "Sandstone";
         }
 
-        /// <summary>Solo terreno natural transitable, sin edificios ni cultivos.</summary>
+        /// <summary>
+        /// Exterior sin edificios ni cultivos: terreno natural (salvo agua profunda o intransitable), las calles
+        /// que pone BaseGen y los puentes sobre pantano o barro. Así queda un solo material general.
+        /// Bajo los edificios no se toca: conservan sus suelos.
+        /// </summary>
         private static bool CanPave(Map map, IntVec3 c)
         {
-            if (c.GetEdifice(map) != null)
+            if (c.GetEdifice(map) != null || c.Roofed(map))
             {
                 return false;
             }
             TerrainDef terrain = c.GetTerrain(map);
-            if (!terrain.natural || terrain.IsWater || terrain.passability != Traversability.Standable)
+            if (terrain.passability == Traversability.Impassable)
+            {
+                return false;
+            }
+            // Agua sin puente debajo: no se pavimenta.
+            if (terrain.IsWater && map.terrainGrid.FoundationAt(c) == null)
             {
                 return false;
             }

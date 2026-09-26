@@ -144,6 +144,13 @@ Cada asentamiento NPC tiene un **rango**.
 - [ ] **Fortificaciones por estilo** — traza italiana implementada (falta probar): plantillas en
   `Defs/FortPieceDefs` (`FortPieceDef`, se editan sin C#), herramienta "Generate test base" para
   inspeccionar. Pendiente: empalizada, pukará, ciudadela.
+  - Suelos: `CityPaver` (avenidas desde los portones, plaza central, pavimento por facción). Prueba:
+    mejor que la tierra, pero desorganizado: se mezclaban calles vanilla, puentes sobre pantano y el
+    pavimento nuevo, y la capital cayó sobre montaña. Corregido: pavimento unificado sobre calles y
+    puentes; ciudades y capitales evitan sitios con más del 15 % de roca (filtro tolerante); mini
+    torreta donde no alcanza la pesada.
+  - **Siguiente: distritos con cuadrícula de calles** (Palmanova, Muller): primero las calles y
+    después los edificios en manzanas, en vez de la partición aleatoria de BaseGen.
   (inspiración del usuario, imágenes en `Inspiracion/`, no se suben):
   - **Traza italiana** (Palmanova, Charleville, Pamplona, Muller) para industriales o más:
     - Baluartes en punta con torretas en los flancos (fuego a lo largo del muro): son los puntos fuertes.

@@ -104,9 +104,19 @@ namespace LivingFactions.Generation
                 }
                 else
                 {
+                    // Sin torreta pesada disponible: una mini torreta en la esquina más exterior y muro en el resto.
+                    IntVec3 outer = block.Cells.MaxBy(c => c.DistanceToSquared(anchor));
+                    bool mini = hasTurrets && FortBuildUtility.TrySpawn(map, ThingDefOf.Turret_MiniTurret, null, outer, Rot4.North, faction);
+                    if (mini)
+                    {
+                        footprint.miniTurrets++;
+                    }
                     foreach (IntVec3 c in block)
                     {
-                        FortBuildUtility.TrySpawn(map, ThingDefOf.Wall, wallStuff, c, Rot4.North, faction);
+                        if (!mini || c != outer)
+                        {
+                            FortBuildUtility.TrySpawn(map, ThingDefOf.Wall, wallStuff, c, Rot4.North, faction);
+                        }
                     }
                 }
                 foreach (IntVec3 c in block)
