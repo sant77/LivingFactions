@@ -11,10 +11,12 @@ namespace LivingFactions
         public float lootMultiplier = 1f;
         public int maxCitiesPerFaction = 3;
         public bool showTierInInspect = true;
+        public bool autoMeasure = true;
 
         public override void ExposeData()
         {
             base.ExposeData();
+            Scribe_Values.Look(ref autoMeasure, "autoMeasure", true);
             Scribe_Values.Look(ref enabled, "enabled", true);
             Scribe_Values.Look(ref defenderMultiplier, "defenderMultiplier", 1f);
             Scribe_Values.Look(ref lootMultiplier, "lootMultiplier", 1f);
@@ -60,6 +62,12 @@ namespace LivingFactions
 
             list.Gap();
             list.Label("LF_Settings_ExistingNote".Translate());
+
+            if (Prefs.DevMode)
+            {
+                list.Gap();
+                list.CheckboxLabeled("LF_Settings_AutoMeasure".Translate(), ref Settings.autoMeasure, "LF_Settings_AutoMeasure_Desc".Translate());
+            }
 
             list.End();
         }

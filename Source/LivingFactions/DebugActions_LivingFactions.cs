@@ -30,7 +30,10 @@ namespace LivingFactions
         [DebugAction("Living Factions", "Measure performance (30 s)", actionType = DebugActionType.Action, allowedGameStates = AllowedGameStates.PlayingOnMap)]
         private static void MeasurePerformance()
         {
-            PerformanceMeter.Start();
+            if (!PerformanceMeter.Start(Find.CurrentMap, "manual"))
+            {
+                Messages.Message("[Living Factions] Ya hay una medición en curso.", RimWorld.MessageTypeDefOf.RejectInput, false);
+            }
         }
     }
 }

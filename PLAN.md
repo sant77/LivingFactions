@@ -64,8 +64,14 @@ Cada asentamiento NPC tiene un **rango**.
 **Rediseño de la defensa (siguiente paso):**
 - **Refuerzos por oleadas** (propuesta del usuario): en ciudades y capitales no están todos los
   defensores desde el inicio. Una guarnición inicial defiende, y el resto llega en oleadas durante
-  el asalto. Reduce el lag y hace el asalto más interesante. Detalles por definir: de dónde salen,
-  qué dispara cada oleada y cuántas hay.
+  el asalto. Reduce el lag y hace el asalto más interesante. Decidido:
+  - **Origen mixto según la facción:** desde los cuarteles (tropas de dentro) o desde el borde del
+    mapa (refuerzos de otras bases).
+  - **Disparo por pérdidas:** cada oleada llega cuando la guarnición pierde cierto % de defensores.
+  - **Cantidades iniciales:** ciudad con guarnición del 60 % y 1–2 oleadas; capital con guarnición
+    del 40 % y 3 oleadas (la última de élite, guardia del líder).
+  - ⚠️ **Tribus:** su fortaleza es el número. El límite de pawns no debe quitarles eso: tendrán más
+    oleadas y/o un límite más alto con unidades baratas, en vez de menos pawns.
 - **Defensa distribuida:** en vanilla todos los defensores (también los guardias del perímetro)
   defienden el centro de la base (`LordJob_DefendBase` → `rp.rect.CenterCell`) y el perímetro
   queda vacío. Propuesta:

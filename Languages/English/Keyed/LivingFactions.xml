@@ -14,4 +14,6 @@
   <LF_Settings_LootMultiplier>Loot multiplier: {0}</LF_Settings_LootMultiplier>
   <LF_Settings_MaxCities>Max cities per faction: {0}</LF_Settings_MaxCities>
   <LF_Settings_ExistingNote>Ranks are assigned when the world is created, or the first time a save is loaded with the mod. Changing max cities only affects new worlds.</LF_Settings_ExistingNote>
+  <LF_Settings_AutoMeasure>(Testing) Automatically measure performance in NPC bases</LF_Settings_AutoMeasure>
+  <LF_Settings_AutoMeasure_Desc>Dev mode only. Measures 30 s when entering an NPC base and another 30 s when the defenders start their assault. Results go to Player.log.</LF_Settings_AutoMeasure_Desc>
 </LanguageData>

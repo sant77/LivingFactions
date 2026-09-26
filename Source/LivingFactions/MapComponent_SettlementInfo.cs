@@ -1,4 +1,6 @@
+using RimWorld;
 using Verse;
+using Verse.AI.Group;
 
 namespace LivingFactions
 {
@@ -16,8 +18,48 @@ namespace LivingFactions
         public int mortars;
         public int guards;
 
+        // Medición automática (solo modo desarrollador). No se guardan: se repite al recargar.
+        private int ticksOnMap;
+        private bool measuredCalm;
+        private bool measuredCombat;
+
         public MapComponent_SettlementInfo(Map map) : base(map)
         {
+        }
+
+        public override void MapComponentTick()
+        {
+            if (!generated || !Prefs.DevMode || !LivingFactionsMod.Settings.autoMeasure || (measuredCalm && measuredCombat))
+            {
+                return;
+            }
+            ticksOnMap++;
+            if (ticksOnMap % 250 != 0)
+            {
+                return;
+            }
+            if (!measuredCombat && DefendersAssaulting())
+            {
+                // Si la medición de calma sigue en curso, se reintenta en la siguiente comprobación.
+                measuredCombat = PerformanceMeter.Start(map, "combate");
+                measuredCalm = true;
+            }
+            else if (!measuredCalm && ticksOnMap >= 500)
+            {
+                measuredCalm = PerformanceMeter.Start(map, "calma, antes del combate");
+            }
+        }
+
+        private bool DefendersAssaulting()
+        {
+            foreach (Lord lord in map.lordManager.lords)
+            {
+                if (lord.LordJob is LordJob_DefendBase && lord.CurLordToil is LordToil_AssaultColony)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         public override void ExposeData()

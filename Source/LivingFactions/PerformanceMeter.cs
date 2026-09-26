@@ -28,19 +28,21 @@ namespace LivingFactions
         private static int pausedFrames;
         private static float targetTpsSum;
         private static Map measuredMap;
+        private static string measureLabel;
 
         public PerformanceMeter(Game game)
         {
         }
 
-        public static void Start()
+        /// <returns>false si ya había una medición en curso.</returns>
+        public static bool Start(Map map, string label)
         {
             if (Active)
             {
-                Messages.Message("[Living Factions] Ya hay una medición en curso.", MessageTypeDefOf.RejectInput, false);
-                return;
+                return false;
             }
-            measuredMap = Find.CurrentMap;
+            measuredMap = map;
+            measureLabel = label;
             ticks = 0;
             frames = 0;
             totalTickMs = 0;
@@ -49,7 +51,9 @@ namespace LivingFactions
             targetTpsSum = 0;
             startRealTime = Time.realtimeSinceStartup;
             Active = true;
-            Messages.Message($"[Living Factions] Midiendo rendimiento durante {DurationSeconds:F0} s. No pauses el juego.", MessageTypeDefOf.NeutralEvent, false);
+            Messages.Message($"[Living Factions] Midiendo rendimiento ({label}) durante {DurationSeconds:F0} s. No pauses el juego.", MessageTypeDefOf.NeutralEvent, false);
+            Log.Message($"[Living Factions] Inicio de medición ({label}) en {map?.Parent?.Label ?? "?"}.");
+            return true;
         }
 
         public override void GameComponentUpdate()
@@ -83,7 +87,7 @@ namespace LivingFactions
             float tps = ticks / elapsed;
 
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine("[Living Factions] ===== Medición de rendimiento =====");
+            sb.AppendLine($"[Living Factions] ===== Medición de rendimiento: {measureLabel} =====");
             sb.AppendLine($"Duración: {elapsed:F1} s reales, {frames} frames ({frames / elapsed:F0} FPS), pausado en {pausedFrames} frames");
             sb.AppendLine($"TPS real: {tps:F0} / objetivo {targetTps:F0} ({(targetTps > 0 ? tps / targetTps : 0f).ToStringPercent()})");
             sb.AppendLine($"Tiempo por tick: promedio {(ticks > 0 ? totalTickMs / ticks : 0):F2} ms, máximo {maxTickMs:F2} ms ({ticks} ticks)");
