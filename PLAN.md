@@ -51,11 +51,40 @@ Cada asentamiento NPC tiene un **rango**.
   usan otro generador (`SettlementPlatform`) y quedan como en vanilla. Sus rangos propios se harán
   junto con el mod compañero de naves capitales.
 
+**Resultados de las pruebas:**
+- Pueblo (Welthuu): igual a vanilla, como estaba previsto.
+- Ciudad pirata yttakin (53x52, 2833 pts): se siente la diferencia con un pueblo.
+- Capital del Imperio (77x82, 8506 pts): hay diferencia, pero:
+  - Solo hay mini torretas: vanilla fija el tipo en `SymbolResolver_EdgeDefense`
+    (`Turret_MiniTurret`).
+  - Hay lag, probablemente por la cantidad de pawns (50–70).
+  - Los defensores pasan al ataque total casi en cuanto hieres a uno (`LordJob_DefendBase`).
+- Corregido: los guardias del perímetro formaban un grupo aparte y huían solos.
+
+**Rediseño de la defensa (siguiente paso):**
+- **Refuerzos por oleadas** (propuesta del usuario): en ciudades y capitales no están todos los
+  defensores desde el inicio. Una guarnición inicial defiende, y el resto llega en oleadas durante
+  el asalto. Reduce el lag y hace el asalto más interesante. Detalles por definir: de dónde salen,
+  qué dispara cada oleada y cuántas hay.
+- **Torretas pesadas:** en ciudades y capitales, parte de las torretas pasan a autocañón
+  (`Turret_Autocannon`) y francotiradora (`Turret_Sniper`). Solo con tecnología industrial o mayor.
+- **Límite de pawns en el mapa:** los puntos que sobran se convierten en fortificaciones (torretas
+  pesadas, morteros, muros) o en oleadas.
+- **Calidad sobre cantidad:** preferir unidades élite en lugar de muchos soldados rasos.
+- **Opción de rendimiento** en los ajustes del mod.
+- **Medir antes y después** con Dubs Performance Analyzer (ya instalado).
+
 **Estado:**
 - [x] Rangos, tamaño, defensores, botín y perímetro.
 - [x] Opciones y acción de depuración.
-- [ ] Prueba en el juego y balance.
-- [ ] Estilo por facción y defensas de la capital.
+- [x] Pruebas de pueblo, ciudad y capital.
+- [ ] Rediseño de la defensa: oleadas, torretas pesadas, límite de pawns.
+- [ ] El líder de la facción vive en su capital y la defiende.
+- [ ] Rango visible en el mapa del mundo (icono o marca).
+- [ ] Estructura de la capital: muralla, portón o killbox, recinto central, distritos.
+- [ ] Habitaciones nuevas: prisión, armería, hospital, cuartel del líder.
+- [ ] Estilo por facción.
+- [ ] Botín único de capital.
 
 ### Fase 1.5 – Especialización e ideología de las bases
 
