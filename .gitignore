@@ -11,6 +11,7 @@ Source/**/obj/
 # Notas locales (lluvia de ideas y discusiones): solo en el PC
 IDEAS.md
 notas/
+Inspiracion/
 
 # Nunca subir código descompilado del juego
 **/RimWorldDecomp/
