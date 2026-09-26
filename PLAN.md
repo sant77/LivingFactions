@@ -127,7 +127,14 @@ de 1–2 activos y solo ocurre si la misión terminó sin muertes.
   - **Cierre forzado con tiempo de rescate:** si ya no queda ningún colono consciente en el mapa,
     empieza una cuenta atrás (por defecto 12 h de juego, ajustable), avisada con una carta. En ese
     tiempo el jugador puede enviar otra caravana o cápsulas para rescatarlos. Si nadie llega, el
-    mapa se cierra y los caídos pasan a ser prisioneros de esa base. Sin captura visible.
+    mapa se cierra y los caídos pasan a ser prisioneros de esa base.
+  - ⚠️ 12 h es demasiado: la mayoría moriría desangrada. Por definir entre 3–4 h, o 3–4 h con los
+    caídos estabilizados.
+  - **Mejora posterior: captura visible.** Los defensores cargan a los caídos a la prisión de la
+    base y los curan, pero solo cuando no hay combate cerca. Se basa en `JobGiver_Kidnap`,
+    `JobDriver_CarryDownedPawn` y `JobDriver_TendPatient`, más dos tareas nuevas en la duty
+    `DefendBase`. Se hace después de la habitación de prisión (Fase 1). Dificultad media:
+    ~300–400 líneas y 2–3 rondas de prueba.
   - El mod guarda **en qué base** está cada prisionero, y esa base se marca en el mapa del mundo.
   - Formas de recuperarlo:
     - Rescate pagado (requiere consola de comunicaciones).
