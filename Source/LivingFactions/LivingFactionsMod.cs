@@ -16,11 +16,13 @@ namespace LivingFactions
         public int maxActiveEnemies = 35;
         public int tribalExtraEnemies = 10;
         public float settlementAnimalFactor = 0.25f;
+        public float tribalPointsMultiplier = 1.5f;
 
         public override void ExposeData()
         {
             base.ExposeData();
             Scribe_Values.Look(ref settlementAnimalFactor, "settlementAnimalFactor", 0.25f);
+            Scribe_Values.Look(ref tribalPointsMultiplier, "tribalPointsMultiplier", 1.5f);
             Scribe_Values.Look(ref wavesEnabled, "wavesEnabled", true);
             Scribe_Values.Look(ref maxActiveEnemies, "maxActiveEnemies", 35);
             Scribe_Values.Look(ref tribalExtraEnemies, "tribalExtraEnemies", 10);
@@ -61,6 +63,9 @@ namespace LivingFactions
             list.Gap();
             list.Label("LF_Settings_DefenderMultiplier".Translate(Settings.defenderMultiplier.ToStringPercent()));
             Settings.defenderMultiplier = Mathf.Round(list.Slider(Settings.defenderMultiplier, 0.25f, 2f) * 20f) / 20f;
+
+            list.Label("LF_Settings_TribalPoints".Translate(Settings.tribalPointsMultiplier.ToStringPercent()), tooltip: "LF_Settings_TribalPoints_Desc".Translate());
+            Settings.tribalPointsMultiplier = Mathf.Round(list.Slider(Settings.tribalPointsMultiplier, 1f, 2.5f) * 20f) / 20f;
 
             list.Label("LF_Settings_LootMultiplier".Translate(Settings.lootMultiplier.ToStringPercent()));
             Settings.lootMultiplier = Mathf.Round(list.Slider(Settings.lootMultiplier, 0.25f, 2f) * 20f) / 20f;

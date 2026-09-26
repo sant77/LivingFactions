@@ -43,7 +43,9 @@ namespace LivingFactions.Generation
                 ? new List<int> { 0, 1, 2, 3 }
                 : (Rand.Bool ? new List<int> { 0, 1 } : new List<int> { 2, 3 }).Take(data.gates).ToList();
 
-            ThingDef securityDoor = ModsConfig.AnomalyActive ? DefDatabase<ThingDef>.GetNamedSilentFail("SecurityDoor") : null;
+            // La puerta de seguridad necesita energía: solo facciones industriales o más (si no, GenStep_Power
+            // pondría paneles solares y conductos en una base tribal).
+            ThingDef securityDoor = ModsConfig.AnomalyActive && hasTurrets ? DefDatabase<ThingDef>.GetNamedSilentFail("SecurityDoor") : null;
             HashSet<IntVec3> reserved = new HashSet<IntVec3>();
             List<IntVec3> gateInsides = new List<IntVec3>();
             List<(IntVec3 cell, Rot4 rot, Side side)> gates = new List<(IntVec3, Rot4, Side)>();

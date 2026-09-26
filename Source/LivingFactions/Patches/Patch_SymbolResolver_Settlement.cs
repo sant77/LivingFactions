@@ -37,8 +37,13 @@ namespace LivingFactions.Patches
             // Oleadas: solo si somos nosotros quienes fijamos los puntos (no una misión u otro mod).
             if (!rp.settlementPawnGroupPoints.HasValue)
             {
-                float totalPoints = data.defenderPoints.RandomInRange * settings.defenderMultiplier;
                 FactionStyle style = FactionStyleUtility.StyleOf(rp.faction ?? map.ParentFaction);
+                float totalPoints = data.defenderPoints.RandomInRange * settings.defenderMultiplier;
+                // Las tribus no tienen torretas ni morteros: su fuerza es el número.
+                if (style == FactionStyle.Tribal)
+                {
+                    totalPoints *= settings.tribalPointsMultiplier;
+                }
                 float[] thresholds = data.WaveThresholdsFor(style);
                 if (settings.wavesEnabled && thresholds.Length > 0 && data.garrisonShare < 1f && info != null)
                 {

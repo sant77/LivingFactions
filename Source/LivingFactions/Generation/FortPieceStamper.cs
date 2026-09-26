@@ -144,7 +144,8 @@ namespace LivingFactions.Generation
         private static void PlaceDoors(Map map, IEnumerable<IntVec3> doorCells, Faction faction, ThingDef wallStuff, FortFootprint footprint)
         {
             List<IntVec3> cells = doorCells.ToList();
-            ThingDef securityDoor = ModsConfig.AnomalyActive ? DefDatabase<ThingDef>.GetNamedSilentFail("SecurityDoor") : null;
+            bool industrial = faction != null && faction.def.techLevel >= TechLevel.Industrial;
+            ThingDef securityDoor = ModsConfig.AnomalyActive && industrial ? DefDatabase<ThingDef>.GetNamedSilentFail("SecurityDoor") : null;
             if (securityDoor != null && cells.Count == 2)
             {
                 CellRect pair = CellRect.FromLimits(cells[0], cells[1]);

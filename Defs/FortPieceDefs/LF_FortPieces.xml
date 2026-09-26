@@ -73,10 +73,10 @@
     <description>Portón con dos torretas y un revellín triangular delante: para llegar a la puerta hay que rodearlo bajo fuego cruzado.</description>
     <anchor>(7,9)</anchor>
     <rows>
-      <li>"      WWWW      "</li>
-      <li>"     WW..WW     "</li>
+      <li>"      WHHW      "</li>
+      <li>"     WWHHWW     "</li>
       <li>"    WW....WW    "</li>
-      <li>"  WTW......TWW  "</li>
+      <li>"  TWW......WWT  "</li>
       <li>" WW..........WW "</li>
       <li>"WW............WW"</li>
       <li>"W..............W"</li>
