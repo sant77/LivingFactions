@@ -4,6 +4,7 @@ using HarmonyLib;
 using RimWorld;
 using Verse;
 using Verse.AI.Group;
+using LivingFactions.AI;
 
 namespace LivingFactions.Patches
 {
@@ -17,6 +18,7 @@ namespace LivingFactions.Patches
     {
         private const float PostWanderRadius = 5f;
         private const float PostDefendRadius = 14f;
+        private const float RationNutrition = 4f;
 
         private static void Postfix(Map map)
         {
@@ -31,6 +33,12 @@ namespace LivingFactions.Patches
                 return;
             }
             Faction faction = map.ParentFaction;
+            int rationed = GiveRations(map, faction);
+            if (Prefs.DevMode)
+            {
+                Log.Message($"[Living Factions] Raciones para {rationed} defensores.");
+            }
+
             Lord mainLord = map.lordManager.lords
                 .Where(l => l.faction == faction && l.LordJob is LordJob_DefendBase)
                 .MaxByWithFallback(l => l.ownedPawns.Count);
@@ -61,13 +69,42 @@ namespace LivingFactions.Patches
                     mainLord.RemovePawn(pawn);
                     available.Remove(pawn);
                 }
-                LordMaker.MakeNewLord(faction, new LordJob_DefendPoint(post, PostWanderRadius, PostDefendRadius, addFleeToil: false), map, squad);
+                LordMaker.MakeNewLord(faction, new LordJob_LFPerimeterPost(post, PostDefendRadius, PostWanderRadius), map, squad);
             }
 
             if (Prefs.DevMode)
             {
                 Log.Message($"[Living Factions] Defensa distribuida: {posts.Count} puestos de ~{perPost} pawns, reserva central de {mainLord.ownedPawns.Count}.");
             }
+        }
+
+        /// <summary>
+        /// Raciones de unos 2 días por defensor (tribus: pemmican; resto: comida de supervivencia, no se pudre).
+        /// </summary>
+        private static int GiveRations(Map map, Faction faction)
+        {
+            ThingDef ration = FactionStyleUtility.StyleOf(faction) == FactionStyle.Tribal ? ThingDefOf.Pemmican : ThingDefOf.MealSurvivalPack;
+            float unitNutrition = ration?.GetStatValueAbstract(StatDefOf.Nutrition) ?? 0f;
+            if (unitNutrition <= 0f)
+            {
+                return 0;
+            }
+            int count = UnityEngine.Mathf.CeilToInt(RationNutrition / unitNutrition);
+            int rationed = 0;
+            foreach (Pawn pawn in map.mapPawns.SpawnedPawnsInFaction(faction))
+            {
+                if (!pawn.RaceProps.Humanlike || pawn.inventory == null || pawn.needs?.food == null)
+                {
+                    continue;
+                }
+                Thing food = ThingMaker.MakeThing(ration);
+                food.stackCount = count;
+                if (pawn.inventory.innerContainer.TryAdd(food))
+                {
+                    rationed++;
+                }
+            }
+            return rationed;
         }
 
         /// <summary>Punto medio de cada lado, un poco hacia dentro del perímetro defensivo.</summary>

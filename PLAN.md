@@ -122,6 +122,20 @@ Cada asentamiento NPC tiene un **rango**.
 - [ ] Rango visible en el mapa del mundo (icono o marca).
 - [ ] Estructura de la capital: muralla, portón o killbox, recinto central, distritos.
 - [ ] Habitaciones nuevas: prisión, armería, hospital, cuartel del líder.
+- [x] Puestos que salen a atacar y raciones (implementado, falta probar):
+  - Los puestos (`LordJob_LFPerimeterPost`) mantienen la posición, pero salen a atacar si hieren a
+    uno de ellos, si el jugador daña edificios de la base, si pierden un tercio, si tienen hambre
+    urgente o si el asedio dura más de 2 días.
+  - Vanilla: la orden de defensa incluye comer (`SatisfyBasicNeeds`, dentro de 16 casillas), pero los
+    defensores no tienen comida, así que se morían de hambre en asedios largos.
+  - Cada defensor de ciudad o capital lleva unos 2 días de raciones (tribus: pemmican; resto: comida
+    de supervivencia). Comen **solo** de sus raciones (`JobGiver_LFEatRation`), no del mapa.
+- [ ] Despensa central (con la infraestructura): única fuente de comida además de las raciones.
+  Destruirla o saquearla obliga a la guarnición a salir a pelear.
+- [ ] Escudo antimortero en la capital (con la infraestructura): edificio propio basado en
+  `CompProperties_ProjectileInterceptor` (como `ShieldGeneratorMortar` de Royalty, radio 25), siempre
+  activo y con consumo de energía. Contramedidas: EMP, destruirlo o cortarle la energía. Requiere los
+  gráficos de Royalty u Odyssey.
 - [ ] Energía por facción: químico (piratas), eólico (outlanders), geotérmico (capitales con
   géiser), molino (ríos). Central de energía protegida en el recinto central, que el jugador puede
   atacar para apagar las torretas. Vanilla: `GenStep_Power` conecta todo lo que necesita energía
