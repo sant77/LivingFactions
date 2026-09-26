@@ -136,6 +136,38 @@ Cada asentamiento NPC tiene un **rango**.
     vanilla. Portones: 2 en ciudades, 3–4 en capitales.
   - Recinto central, distritos y estilo por facción: de acuerdo.
   - Capital de ~110 en el mapa normal de 250 (primera prueba). Si hay lag, reducir más los animales.
+- [x] Muralla exterior (primera versión): capital ~110, bastiones con torretas en la línea del muro,
+  portones con puerta de seguridad, zona de tiro. Corregido: sin morteros con ancho de perímetro 2.
+  - Prueba: "ya va tomando forma de capital", pero **la muralla con torretas repartidas no es
+    eficiente**: 32 torretas en ~440 casillas, solo 2–3 disparan a la vez; se destruyen desde fuera de
+    su alcance; todo está en la primera línea.
+- [ ] **Fortificaciones por estilo** (inspiración del usuario, imágenes en `Inspiracion/`, no se suben):
+  - **Traza italiana** (Palmanova, Charleville, Pamplona, Muller) para industriales o más:
+    - Baluartes en punta con torretas en los flancos (fuego a lo largo del muro): son los puntos fuertes.
+    - Revellín delante de cada portón.
+    - Foso de agua poco profunda (ralentiza).
+    - Glacis (zona de tiro despejada).
+    - La ciudadela es el recinto central de la capital.
+    - Trazado interior en cuadrícula.
+    - Fuerte contra el asalto; débil contra la artillería y los zapadores.
+  - **Empalizada, estilo Ruapekapeka** (Māori, 1845), para tribus en bosque o llanura:
+    - 2–3 empalizadas de madera con trincheras (sacos o barricadas) detrás.
+    - Búnkeres con **techo grueso**: en vanilla un mortero que cae sobre techo grueso se destruye
+      sin daño (`Projectile.ImpactSomething`).
+    - Bosque conservado alrededor como cobertura.
+    - Fuerte contra el bombardeo; débil contra el fuego.
+  - **Pukará** (andino, incas, mapuche en la Guerra de Arauco), para tribus en terreno rocoso o
+    montañoso:
+    - Anillos concéntricos de **piedra local**; aprovecha la roca natural.
+    - Sin búnkeres.
+    - Fuerte contra el fuego y el asalto; débil contra la artillería.
+  - Tribus en general: trampas de púas (`TrapSpike`) en los accesos y terreno pantanoso.
+  - Por decidir: foso poco profundo o, en algunas capitales, profundo con puentes; búnkeres tribales
+    en todas las tribus o solo en capitales.
+  - **Inflamabilidad:** material según el estilo; las puertas de madera son un punto débil a evitar
+    o a dejar a propósito.
+  - Además (acordado): segunda línea de torretas, reacción garantizada al atacar un punto fuerte y
+    tiradores de largo alcance en los puntos fuertes.
 - [ ] Energía: los generadores de leña duran ~3.4 días (75 de leña, 22/día). BaseGen los llena una vez
   (`refuel`) y nadie los recarga. Decidido: que no se acabe tan fácil. **Mezcla de fuentes** (solar y
   eólica con baterías, que no se agotan, más algunos generadores de combustible), **almacén de
