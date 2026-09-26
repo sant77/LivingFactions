@@ -61,7 +61,8 @@ namespace LivingFactions.Patches
                 pendingWallRect = rp.rect;
                 rp.rect = rp.rect.ContractedBy(WallMargin);
                 rp.edgeDefenseTurretsCount ??= 0;
-                rp.edgeDefenseWidth ??= 2;
+                // Ancho 3 como mínimo: con ancho 2 SymbolResolver_EdgeDefense fija los morteros en 0.
+                rp.edgeDefenseWidth ??= 3;
             }
 
             if (data.edgeDefenseWidth.HasValue)
