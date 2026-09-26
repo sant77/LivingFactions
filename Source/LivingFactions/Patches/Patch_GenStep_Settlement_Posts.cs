@@ -34,6 +34,11 @@ namespace LivingFactions.Patches
                 return;
             }
             Faction faction = map.ParentFaction;
+            if (data.walled)
+            {
+                MapGenerator.TryGetVar(OuterWallBuilder.GateInsidesVar, out List<IntVec3> gates);
+                CityPaver.Pave(map, rect.ContractedBy(1), faction, gates ?? new List<IntVec3>());
+            }
             int rationed = GiveRations(map, faction);
             if (Prefs.DevMode)
             {

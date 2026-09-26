@@ -75,7 +75,8 @@ namespace LivingFactions
         public static readonly TierData City = new TierData
         {
             size = new IntRange(50, 60),
-            defenderPoints = new FloatRange(2500f, 4000f),
+            // 2300–3600 (antes 2500–4000): compensa las 4 torretas pesadas.
+            defenderPoints = new FloatRange(2300f, 3600f),
             lootMarketValue = 4000f,
             edgeDefenseWidth = 4,
             cellsPerTurret = 20,
@@ -86,7 +87,7 @@ namespace LivingFactions
             waveThresholds = new[] { 0.4f, 0.7f },
             tribalWaveThresholds = new[] { 0.3f, 0.55f, 0.75f },
             perimeterPosts = 2,
-            autocannons = 2,
+            autocannons = 4,
             walled = true,
             gates = 2,
             bastionPiece = "LF_Bastion_Small"

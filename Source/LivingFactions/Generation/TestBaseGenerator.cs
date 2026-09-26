@@ -33,6 +33,11 @@ namespace LivingFactions.Generation
                 };
                 BaseGen.symbolStack.Push("settlement", rp);
                 BaseGen.Generate();
+                if (data.walled)
+                {
+                    MapGenerator.TryGetVar(OuterWallBuilder.GateInsidesVar, out System.Collections.Generic.List<IntVec3> gates);
+                    CityPaver.Pave(map, rect.ContractedBy(1), faction, gates ?? new System.Collections.Generic.List<IntVec3>());
+                }
             }
             finally
             {
