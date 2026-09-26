@@ -1,4 +1,6 @@
 using HarmonyLib;
+using LivingFactions.Generation;
+using RimWorld;
 using RimWorld.BaseGen;
 using Verse;
 
@@ -11,8 +13,15 @@ namespace LivingFactions.Patches
     [HarmonyPatch(typeof(SymbolResolver_Settlement), nameof(SymbolResolver_Settlement.Resolve))]
     public static class Patch_SymbolResolver_Settlement
     {
+        // Muralla: casillas entre la muralla y el resto de la base (pasillo interior).
+        private const int WallMargin = 3;
+
+        // Rectángulo completo de la base (con muralla) pendiente de construir en el Postfix.
+        private static CellRect? pendingWallRect;
+
         private static void Prefix(ref ResolveParams rp)
         {
+            pendingWallRect = null;
             SettlementTier? tier = WorldComponent_SettlementTiers.TierOfMap(BaseGen.globalSettings.map);
             if (!tier.HasValue)
             {
@@ -44,6 +53,17 @@ namespace LivingFactions.Patches
             }
             rp.lootMarketValue ??= data.lootMarketValue * settings.lootMultiplier;
 
+            // Muralla: el resto de la base se genera dentro; las torretas van en los bastiones de la
+            // muralla (detrás de un muro no verían nada) y el perímetro vanilla queda como línea interior de sacos.
+            CellRect fullRect = rp.rect;
+            if (data.walled && rp.rect.Width > WallMargin * 4 && rp.rect.Height > WallMargin * 4)
+            {
+                pendingWallRect = rp.rect;
+                rp.rect = rp.rect.ContractedBy(WallMargin);
+                rp.edgeDefenseTurretsCount ??= 0;
+                rp.edgeDefenseWidth ??= 2;
+            }
+
             if (data.edgeDefenseWidth.HasValue)
             {
                 rp.edgeDefenseWidth ??= data.edgeDefenseWidth.Value;
@@ -74,7 +94,7 @@ namespace LivingFactions.Patches
                 info.generated = true;
                 info.tier = tier.Value;
                 info.defenderPoints = rp.settlementPawnGroupPoints ?? 0f;
-                info.size = new IntVec2(rp.rect.Width, rp.rect.Height);
+                info.size = new IntVec2(fullRect.Width, fullRect.Height);
                 info.turrets = rp.edgeDefenseTurretsCount ?? 0;
                 info.mortars = rp.edgeDefenseMortarsCount ?? 0;
                 info.guards = rp.edgeDefenseGuardsCount ?? 0;
@@ -83,11 +103,28 @@ namespace LivingFactions.Patches
             if (Prefs.DevMode)
             {
                 Log.Message($"[Living Factions] Generando {tier.Value} de {rp.faction?.Name}: " +
-                    $"tamaño {rp.rect.Width}x{rp.rect.Height}, defensores {rp.settlementPawnGroupPoints:F0} pts, " +
+                    $"tamaño {fullRect.Width}x{fullRect.Height}{(pendingWallRect.HasValue ? " con muralla" : "")}, defensores {rp.settlementPawnGroupPoints:F0} pts, " +
                     $"botín {rp.lootMarketValue:F0}, perímetro {rp.edgeDefenseWidth?.ToString() ?? "vanilla"}, " +
                     $"torretas {rp.edgeDefenseTurretsCount?.ToString() ?? "vanilla"}, morteros {rp.edgeDefenseMortarsCount?.ToString() ?? "vanilla"}, " +
                     $"guardias {rp.edgeDefenseGuardsCount ?? 0}" +
                     (info != null && info.TotalWaves > 0 ? $", oleadas {info.TotalWaves} x {info.pointsPerWave:F0} pts ({info.style})" : ""));
+            }
+        }
+
+        private static void Postfix(ResolveParams rp)
+        {
+            if (!pendingWallRect.HasValue)
+            {
+                return;
+            }
+            CellRect wallRect = pendingWallRect.Value;
+            pendingWallRect = null;
+            Map map = BaseGen.globalSettings.map;
+            SettlementTier? tier = WorldComponent_SettlementTiers.TierOfMap(map);
+            if (tier.HasValue)
+            {
+                // Se construye ya, antes de que se resuelvan los símbolos del interior (que usan el rectángulo reducido).
+                OuterWallBuilder.Build(map, wallRect, rp.faction ?? map.ParentFaction, TierData.For(tier.Value));
             }
         }
     }

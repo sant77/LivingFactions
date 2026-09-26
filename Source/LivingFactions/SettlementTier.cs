@@ -37,6 +37,12 @@ namespace LivingFactions
         public int perimeterPosts;
         public float perimeterShare = 0.4f;
 
+        // Muralla exterior con portones, parapetos de sacos de arena y bastiones con torretas en la línea
+        // del muro (las paredes bloquean la línea de visión, así que las torretas no van detrás).
+        public bool walled;
+        public int gates;
+        public int bastionSpacing = 14;
+
         // Torretas pesadas además de las mini torretas vanilla (solo tecnología industrial o más).
         public int autocannons;
         public int sniperTurrets;
@@ -77,12 +83,14 @@ namespace LivingFactions
             waveThresholds = new[] { 0.4f, 0.7f },
             tribalWaveThresholds = new[] { 0.3f, 0.55f, 0.75f },
             perimeterPosts = 2,
-            autocannons = 2
+            autocannons = 2,
+            walled = true,
+            gates = 2
         };
 
         public static readonly TierData Capital = new TierData
         {
-            size = new IntRange(76, 88),
+            size = new IntRange(106, 114),
             defenderPoints = new FloatRange(6000f, 9000f),
             lootMarketValue = 9000f,
             edgeDefenseWidth = 6,
@@ -95,7 +103,9 @@ namespace LivingFactions
             tribalWaveThresholds = new[] { 0.25f, 0.45f, 0.6f, 0.75f },
             perimeterPosts = 4,
             autocannons = 6,
-            sniperTurrets = 3
+            sniperTurrets = 3,
+            walled = true,
+            gates = 4
         };
 
         public static TierData For(SettlementTier tier)

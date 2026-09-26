@@ -5,6 +5,7 @@ using RimWorld;
 using Verse;
 using Verse.AI.Group;
 using LivingFactions.AI;
+using LivingFactions.Generation;
 
 namespace LivingFactions.Patches
 {
@@ -47,7 +48,10 @@ namespace LivingFactions.Patches
                 return;
             }
 
-            List<IntVec3> posts = PostPositions(map, rect, data).ToList();
+            // Con muralla, los puestos van a las zonas de concentración detrás de cada portón.
+            List<IntVec3> posts = MapGenerator.TryGetVar(OuterWallBuilder.GateInsidesVar, out List<IntVec3> gateInsides) && gateInsides.Count > 0
+                ? gateInsides.Select(g => StandableNear(map, g)).Where(c => c.IsValid).ToList()
+                : PostPositions(map, rect, data).ToList();
             int toMove = (int)(mainLord.ownedPawns.Count * data.perimeterShare);
             if (posts.Count == 0 || toMove < posts.Count)
             {
@@ -105,6 +109,11 @@ namespace LivingFactions.Patches
                 }
             }
             return rationed;
+        }
+
+        private static IntVec3 StandableNear(Map map, IntVec3 cell)
+        {
+            return CellFinder.TryFindRandomCellNear(cell, map, 4, c => c.Standable(map), out IntVec3 result) ? result : IntVec3.Invalid;
         }
 
         /// <summary>Punto medio de cada lado, un poco hacia dentro del perímetro defensivo.</summary>

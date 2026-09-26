@@ -135,10 +135,13 @@ Cada asentamiento NPC tiene un **rango**.
   - Ciudades: muralla y portones, **sin recinto central**. Pueblos y puestos avanzados: como en
     vanilla. Portones: 2 en ciudades, 3–4 en capitales.
   - Recinto central, distritos y estilo por facción: de acuerdo.
-  - Por decidir: tamaño de la capital (propuesta ~100–110 en el mapa de 250) y si su mapa se agranda.
+  - Capital de ~110 en el mapa normal de 250 (primera prueba). Si hay lag, reducir más los animales.
 - [ ] Energía: los generadores de leña duran ~3.4 días (75 de leña, 22/día). BaseGen los llena una vez
-  (`refuel`) y nadie los recarga. Propuesta: solo fuentes sin combustible en ciudades y capitales;
-  el combustible como debilidad a propósito en facciones pobres. Por decidir.
+  (`refuel`) y nadie los recarga. Decidido: que no se acabe tan fácil. **Mezcla de fuentes** (solar y
+  eólica con baterías, que no se agotan, más algunos generadores de combustible), **almacén de
+  combustible** en la base y la reserva central **recarga** los generadores cuando bajan (tarea de
+  recarga vanilla; costo de rendimiento insignificante). Destruir el almacén apaga solo los de
+  combustible.
 - [ ] Habitaciones nuevas: prisión, armería, hospital, cuartel del líder.
 - [x] Puestos que salen a atacar y raciones (probado):
   - Los puestos (`LordJob_LFPerimeterPost`) mantienen la posición, pero salen a atacar si hieren a

@@ -33,6 +33,11 @@ namespace LivingFactions.Patches
                 return;
             }
             TierData data = TierData.For(tier.Value);
+            if (data.walled)
+            {
+                // Con muralla, las torretas pesadas van en los bastiones (OuterWallBuilder).
+                return;
+            }
             Faction faction = rp.faction ?? BaseGen.globalSettings.map.ParentFaction;
             if (faction == null || faction.def.techLevel < TechLevel.Industrial)
             {
