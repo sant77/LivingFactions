@@ -20,24 +20,29 @@ namespace LivingFactions.Generation
             string localStone = LocalStoneName(map, inner.CenterCell);
             TerrainDef general;
             TerrainDef avenue;
+            TerrainDef indoor;
             switch (style)
             {
                 case FactionStyle.Tribal:
                     general = null;
                     avenue = Named("PackedDirt");
+                    indoor = Named("StrawMatting");
                     break;
                 case FactionStyle.Pirate:
                     // La grava tiene casi el color de la tierra; el asfalto roto se nota y va con los piratas.
                     general = Named("BrokenAsphalt") ?? Named("Gravel");
                     avenue = Named("Concrete");
+                    indoor = Named("Concrete");
                     break;
                 case FactionStyle.Empire:
                     general = Named("Tile" + localStone) ?? Named("TileSandstone");
                     avenue = Named("TileMarble") ?? Named("PavedTile");
+                    indoor = general;
                     break;
                 default:
                     general = Named("Flagstone" + localStone) ?? Named("FlagstoneSandstone");
                     avenue = Named("PavedTile");
+                    indoor = Named("WoodPlankFloor");
                     break;
             }
 
@@ -62,8 +67,14 @@ namespace LivingFactions.Generation
             int paved = 0;
             foreach (IntVec3 c in inner)
             {
-                TerrainDef floor = avenueCells.Contains(c) ? avenue : general;
-                if (floor != null && c.InBounds(map) && CanPave(map, c))
+                if (!c.InBounds(map))
+                {
+                    continue;
+                }
+                // Dentro de los edificios (techo construido): suelo de interior donde BaseGen dejó tierra.
+                bool indoors = c.Roofed(map);
+                TerrainDef floor = indoors ? indoor : avenueCells.Contains(c) ? avenue : general;
+                if (floor != null && CanPave(map, c, indoors))
                 {
                     RemoveWildPlants(map, c);
                     // Si hay un puente (cimiento en 1.6), el suelo se pone encima y el puente lo sostiene.
@@ -73,7 +84,7 @@ namespace LivingFactions.Generation
             }
             if (Prefs.DevMode)
             {
-                Log.Message($"[Living Factions] Suelos: {paved} casillas ({general?.defName ?? "tierra natural"}, avenidas {avenue?.defName}).");
+                Log.Message($"[Living Factions] Suelos: {paved} casillas ({general?.defName ?? "tierra natural"}, avenidas {avenue?.defName}, interiores {indoor?.defName}).");
             }
         }
 
@@ -102,13 +113,19 @@ namespace LivingFactions.Generation
         /// que pone BaseGen y los puentes sobre pantano o barro. Así queda un solo material general.
         /// Bajo los edificios no se toca: conservan sus suelos.
         /// </summary>
-        private static bool CanPave(Map map, IntVec3 c)
+        private static bool CanPave(Map map, IntVec3 c, bool indoors)
         {
-            if (c.GetEdifice(map) != null || c.Roofed(map))
+            RoofDef roof = c.GetRoof(map);
+            if (c.GetEdifice(map) != null || (roof != null && roof.isThickRoof))
             {
                 return false;
             }
             TerrainDef terrain = c.GetTerrain(map);
+            // Dentro, solo donde no hay suelo construido (las habitaciones con suelo lo conservan).
+            if (indoors && !terrain.natural)
+            {
+                return false;
+            }
             if (terrain.passability == Traversability.Impassable)
             {
                 return false;
