@@ -26,6 +26,7 @@ namespace LivingFactions
         private static double totalTickMs;
         private static double maxTickMs;
         private static int pausedFrames;
+        private static float runningRealTime;
         private static float targetTpsSum;
         private static Map measuredMap;
         private static string measureLabel;
@@ -48,6 +49,7 @@ namespace LivingFactions
             totalTickMs = 0;
             maxTickMs = 0;
             pausedFrames = 0;
+            runningRealTime = 0f;
             targetTpsSum = 0;
             startRealTime = Time.realtimeSinceStartup;
             Active = true;
@@ -70,6 +72,7 @@ namespace LivingFactions
             }
             else
             {
+                runningRealTime += Time.unscaledDeltaTime;
                 targetTpsSum += 60f * tm.TickRateMultiplier;
             }
             if (Time.realtimeSinceStartup - startRealTime >= DurationSeconds)
@@ -84,11 +87,12 @@ namespace LivingFactions
             float elapsed = Time.realtimeSinceStartup - startRealTime;
             int runningFrames = frames - pausedFrames;
             float targetTps = runningFrames > 0 ? targetTpsSum / runningFrames : 0f;
-            float tps = ticks / elapsed;
+            // Solo el tiempo sin pausa: con el juego pausado no hay ticks.
+            float tps = runningRealTime > 0f ? ticks / runningRealTime : 0f;
 
             StringBuilder sb = new StringBuilder();
             sb.AppendLine($"[Living Factions] ===== Medición de rendimiento: {measureLabel} =====");
-            sb.AppendLine($"Duración: {elapsed:F1} s reales, {frames} frames ({frames / elapsed:F0} FPS), pausado en {pausedFrames} frames");
+            sb.AppendLine($"Duración: {elapsed:F1} s reales, {frames} frames ({frames / elapsed:F0} FPS), pausado en {pausedFrames} frames; {runningRealTime:F1} s sin pausa");
             sb.AppendLine($"TPS real: {tps:F0} / objetivo {targetTps:F0} ({(targetTps > 0 ? tps / targetTps : 0f).ToStringPercent()})");
             sb.AppendLine($"Tiempo por tick: promedio {(ticks > 0 ? totalTickMs / ticks : 0):F2} ms, máximo {maxTickMs:F2} ms ({ticks} ticks)");
 

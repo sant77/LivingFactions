@@ -80,6 +80,13 @@ Cada asentamiento NPC tiene un **rango**.
   - Oleadas de refuerzo.
 - **Medición base** (capital de Cerro mongol, 77x88, 8291 pts): a velocidad x1, 25 FPS y
   47/60 TPS antes del combate. Ya hay lag sin combate.
+- **Línea base con la medición automática** (capital de El imperio caído, 86x86, 6351 pts,
+  67 enemigos humanos en pie, velocidad x1):
+  - Calma: 4.48 ms por tick (máx. 31.9), 57 FPS.
+  - Combate: 4.34 ms por tick (máx. 17.3), 40 FPS.
+  - A x3 (360 TPS) hace falta ≤ 2.8 ms por tick: correría al ~60 %.
+  - Cada pawn cuesta ~0.05–0.06 ms/tick. **Objetivo: ~30–35 enemigos a la vez en el mapa
+    (~2.5 ms/tick).** Encaja con una guarnición del 40 % más oleadas.
 - **Torretas pesadas:** en ciudades y capitales, parte de las torretas pasan a autocañón
   (`Turret_Autocannon`) y francotiradora (`Turret_Sniper`). Solo con tecnología industrial o mayor.
 - **Límite de pawns en el mapa:** los puntos que sobran se convierten en fortificaciones (torretas
