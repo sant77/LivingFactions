@@ -108,7 +108,8 @@ Cada asentamiento NPC tiene un **rango**.
 - [x] Opciones y acción de depuración.
 - [x] Pruebas de pueblo, ciudad y capital.
 - [x] Rediseño de la defensa implementado: oleadas, puestos del perímetro, reserva central, torretas pesadas y límite de enemigos a la vez.
-- [ ] Prueba del rediseño a x3 y comparación con la línea base.
+- [x] Prueba del rediseño a x3 y comparación con la línea base. **Validado por el usuario:** los
+  defensores se comportan bien, comen sus raciones y están bien armados.
   - Prueba 1 (capital outlander de Ithium del suroeste, x1): las torretas pesadas funcionan, las 3
     oleadas llegaron a los umbrales (33/60/80 %), 4 puestos de ~3 pawns y reserva de 26. Guarnición
     de 45 pawns con 3383 pts. **69 animales salvajes** en el mapa (115 pawns en total): calma 4.46 ms/tick.
@@ -122,7 +123,7 @@ Cada asentamiento NPC tiene un **rango**.
 - [ ] Rango visible en el mapa del mundo (icono o marca).
 - [ ] Estructura de la capital: muralla, portón o killbox, recinto central, distritos.
 - [ ] Habitaciones nuevas: prisión, armería, hospital, cuartel del líder.
-- [x] Puestos que salen a atacar y raciones (implementado, falta probar):
+- [x] Puestos que salen a atacar y raciones (probado):
   - Los puestos (`LordJob_LFPerimeterPost`) mantienen la posición, pero salen a atacar si hieren a
     uno de ellos, si el jugador daña edificios de la base, si pierden un tercio, si tienen hambre
     urgente o si el asedio dura más de 2 días.
