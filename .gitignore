@@ -8,6 +8,10 @@ Source/**/obj/
 .vscode/
 *.user
 
+# Notas locales (lluvia de ideas y discusiones): solo en el PC
+IDEAS.md
+notas/
+
 # Nunca subir código descompilado del juego
 **/RimWorldDecomp/
 **/Assembly-CSharp/

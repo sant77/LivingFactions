@@ -1,7 +1,7 @@
 # Living Factions
 
 Mod para RimWorld 1.6 (C# + Harmony) que da vida a las facciones NPC.
-Diseño completo en [PLAN.md](PLAN.md); ideas en [IDEAS.md](IDEAS.md).
+Hoja de ruta en [PLAN.md](PLAN.md).
 
 ## Estado
 
