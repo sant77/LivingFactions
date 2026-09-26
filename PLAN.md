@@ -121,8 +121,13 @@ de 1–2 activos y solo ocurre si la misión terminó sin muertes.
   - Si no se resuelve a tiempo, la facción nombra otro líder y el capturado pasa a ser un
     prisionero normal.
 - **Colonos capturados en un asalto fallido** (espejo de los líderes capturados):
-  - La captura sigue como en vanilla: al cerrarse el mapa, los colonos que quedaron pasan a estar
-    secuestrados.
+  - **Problema vanilla:** un colono incapacitado pero vivo mantiene abierto el mapa
+    (`MapPawns.IsValidColonyPawn`). El secuestro al cerrar el mapa casi nunca ocurre: los caídos se
+    desangran mientras los defensores los ignoran.
+  - **Cierre forzado con tiempo de rescate:** si ya no queda ningún colono consciente en el mapa,
+    empieza una cuenta atrás (por defecto 12 h de juego, ajustable), avisada con una carta. En ese
+    tiempo el jugador puede enviar otra caravana o cápsulas para rescatarlos. Si nadie llega, el
+    mapa se cierra y los caídos pasan a ser prisioneros de esa base. Sin captura visible.
   - El mod guarda **en qué base** está cada prisionero, y esa base se marca en el mapa del mundo.
   - Formas de recuperarlo:
     - Rescate pagado (requiere consola de comunicaciones).
