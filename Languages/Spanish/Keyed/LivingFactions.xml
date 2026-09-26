@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <LF_Tier_Outpost>Puesto avanzado</LF_Tier_Outpost>
+  <LF_Tier_Town>Pueblo</LF_Tier_Town>
+  <LF_Tier_City>Ciudad</LF_Tier_City>
+  <LF_Tier_Capital>Capital</LF_Tier_Capital>
+  <LF_TierInspect>Rango: {0}</LF_TierInspect>
+
+  <LF_Settings_Phase1>Fase 1 – Jerarquía de asentamientos</LF_Settings_Phase1>
+  <LF_Settings_Enabled>Activar rangos de asentamientos</LF_Settings_Enabled>
+  <LF_Settings_Enabled_Desc>Si se desactiva, las bases NPC se generan como en vanilla.</LF_Settings_Enabled_Desc>
+  <LF_Settings_ShowTier>Mostrar el rango en el panel del mapa del mundo</LF_Settings_ShowTier>
+  <LF_Settings_DefenderMultiplier>Multiplicador de defensores: {0}</LF_Settings_DefenderMultiplier>
+  <LF_Settings_LootMultiplier>Multiplicador de botín: {0}</LF_Settings_LootMultiplier>
+  <LF_Settings_MaxCities>Máximo de ciudades por facción: {0}</LF_Settings_MaxCities>
+  <LF_Settings_ExistingNote>Los rangos se asignan al crear el mundo o al cargar una partida por primera vez con el mod. Los cambios de ciudades máximas solo afectan a mundos nuevos.</LF_Settings_ExistingNote>
+</LanguageData>

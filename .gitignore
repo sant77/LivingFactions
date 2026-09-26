@@ -1,0 +1,13 @@
+# Compilación
+Source/**/bin/
+Source/**/obj/
+1.6/Assemblies/
+
+# Editores
+.vs/
+.vscode/
+*.user
+
+# Nunca subir código descompilado del juego
+**/RimWorldDecomp/
+**/Assembly-CSharp/

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <LF_Tier_Outpost>Outpost</LF_Tier_Outpost>
+  <LF_Tier_Town>Town</LF_Tier_Town>
+  <LF_Tier_City>City</LF_Tier_City>
+  <LF_Tier_Capital>Capital</LF_Tier_Capital>
+  <LF_TierInspect>Rank: {0}</LF_TierInspect>
+
+  <LF_Settings_Phase1>Phase 1 – Settlement hierarchy</LF_Settings_Phase1>
+  <LF_Settings_Enabled>Enable settlement ranks</LF_Settings_Enabled>
+  <LF_Settings_Enabled_Desc>When disabled, NPC bases generate as in vanilla.</LF_Settings_Enabled_Desc>
+  <LF_Settings_ShowTier>Show rank in the world map inspect panel</LF_Settings_ShowTier>
+  <LF_Settings_DefenderMultiplier>Defender multiplier: {0}</LF_Settings_DefenderMultiplier>
+  <LF_Settings_LootMultiplier>Loot multiplier: {0}</LF_Settings_LootMultiplier>
+  <LF_Settings_MaxCities>Max cities per faction: {0}</LF_Settings_MaxCities>
+  <LF_Settings_ExistingNote>Ranks are assigned when the world is created, or the first time a save is loaded with the mod. Changing max cities only affects new worlds.</LF_Settings_ExistingNote>
+</LanguageData>
