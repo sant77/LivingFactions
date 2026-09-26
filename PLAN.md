@@ -130,6 +130,10 @@ Cada asentamiento NPC tiene un **rango**.
     defensores no tienen comida, así que se morían de hambre en asedios largos.
   - Cada defensor de ciudad o capital lleva unos 2 días de raciones (tribus: pemmican; resto: comida
     de supervivencia). Comen **solo** de sus raciones (`JobGiver_LFEatRation`), no del mapa.
+  - Prueba 3 (capital outlander de Moikgol-pernil): raciones para 44 defensores, 4 puestos de ~3
+    y reserva de 25. **Calma a x3: 2.49 ms/tick, 298/360 TPS (83 %)** con 66 pawns (19 animales):
+    por debajo del objetivo de 2.8 ms. Combate (medido a x1): 4.89 ms/tick, máx. 68 ms. El combate
+    sigue siendo pesado.
 - [ ] Despensa central (con la infraestructura): única fuente de comida además de las raciones.
   Destruirla o saquearla obliga a la guarnición a salir a pelear.
 - [ ] Escudo antimortero en la capital (con la infraestructura): edificio propio basado en
