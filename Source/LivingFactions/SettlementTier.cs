@@ -26,6 +26,18 @@ namespace LivingFactions
         public int edgeGuards;
         public int minBarracks;
 
+        // Oleadas: fracción de los puntos que defiende desde el inicio, y % de pérdidas de la
+        // guarnición que dispara cada oleada. El resto de puntos se reparte entre las oleadas.
+        public float garrisonShare = 1f;
+        public float[] waveThresholds = new float[0];
+        // Las tribus pelean en número: más oleadas, más pequeñas.
+        public float[] tribalWaveThresholds = new float[0];
+
+        public float[] WaveThresholdsFor(FactionStyle style)
+        {
+            return style == FactionStyle.Tribal && tribalWaveThresholds.Length > 0 ? tribalWaveThresholds : waveThresholds;
+        }
+
         public static readonly TierData Outpost = new TierData
         {
             size = new IntRange(24, 30),
@@ -52,7 +64,10 @@ namespace LivingFactions
             cellsPerTurret = 20,
             cellsPerMortar = 60,
             edgeGuards = 4,
-            minBarracks = 2
+            minBarracks = 2,
+            garrisonShare = 0.6f,
+            waveThresholds = new[] { 0.4f, 0.7f },
+            tribalWaveThresholds = new[] { 0.3f, 0.55f, 0.75f }
         };
 
         public static readonly TierData Capital = new TierData
@@ -64,7 +79,10 @@ namespace LivingFactions
             cellsPerTurret = 14,
             cellsPerMortar = 40,
             edgeGuards = 10,
-            minBarracks = 3
+            minBarracks = 3,
+            garrisonShare = 0.4f,
+            waveThresholds = new[] { 0.3f, 0.55f, 0.75f },
+            tribalWaveThresholds = new[] { 0.25f, 0.45f, 0.6f, 0.75f }
         };
 
         public static TierData For(SettlementTier tier)

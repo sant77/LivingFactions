@@ -12,10 +12,16 @@ namespace LivingFactions
         public int maxCitiesPerFaction = 3;
         public bool showTierInInspect = true;
         public bool autoMeasure = true;
+        public bool wavesEnabled = true;
+        public int maxActiveEnemies = 35;
+        public int tribalExtraEnemies = 10;
 
         public override void ExposeData()
         {
             base.ExposeData();
+            Scribe_Values.Look(ref wavesEnabled, "wavesEnabled", true);
+            Scribe_Values.Look(ref maxActiveEnemies, "maxActiveEnemies", 35);
+            Scribe_Values.Look(ref tribalExtraEnemies, "tribalExtraEnemies", 10);
             Scribe_Values.Look(ref autoMeasure, "autoMeasure", true);
             Scribe_Values.Look(ref enabled, "enabled", true);
             Scribe_Values.Look(ref defenderMultiplier, "defenderMultiplier", 1f);
@@ -59,6 +65,16 @@ namespace LivingFactions
 
             list.Label("LF_Settings_MaxCities".Translate(Settings.maxCitiesPerFaction));
             Settings.maxCitiesPerFaction = Mathf.RoundToInt(list.Slider(Settings.maxCitiesPerFaction, 0f, 6f));
+
+            list.Gap();
+            list.CheckboxLabeled("LF_Settings_Waves".Translate(), ref Settings.wavesEnabled, "LF_Settings_Waves_Desc".Translate());
+            if (Settings.wavesEnabled)
+            {
+                list.Label("LF_Settings_MaxActive".Translate(Settings.maxActiveEnemies), tooltip: "LF_Settings_MaxActive_Desc".Translate());
+                Settings.maxActiveEnemies = Mathf.RoundToInt(list.Slider(Settings.maxActiveEnemies, 15f, 80f));
+                list.Label("LF_Settings_TribalExtra".Translate(Settings.tribalExtraEnemies));
+                Settings.tribalExtraEnemies = Mathf.RoundToInt(list.Slider(Settings.tribalExtraEnemies, 0f, 30f));
+            }
 
             list.Gap();
             list.Label("LF_Settings_ExistingNote".Translate());

@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using RimWorld;
 using Verse;
 using Verse.AI.Group;
@@ -5,11 +7,14 @@ using Verse.AI.Group;
 namespace LivingFactions
 {
     /// <summary>
-    /// Recuerda cómo se generó la base de este mapa (para mediciones y depuración).
+    /// Datos de la base NPC de este mapa: cómo se generó y el estado de sus oleadas de refuerzo.
     /// RimWorld crea automáticamente un MapComponent de cada tipo en todos los mapas.
     /// </summary>
     public class MapComponent_SettlementInfo : MapComponent
     {
+        private const int CheckInterval = 250;
+
+        // Generación.
         public bool generated;
         public SettlementTier tier;
         public float defenderPoints;
@@ -18,7 +23,16 @@ namespace LivingFactions
         public int mortars;
         public int guards;
 
-        // Medición automática (solo modo desarrollador). No se guardan: se repite al recargar.
+        // Oleadas.
+        public FactionStyle style;
+        public float[] waveThresholds = new float[0];
+        public float pointsPerWave;
+        private int wavesSent;
+        private List<Pawn> garrison = new List<Pawn>();
+        private int garrisonInitial;
+        private bool garrisonCounted;
+
+        // Medición automática (solo modo desarrollador). No se guarda: se repite al recargar.
         private int ticksOnMap;
         private bool measuredCalm;
         private bool measuredCombat;
@@ -27,14 +41,161 @@ namespace LivingFactions
         {
         }
 
+        public int TotalWaves => waveThresholds.Length;
+
+        public bool WavesPending => generated && wavesSent < TotalWaves;
+
+        public override void ExposeData()
+        {
+            base.ExposeData();
+            Scribe_Values.Look(ref generated, "generated");
+            Scribe_Values.Look(ref tier, "tier");
+            Scribe_Values.Look(ref defenderPoints, "defenderPoints");
+            Scribe_Values.Look(ref size, "size");
+            Scribe_Values.Look(ref turrets, "turrets");
+            Scribe_Values.Look(ref mortars, "mortars");
+            Scribe_Values.Look(ref guards, "guards");
+
+            Scribe_Values.Look(ref style, "style");
+            List<float> thresholds = waveThresholds?.ToList();
+            Scribe_Collections.Look(ref thresholds, "waveThresholds", LookMode.Value);
+            if (Scribe.mode == LoadSaveMode.LoadingVars)
+            {
+                waveThresholds = thresholds?.ToArray() ?? new float[0];
+            }
+            Scribe_Values.Look(ref pointsPerWave, "pointsPerWave");
+            Scribe_Values.Look(ref wavesSent, "wavesSent");
+            Scribe_Collections.Look(ref garrison, "garrison", LookMode.Reference);
+            Scribe_Values.Look(ref garrisonInitial, "garrisonInitial");
+            Scribe_Values.Look(ref garrisonCounted, "garrisonCounted");
+            if (Scribe.mode == LoadSaveMode.PostLoadInit)
+            {
+                garrison ??= new List<Pawn>();
+                garrison.RemoveAll(p => p == null);
+            }
+        }
+
         public override void MapComponentTick()
         {
-            if (!generated || !Prefs.DevMode || !LivingFactionsMod.Settings.autoMeasure || (measuredCalm && measuredCombat))
+            if (!generated)
             {
                 return;
             }
             ticksOnMap++;
-            if (ticksOnMap % 250 != 0)
+            if (ticksOnMap % CheckInterval != 0)
+            {
+                return;
+            }
+            if (WavesPending)
+            {
+                CheckWaves();
+            }
+            if (Prefs.DevMode && LivingFactionsMod.Settings.autoMeasure)
+            {
+                CheckAutoMeasure();
+            }
+        }
+
+        // ---------------- Oleadas ----------------
+
+        private Faction Faction => map.ParentFaction;
+
+        private void CheckWaves()
+        {
+            Faction faction = Faction;
+            if (faction == null || faction.IsPlayer || !faction.HostileTo(Faction.OfPlayer))
+            {
+                return;
+            }
+            if (!garrisonCounted)
+            {
+                garrison = map.mapPawns.SpawnedPawnsInFaction(faction).Where(p => p.RaceProps.Humanlike).ToList();
+                garrisonInitial = garrison.Count;
+                garrisonCounted = true;
+                return;
+            }
+            // Sin colonos en pie no hay asalto en curso: los refuerzos esperan.
+            if (!map.mapPawns.FreeColonistsSpawned.Any(p => !p.Downed))
+            {
+                return;
+            }
+            if (LossFraction() < waveThresholds[wavesSent])
+            {
+                return;
+            }
+            int maxActive = LivingFactionsMod.Settings.maxActiveEnemies + (style == FactionStyle.Tribal ? LivingFactionsMod.Settings.tribalExtraEnemies : 0);
+            if (ActiveEnemies(faction) >= maxActive)
+            {
+                return;
+            }
+            SendWave(faction);
+        }
+
+        private float LossFraction()
+        {
+            if (garrisonInitial <= 0)
+            {
+                return 1f;
+            }
+            int standing = garrison.Count(p => p.Spawned && p.Map == map && !p.Dead && !p.Downed);
+            return 1f - (float)standing / garrisonInitial;
+        }
+
+        private int ActiveEnemies(Faction faction)
+        {
+            return map.mapPawns.SpawnedPawnsInFaction(faction).Count(p => p.RaceProps.Humanlike && !p.Downed);
+        }
+
+        private void SendWave(Faction faction)
+        {
+            bool lastWave = wavesSent == TotalWaves - 1;
+            wavesSent++;
+
+            IncidentParms parms = new IncidentParms
+            {
+                target = map,
+                faction = faction,
+                points = pointsPerWave,
+                raidStrategy = RaidStrategyDefOf.ImmediateAttack,
+                raidArrivalMode = FactionStyleUtility.WaveArrivalMode(style, lastWave)
+            };
+            if (!parms.raidArrivalMode.Worker.TryResolveRaidSpawnCenter(parms))
+            {
+                parms.raidArrivalMode = PawnsArrivalModeDefOf.EdgeWalkIn;
+                if (!parms.raidArrivalMode.Worker.TryResolveRaidSpawnCenter(parms))
+                {
+                    Log.Warning($"[Living Factions] No se encontró por dónde enviar la oleada {wavesSent} en {map.Parent?.Label}.");
+                    return;
+                }
+            }
+
+            PawnGroupMakerParms groupParms = IncidentParmsUtility.GetDefaultPawnGroupMakerParms(PawnGroupKindDefOf.Combat, parms, ensureCanGenerateAtLeastOnePawn: true);
+            List<Pawn> pawns = PawnGroupMakerUtility.GeneratePawns(groupParms).ToList();
+            if (pawns.Count == 0)
+            {
+                Log.Warning($"[Living Factions] La oleada {wavesSent} de {faction.Name} no generó pawns ({pointsPerWave:F0} pts).");
+                return;
+            }
+
+            parms.raidArrivalMode.Worker.Arrive(pawns, parms);
+            LordMaker.MakeNewLord(faction, new LordJob_AssaultColony(faction, canKidnap: false, canTimeoutOrFlee: true, sappers: false, useAvoidGridSmart: false, canSteal: false), map, pawns);
+
+            string label = "LF_WaveLetterLabel".Translate(wavesSent, TotalWaves);
+            string text = (lastWave ? "LF_WaveLetterTextLast" : "LF_WaveLetterText").Translate(faction.NameColored, pawns.Count);
+            Find.LetterStack.ReceiveLetter(label, text, LetterDefOf.ThreatBig, new LookTargets(pawns), faction);
+
+            if (Prefs.DevMode)
+            {
+                Log.Message($"[Living Factions] Oleada {wavesSent}/{TotalWaves} de {faction.Name}: {pawns.Count} pawns, {pointsPerWave:F0} pts, " +
+                    $"llegada {parms.raidArrivalMode.defName}, pérdidas de la guarnición {LossFraction().ToStringPercent()}.");
+            }
+        }
+
+        // ---------------- Medición automática ----------------
+
+        private void CheckAutoMeasure()
+        {
+            if (measuredCalm && measuredCombat)
             {
                 return;
             }
@@ -62,26 +223,15 @@ namespace LivingFactions
             return false;
         }
 
-        public override void ExposeData()
-        {
-            base.ExposeData();
-            Scribe_Values.Look(ref generated, "generated");
-            Scribe_Values.Look(ref tier, "tier");
-            Scribe_Values.Look(ref defenderPoints, "defenderPoints");
-            Scribe_Values.Look(ref size, "size");
-            Scribe_Values.Look(ref turrets, "turrets");
-            Scribe_Values.Look(ref mortars, "mortars");
-            Scribe_Values.Look(ref guards, "guards");
-        }
-
         public override string ToString()
         {
             if (!generated)
             {
                 return "sin datos de Living Factions";
             }
-            return $"{tier}, tamaño {size.x}x{size.z}, defensores {defenderPoints:F0} pts, " +
-                $"torretas {turrets}, morteros {mortars}, guardias {guards}";
+            string waves = TotalWaves > 0 ? $", oleadas {wavesSent}/{TotalWaves} de {pointsPerWave:F0} pts ({style})" : "";
+            return $"{tier}, tamaño {size.x}x{size.z}, guarnición {defenderPoints:F0} pts ({garrisonInitial} pawns), " +
+                $"torretas {turrets}, morteros {mortars}, guardias {guards}{waves}";
         }
     }
 }

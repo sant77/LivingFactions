@@ -21,7 +21,27 @@ namespace LivingFactions.Patches
             TierData data = TierData.For(tier.Value);
             LivingFactionsSettings settings = LivingFactionsMod.Settings;
 
-            rp.settlementPawnGroupPoints ??= data.defenderPoints.RandomInRange * settings.defenderMultiplier;
+            Map map = BaseGen.globalSettings.map;
+            MapComponent_SettlementInfo info = map.GetComponent<MapComponent_SettlementInfo>();
+
+            // Oleadas: solo si somos nosotros quienes fijamos los puntos (no una misión u otro mod).
+            if (!rp.settlementPawnGroupPoints.HasValue)
+            {
+                float totalPoints = data.defenderPoints.RandomInRange * settings.defenderMultiplier;
+                FactionStyle style = FactionStyleUtility.StyleOf(rp.faction ?? map.ParentFaction);
+                float[] thresholds = data.WaveThresholdsFor(style);
+                if (settings.wavesEnabled && thresholds.Length > 0 && data.garrisonShare < 1f && info != null)
+                {
+                    rp.settlementPawnGroupPoints = totalPoints * data.garrisonShare;
+                    info.style = style;
+                    info.waveThresholds = thresholds;
+                    info.pointsPerWave = totalPoints * (1f - data.garrisonShare) / thresholds.Length;
+                }
+                else
+                {
+                    rp.settlementPawnGroupPoints = totalPoints;
+                }
+            }
             rp.lootMarketValue ??= data.lootMarketValue * settings.lootMultiplier;
 
             if (data.edgeDefenseWidth.HasValue)
@@ -49,7 +69,6 @@ namespace LivingFactions.Patches
                 BaseGen.globalSettings.minBarracks = data.minBarracks;
             }
 
-            MapComponent_SettlementInfo info = BaseGen.globalSettings.map.GetComponent<MapComponent_SettlementInfo>();
             if (info != null)
             {
                 info.generated = true;
@@ -67,7 +86,8 @@ namespace LivingFactions.Patches
                     $"tamaño {rp.rect.Width}x{rp.rect.Height}, defensores {rp.settlementPawnGroupPoints:F0} pts, " +
                     $"botín {rp.lootMarketValue:F0}, perímetro {rp.edgeDefenseWidth?.ToString() ?? "vanilla"}, " +
                     $"torretas {rp.edgeDefenseTurretsCount?.ToString() ?? "vanilla"}, morteros {rp.edgeDefenseMortarsCount?.ToString() ?? "vanilla"}, " +
-                    $"guardias {rp.edgeDefenseGuardsCount ?? 0}");
+                    $"guardias {rp.edgeDefenseGuardsCount ?? 0}" +
+                    (info != null && info.TotalWaves > 0 ? $", oleadas {info.TotalWaves} x {info.pointsPerWave:F0} pts ({info.style})" : ""));
             }
         }
     }

@@ -16,4 +16,12 @@
   <LF_Settings_ExistingNote>Ranks are assigned when the world is created, or the first time a save is loaded with the mod. Changing max cities only affects new worlds.</LF_Settings_ExistingNote>
   <LF_Settings_AutoMeasure>(Testing) Automatically measure performance in NPC bases</LF_Settings_AutoMeasure>
   <LF_Settings_AutoMeasure_Desc>Dev mode only. Measures 30 s when entering an NPC base and another 30 s when the defenders start their assault. Results go to Player.log.</LF_Settings_AutoMeasure_Desc>
+  <LF_Settings_Waves>Reinforcement waves in cities and capitals</LF_Settings_Waves>
+  <LF_Settings_Waves_Desc>Only part of the defenders are present at the start; the rest arrive in waves as the garrison takes losses. Reduces lag. Affects bases generated after the change.</LF_Settings_Waves_Desc>
+  <LF_Settings_MaxActive>Max standing enemies at once: {0}</LF_Settings_MaxActive>
+  <LF_Settings_MaxActive_Desc>If more enemies are standing, the next wave waits. Lower values improve performance.</LF_Settings_MaxActive_Desc>
+  <LF_Settings_TribalExtra>Extra enemies allowed for tribes: {0}</LF_Settings_TribalExtra>
+  <LF_WaveLetterLabel>Enemy reinforcements ({0}/{1})</LF_WaveLetterLabel>
+  <LF_WaveLetterText>Reinforcements from {0} arrive to defend their base: {1} fighters.</LF_WaveLetterText>
+  <LF_WaveLetterTextLast>The last wave from {0} arrives: {1} fighters. If it falls, the base falls with it.</LF_WaveLetterTextLast>
 </LanguageData>
