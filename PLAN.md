@@ -65,8 +65,16 @@ Cada asentamiento NPC tiene un **rango**.
 - **Refuerzos por oleadas** (propuesta del usuario): en ciudades y capitales no están todos los
   defensores desde el inicio. Una guarnición inicial defiende, y el resto llega en oleadas durante
   el asalto. Reduce el lag y hace el asalto más interesante. Decidido:
-  - **Origen mixto según la facción:** desde los cuarteles (tropas de dentro) o desde el borde del
-    mapa (refuerzos de otras bases).
+  - **Origen según la facción** (nunca desde los cuarteles, porque el jugador podría estar ya dentro):
+    - Tribus: a pie desde el borde, en grupos (`EdgeWalkInGroups`).
+    - Piratas: cápsulas en el borde (`EdgeDrop`); la última, en el centro.
+    - Outlanders: a pie desde el borde (`EdgeWalkIn`).
+    - Imperio: cápsulas; la élite, en el centro (`CenterDrop`).
+  - Reparto: guarnición inicial (ciudad 60 %, capital 40 %) + oleadas del 20 % cada una. Umbrales
+    iniciales: ciudad al 40/70 % de pérdidas; capital al 30/55/75 %.
+  - Límite de enemigos a la vez (~35; ~45 para tribus): si se supera, la oleada espera.
+  - Puestos del perímetro (`LordJob_DefendPoint`, ~40 % de la guarnición) en los lados de la base
+    hasta que existan portones, y reserva central (`LordJob_DefendBase`, ~60 %).
   - **Disparo por pérdidas:** cada oleada llega cuando la guarnición pierde cierto % de defensores.
   - **Cantidades iniciales:** ciudad con guarnición del 60 % y 1–2 oleadas; capital con guarnición
     del 40 % y 3 oleadas (la última de élite, guardia del líder).
@@ -104,6 +112,10 @@ Cada asentamiento NPC tiene un **rango**.
 - [ ] Rango visible en el mapa del mundo (icono o marca).
 - [ ] Estructura de la capital: muralla, portón o killbox, recinto central, distritos.
 - [ ] Habitaciones nuevas: prisión, armería, hospital, cuartel del líder.
+- [ ] Energía por facción: químico (piratas), eólico (outlanders), geotérmico (capitales con
+  géiser), molino (ríos). Central de energía protegida en el recinto central, que el jugador puede
+  atacar para apagar las torretas. Vanilla: `GenStep_Power` conecta todo lo que necesita energía
+  y crea solares o baterías; BaseGen solo coloca plantas solares o de leña.
 - [ ] Estilo por facción.
 - [ ] Botín único de capital.
 
