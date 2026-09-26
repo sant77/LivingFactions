@@ -107,7 +107,8 @@ Cada asentamiento NPC tiene un **rango**.
 - [x] Rangos, tamaño, defensores, botín y perímetro.
 - [x] Opciones y acción de depuración.
 - [x] Pruebas de pueblo, ciudad y capital.
-- [ ] Rediseño de la defensa: oleadas, torretas pesadas, límite de pawns.
+- [x] Rediseño de la defensa implementado: oleadas, puestos del perímetro, reserva central, torretas pesadas y límite de enemigos a la vez.
+- [ ] Prueba del rediseño a x3 y comparación con la línea base.
 - [ ] El líder de la facción vive en su capital y la defiende.
 - [ ] Rango visible en el mapa del mundo (icono o marca).
 - [ ] Estructura de la capital: muralla, portón o killbox, recinto central, distritos.
