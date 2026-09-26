@@ -121,7 +121,24 @@ Cada asentamiento NPC tiene un **rango**.
     de pawns queda para después, según la próxima medición.
 - [ ] El líder de la facción vive en su capital y la defiende.
 - [ ] Rango visible en el mapa del mundo (icono o marca).
-- [ ] Estructura de la capital: muralla, portón o killbox, recinto central, distritos.
+- [ ] Estructura de la capital (decisiones del usuario):
+  - **Sin killbox.** Defensas generales: muralla, **zonas de tiro** (terreno despejado cubierto por
+    varias torretas) y **zonas de concentración** (puntos de reunión detrás de los portones).
+  - La muralla no debe impedir el fuego de torretas ni morteros. En RimWorld las paredes bloquean la
+    línea de visión: torretas en **bastiones** que ocupan el lugar del muro, **sacos de arena** detrás
+    de la muralla para los defensores, y morteros dentro (disparan en arco).
+  - Portones con la **puerta de seguridad de Anomaly** (`SecurityDoor`: 2x1, 800 HP, necesita
+    energía) si está activo; si no, puertas normales.
+  - La muralla es un retraso, no la defensa: el jugador puede abrir un hueco. **Defensa en
+    profundidad:** los puestos salen a atacar, segunda muralla en el recinto central, torretas y
+    sacos también dentro.
+  - Ciudades: muralla y portones, **sin recinto central**. Pueblos y puestos avanzados: como en
+    vanilla. Portones: 2 en ciudades, 3–4 en capitales.
+  - Recinto central, distritos y estilo por facción: de acuerdo.
+  - Por decidir: tamaño de la capital (propuesta ~100–110 en el mapa de 250) y si su mapa se agranda.
+- [ ] Energía: los generadores de leña duran ~3.4 días (75 de leña, 22/día). BaseGen los llena una vez
+  (`refuel`) y nadie los recarga. Propuesta: solo fuentes sin combustible en ciudades y capitales;
+  el combustible como debilidad a propósito en facciones pobres. Por decidir.
 - [ ] Habitaciones nuevas: prisión, armería, hospital, cuartel del líder.
 - [x] Puestos que salen a atacar y raciones (probado):
   - Los puestos (`LordJob_LFPerimeterPost`) mantienen la posición, pero salen a atacar si hieren a
