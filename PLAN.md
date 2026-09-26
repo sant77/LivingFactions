@@ -113,7 +113,9 @@ Cada asentamiento NPC tiene un **rango**.
   el botín y el estilo de defensa.
 - **Ideología de la facción** (con Ideology) en la base:
   - Bases mecanoides: un **mecanizador** con su ejército.
-  - Bases de árboles Gauranlen: llenas de árboles y **dríadas que defienden**.
+  - Bases de árboles Gauranlen: llenas de árboles y **dríadas que defienden**. En vanilla los NPC
+    nunca usan árboles ni dríadas: BaseGen no los genera y las misiones excluyen a las dríadas
+    (`!RaceProps.Dryad`). El meme de árboles de una facción NPC no cambia su base.
   - La ideología afecta el armamento y las defensas.
 
 ---
