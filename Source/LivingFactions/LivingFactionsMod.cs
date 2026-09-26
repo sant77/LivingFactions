@@ -15,10 +15,12 @@ namespace LivingFactions
         public bool wavesEnabled = true;
         public int maxActiveEnemies = 35;
         public int tribalExtraEnemies = 10;
+        public float settlementAnimalFactor = 0.25f;
 
         public override void ExposeData()
         {
             base.ExposeData();
+            Scribe_Values.Look(ref settlementAnimalFactor, "settlementAnimalFactor", 0.25f);
             Scribe_Values.Look(ref wavesEnabled, "wavesEnabled", true);
             Scribe_Values.Look(ref maxActiveEnemies, "maxActiveEnemies", 35);
             Scribe_Values.Look(ref tribalExtraEnemies, "tribalExtraEnemies", 10);
@@ -75,6 +77,9 @@ namespace LivingFactions
                 list.Label("LF_Settings_TribalExtra".Translate(Settings.tribalExtraEnemies));
                 Settings.tribalExtraEnemies = Mathf.RoundToInt(list.Slider(Settings.tribalExtraEnemies, 0f, 30f));
             }
+
+            list.Label("LF_Settings_AnimalFactor".Translate(Settings.settlementAnimalFactor.ToStringPercent()), tooltip: "LF_Settings_AnimalFactor_Desc".Translate());
+            Settings.settlementAnimalFactor = Mathf.Round(list.Slider(Settings.settlementAnimalFactor, 0f, 1f) * 20f) / 20f;
 
             list.Gap();
             list.Label("LF_Settings_ExistingNote".Translate());

@@ -116,8 +116,8 @@ Cada asentamiento NPC tiene un **rango**.
   - Corregido: las oleadas se iban "satisfechas con los daños" (`canTimeoutOrFlee` en
     `LordJob_AssaultColony`) y los puestos de ~3 pawns huían tras 1–2 bajas (huida automática de
     vanilla por grupo). Ahora en la capital nadie huye; en la ciudad solo puede huir la reserva central.
-  - Pendiente de evaluar: los animales salvajes también cuestan rendimiento. ¿Reducirlos en los mapas
-    de bases NPC?
+  - Animales salvajes reducidos al 25 % en los mapas de bases NPC (ajustable). El límite por número
+    de pawns queda para después, según la próxima medición.
 - [ ] El líder de la facción vive en su capital y la defiende.
 - [ ] Rango visible en el mapa del mundo (icono o marca).
 - [ ] Estructura de la capital: muralla, portón o killbox, recinto central, distritos.
