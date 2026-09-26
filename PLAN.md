@@ -162,8 +162,8 @@ Cada asentamiento NPC tiene un **rango**.
     - Sin búnkeres.
     - Fuerte contra el fuego y el asalto; débil contra la artillería.
   - Tribus en general: trampas de púas (`TrapSpike`) en los accesos y terreno pantanoso.
-  - Por decidir: foso poco profundo o, en algunas capitales, profundo con puentes; búnkeres tribales
-    en todas las tribus o solo en capitales.
+  - Decidido: foso siempre de **agua poco profunda**. Búnkeres de la empalizada **solo en ciudades y
+    capitales**. Se empieza por la **traza italiana**.
   - **Inflamabilidad:** material según el estilo; las puertas de madera son un punto débil a evitar
     o a dejar a propósito.
   - Además (acordado): segunda línea de torretas, reacción garantizada al atacar un punto fuerte y
