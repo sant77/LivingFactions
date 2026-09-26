@@ -66,6 +66,14 @@ Cada asentamiento NPC tiene un **rango**.
   defensores desde el inicio. Una guarnición inicial defiende, y el resto llega en oleadas durante
   el asalto. Reduce el lag y hace el asalto más interesante. Detalles por definir: de dónde salen,
   qué dispara cada oleada y cuántas hay.
+- **Defensa distribuida:** en vanilla todos los defensores (también los guardias del perímetro)
+  defienden el centro de la base (`LordJob_DefendBase` → `rp.rect.CenterCell`) y el perímetro
+  queda vacío. Propuesta:
+  - Puestos del perímetro: defienden su sector y los portones.
+  - Reserva central junto al líder: acude donde se rompe la línea.
+  - Oleadas de refuerzo.
+- **Medición base** (capital de Cerro mongol, 77x88, 8291 pts): a velocidad x1, 25 FPS y
+  47/60 TPS antes del combate. Ya hay lag sin combate.
 - **Torretas pesadas:** en ciudades y capitales, parte de las torretas pasan a autocañón
   (`Turret_Autocannon`) y francotiradora (`Turret_Sniper`). Solo con tecnología industrial o mayor.
 - **Límite de pawns en el mapa:** los puntos que sobran se convierten en fortificaciones (torretas
