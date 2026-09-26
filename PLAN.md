@@ -120,6 +120,15 @@ de 1–2 activos y solo ocurre si la misión terminó sin muertes.
   - Si es de una facción aliada, te piden rescatarlo.
   - Si no se resuelve a tiempo, la facción nombra otro líder y el capturado pasa a ser un
     prisionero normal.
+- **Colonos capturados en un asalto fallido** (espejo de los líderes capturados):
+  - La captura sigue como en vanilla: al cerrarse el mapa, los colonos que quedaron pasan a estar
+    secuestrados.
+  - El mod guarda **en qué base** está cada prisionero, y esa base se marca en el mapa del mundo.
+  - Formas de recuperarlo:
+    - Rescate pagado (requiere consola de comunicaciones).
+    - Canje por un prisionero suyo (requiere consola).
+    - **Misión de rescate armada** contra esa base (**no** requiere consola).
+  - Si no lo recuperas, se une a ellos y puede aparecer en raids contra ti.
 - **Caravanas NPC entre asentamientos:** escoltarlas o emboscarlas. Son datos abstractos con un
   máximo de 3–5 activas y pawns solo si intervienes. Si llegan, el destino crece; si las emboscas,
   cambia el goodwill.
