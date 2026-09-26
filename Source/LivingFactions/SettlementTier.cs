@@ -42,6 +42,9 @@ namespace LivingFactions
         public bool walled;
         public int gates;
         public int bastionSpacing = 14;
+        // Traza italiana (facciones industriales o más): piezas dibujadas en Defs/FortPieceDefs.
+        public string bastionPiece;
+        public string gatePiece = "LF_Gate_Ravelin";
 
         // Torretas pesadas además de las mini torretas vanilla (solo tecnología industrial o más).
         public int autocannons;
@@ -85,7 +88,8 @@ namespace LivingFactions
             perimeterPosts = 2,
             autocannons = 2,
             walled = true,
-            gates = 2
+            gates = 2,
+            bastionPiece = "LF_Bastion_Small"
         };
 
         public static readonly TierData Capital = new TierData
@@ -105,7 +109,8 @@ namespace LivingFactions
             autocannons = 6,
             sniperTurrets = 3,
             walled = true,
-            gates = 4
+            gates = 4,
+            bastionPiece = "LF_Bastion_Large"
         };
 
         public static TierData For(SettlementTier tier)

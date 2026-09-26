@@ -126,7 +126,17 @@ namespace LivingFactions.Patches
             if (tier.HasValue)
             {
                 // Se construye ya, antes de que se resuelvan los símbolos del interior (que usan el rectángulo reducido).
-                OuterWallBuilder.Build(map, wallRect, rp.faction ?? map.ParentFaction, TierData.For(tier.Value));
+                Faction faction = rp.faction ?? map.ParentFaction;
+                TierData data = TierData.For(tier.Value);
+                // Tribus: muralla simple por ahora (empalizada y pukará vendrán después).
+                if (FactionStyleUtility.StyleOf(faction) == FactionStyle.Tribal || data.bastionPiece == null)
+                {
+                    OuterWallBuilder.Build(map, wallRect, faction, data);
+                }
+                else
+                {
+                    BastionedTraceBuilder.Build(map, wallRect, faction, data);
+                }
             }
         }
     }

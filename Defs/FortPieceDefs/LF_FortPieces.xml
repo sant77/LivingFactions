@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!--
+    Piezas de fortificación dibujadas con caracteres. Se pueden editar sin tocar C#.
+    Leyenda:
+      W  muro            T  mini torreta (en la línea del muro)   H  torreta pesada (bloque 2x2)
+      D  puerta (2 casillas contiguas = puerta doble / de seguridad)
+      S  sacos de arena  .  interior: se despeja                  ~  agua poco profunda
+      (espacio)  no se toca
+    Cada fila va entre comillas para conservar los espacios.
+    anchor = (columna, fila) de la casilla de referencia, contando desde 0 arriba a la izquierda.
+      Baluartes: se dibujan para la esquina NORESTE; el ancla es la esquina de la muralla.
+      Portones: se dibujan para el lado NORTE (fuera = arriba); el ancla es la primera casilla de la puerta.
+    El código gira cada pieza para las demás esquinas y lados.
+  -->
+
+  <LivingFactions.FortPieceDef>
+    <defName>LF_Bastion_Large</defName>
+    <label>baluarte grande</label>
+    <description>Baluarte en punta para capitales: torreta pesada en la punta, torretas en los flancos que disparan a lo largo de la muralla.</description>
+    <anchor>(8,10)</anchor>
+    <rows>
+      <li>"                 HH"</li>
+      <li>"               WWHH"</li>
+      <li>"            WWWW W "</li>
+      <li>"          TWW...WW "</li>
+      <li>"       WWWW.....W  "</li>
+      <li>"     WWW........W  "</li>
+      <li>"   WWW.........WW  "</li>
+      <li>"   T...........W   "</li>
+      <li>"   W..........WT   "</li>
+      <li>"   W..........W    "</li>
+      <li>"WWWW..........W    "</li>
+      <li>"        .....WW    "</li>
+      <li>"        .....W     "</li>
+      <li>"        ....WW     "</li>
+      <li>"        ....W      "</li>
+      <li>"        WWWTW      "</li>
+      <li>"        W          "</li>
+      <li>"        W          "</li>
+      <li>"        W          "</li>
+    </rows>
+  </LivingFactions.FortPieceDef>
+
+  <LivingFactions.FortPieceDef>
+    <defName>LF_Bastion_Small</defName>
+    <label>baluarte pequeño</label>
+    <description>Baluarte en punta para ciudades.</description>
+    <anchor>(7,7)</anchor>
+    <rows>
+      <li>"             HH"</li>
+      <li>"          WWWHH"</li>
+      <li>"        TWW..W "</li>
+      <li>"     WWWW....W "</li>
+      <li>"   WWW......WW "</li>
+      <li>"   T........W  "</li>
+      <li>"   W.......WT  "</li>
+      <li>"WWWW.......W   "</li>
+      <li>"       ....W   "</li>
+      <li>"       ...WW   "</li>
+      <li>"       ...W    "</li>
+      <li>"       WWTW    "</li>
+      <li>"       W       "</li>
+      <li>"       W       "</li>
+      <li>"       W       "</li>
+    </rows>
+  </LivingFactions.FortPieceDef>
+
+  <LivingFactions.FortPieceDef>
+    <defName>LF_Gate_Ravelin</defName>
+    <label>portón con revellín</label>
+    <description>Portón con dos torretas y un revellín triangular delante: para llegar a la puerta hay que rodearlo bajo fuego cruzado.</description>
+    <anchor>(7,9)</anchor>
+    <rows>
+      <li>"      WWWW      "</li>
+      <li>"     WW..WW     "</li>
+      <li>"    WW....WW    "</li>
+      <li>"  WTW......TWW  "</li>
+      <li>" WW..........WW "</li>
+      <li>"WW............WW"</li>
+      <li>"W..............W"</li>
+      <li>"                "</li>
+      <li>"                "</li>
+      <li>"  WWWTWDDWTWWW  "</li>
+    </rows>
+  </LivingFactions.FortPieceDef>
+
+</Defs>
