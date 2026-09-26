@@ -141,7 +141,10 @@ Cada asentamiento NPC tiene un **rango**.
   - Prueba: "ya va tomando forma de capital", pero **la muralla con torretas repartidas no es
     eficiente**: 32 torretas en ~440 casillas, solo 2–3 disparan a la vez; se destruyen desde fuera de
     su alcance; todo está en la primera línea.
-- [ ] **Fortificaciones por estilo** (inspiración del usuario, imágenes en `Inspiracion/`, no se suben):
+- [ ] **Fortificaciones por estilo** — traza italiana implementada (falta probar): plantillas en
+  `Defs/FortPieceDefs` (`FortPieceDef`, se editan sin C#), herramienta "Generate test base" para
+  inspeccionar. Pendiente: empalizada, pukará, ciudadela.
+  (inspiración del usuario, imágenes en `Inspiracion/`, no se suben):
   - **Traza italiana** (Palmanova, Charleville, Pamplona, Muller) para industriales o más:
     - Baluartes en punta con torretas en los flancos (fuego a lo largo del muro): son los puntos fuertes.
     - Revellín delante de cada portón.
