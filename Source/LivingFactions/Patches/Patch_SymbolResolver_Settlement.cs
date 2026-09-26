@@ -31,7 +31,8 @@ namespace LivingFactions.Patches
             LivingFactionsSettings settings = LivingFactionsMod.Settings;
 
             Map map = BaseGen.globalSettings.map;
-            MapComponent_SettlementInfo info = map.GetComponent<MapComponent_SettlementInfo>();
+            // En una base de prueba no se toca el MapComponent: el mapa es el del jugador (sin oleadas).
+            MapComponent_SettlementInfo info = WorldComponent_SettlementTiers.GeneratingTestBase ? null : map.GetComponent<MapComponent_SettlementInfo>();
 
             // Oleadas: solo si somos nosotros quienes fijamos los puntos (no una misión u otro mod).
             if (!rp.settlementPawnGroupPoints.HasValue)

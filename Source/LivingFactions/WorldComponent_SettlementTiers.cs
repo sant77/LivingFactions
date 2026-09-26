@@ -79,11 +79,23 @@ namespace LivingFactions
             return tier;
         }
 
+        /// <summary>
+        /// Rango forzado durante la generación de una base de prueba (herramienta de depuración). Mientras
+        /// está activo, cualquier mapa se trata como una base de ese rango.
+        /// </summary>
+        public static SettlementTier? ForcedTier { get; set; }
+
+        public static bool GeneratingTestBase => ForcedTier.HasValue;
+
         public static SettlementTier? TierOfMap(Map map)
         {
             if (!LivingFactionsMod.Settings.enabled)
             {
                 return null;
+            }
+            if (ForcedTier.HasValue)
+            {
+                return ForcedTier;
             }
             return Instance?.TierOf(map?.Parent as Settlement);
         }
