@@ -178,7 +178,7 @@ namespace LivingFactions
             }
 
             parms.raidArrivalMode.Worker.Arrive(pawns, parms);
-            LordMaker.MakeNewLord(faction, new LordJob_AssaultColony(faction, canKidnap: false, canTimeoutOrFlee: true, sappers: false, useAvoidGridSmart: false, canSteal: false), map, pawns);
+            LordMaker.MakeNewLord(faction, new LordJob_AssaultColony(faction, canKidnap: false, canTimeoutOrFlee: false, sappers: false, useAvoidGridSmart: false, canSteal: false), map, pawns);
 
             string label = "LF_WaveLetterLabel".Translate(wavesSent, TotalWaves);
             string text = (lastWave ? "LF_WaveLetterTextLast" : "LF_WaveLetterText").Translate(faction.NameColored, pawns.Count);

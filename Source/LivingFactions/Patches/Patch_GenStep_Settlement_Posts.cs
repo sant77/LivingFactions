@@ -61,7 +61,7 @@ namespace LivingFactions.Patches
                     mainLord.RemovePawn(pawn);
                     available.Remove(pawn);
                 }
-                LordMaker.MakeNewLord(faction, new LordJob_DefendPoint(post, PostWanderRadius, PostDefendRadius), map, squad);
+                LordMaker.MakeNewLord(faction, new LordJob_DefendPoint(post, PostWanderRadius, PostDefendRadius, addFleeToil: false), map, squad);
             }
 
             if (Prefs.DevMode)

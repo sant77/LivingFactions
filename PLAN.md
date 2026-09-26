@@ -109,6 +109,15 @@ Cada asentamiento NPC tiene un **rango**.
 - [x] Pruebas de pueblo, ciudad y capital.
 - [x] Rediseño de la defensa implementado: oleadas, puestos del perímetro, reserva central, torretas pesadas y límite de enemigos a la vez.
 - [ ] Prueba del rediseño a x3 y comparación con la línea base.
+  - Prueba 1 (capital outlander de Ithium del suroeste, x1): las torretas pesadas funcionan, las 3
+    oleadas llegaron a los umbrales (33/60/80 %), 4 puestos de ~3 pawns y reserva de 26. Guarnición
+    de 45 pawns con 3383 pts. **69 animales salvajes** en el mapa (115 pawns en total): calma 4.46 ms/tick.
+    La medición de combate no es fiable (el juego estuvo pausado casi todo el tiempo).
+  - Corregido: las oleadas se iban "satisfechas con los daños" (`canTimeoutOrFlee` en
+    `LordJob_AssaultColony`) y los puestos de ~3 pawns huían tras 1–2 bajas (huida automática de
+    vanilla por grupo). Ahora en la capital nadie huye; en la ciudad solo puede huir la reserva central.
+  - Pendiente de evaluar: los animales salvajes también cuestan rendimiento. ¿Reducirlos en los mapas
+    de bases NPC?
 - [ ] El líder de la facción vive en su capital y la defiende.
 - [ ] Rango visible en el mapa del mundo (icono o marca).
 - [ ] Estructura de la capital: muralla, portón o killbox, recinto central, distritos.
