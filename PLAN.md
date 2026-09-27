@@ -197,6 +197,12 @@ Cada asentamiento NPC tiene un **rango**.
     y reserva de 25. **Calma a x3: 2.49 ms/tick, 298/360 TPS (83 %)** con 66 pawns (19 animales):
     por debajo del objetivo de 2.8 ms. Combate (medido a x1): 4.89 ms/tick, máx. 68 ms. El combate
     sigue siendo pesado.
+- [x] Asedio (implementado, falta probar):
+  - En ciudades y capitales la reserva central **no ataca por tiempo (~10 h) ni por azar (3 %/h)**.
+    Sale si la hieren, si dañan la base, si pierde defensores o si tiene hambre.
+  - Más munición de mortero: +2 pilas (ciudad) o +3 (capital) de 25 proyectiles junto a cada mortero
+    (vanilla: una pila de 5–8).
+  - Log en modo desarrollador del motivo por el que un grupo pasa al ataque.
 - [ ] Despensa central (con la infraestructura): única fuente de comida además de las raciones.
   Destruirla o saquearla obliga a la guarnición a salir a pelear.
 - [ ] Escudo antimortero en la capital (con la infraestructura): edificio propio basado en
