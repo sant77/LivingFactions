@@ -81,7 +81,7 @@ namespace LivingFactions.AI
             sally.AddTrigger(new Trigger_PawnHarmed(0.5f));
             sally.AddTrigger(new Trigger_ChanceOnPlayerHarmNPCBuilding(0.3f));
             sally.AddTrigger(new Trigger_FractionPawnsLost(0.34f));
-            sally.AddTrigger(new Trigger_UrgentlyHungry());
+            sally.AddTrigger(new Trigger_LFGarrisonStarving());
             sally.AddTrigger(new Trigger_TicksPassed(SiegeTicksBeforeSally));
             sally.AddPostAction(new TransitionAction_WakeAll());
             graph.AddTransition(sally);

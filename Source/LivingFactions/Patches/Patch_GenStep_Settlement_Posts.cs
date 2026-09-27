@@ -113,6 +113,8 @@ namespace LivingFactions.Patches
                 {
                     continue;
                 }
+                // Guarnición bien alimentada: vanilla genera el nivel de comida al azar y alguno nacía hambriento.
+                pawn.needs.food.CurLevel = pawn.needs.food.MaxLevel;
                 Thing food = ThingMaker.MakeThing(ration);
                 food.stackCount = count;
                 if (pawn.inventory.innerContainer.TryAdd(food))

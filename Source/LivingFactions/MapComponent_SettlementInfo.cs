@@ -187,6 +187,13 @@ namespace LivingFactions
                 return;
             }
 
+            foreach (Pawn pawn in pawns)
+            {
+                if (pawn.needs?.food != null)
+                {
+                    pawn.needs.food.CurLevel = pawn.needs.food.MaxLevel;
+                }
+            }
             parms.raidArrivalMode.Worker.Arrive(pawns, parms);
             LordMaker.MakeNewLord(faction, new LordJob_AssaultColony(faction, canKidnap: false, canTimeoutOrFlee: false, sappers: false, useAvoidGridSmart: false, canSteal: false), map, pawns);
 

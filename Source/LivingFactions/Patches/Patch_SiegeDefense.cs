@@ -10,7 +10,7 @@ namespace LivingFactions.Patches
     /// En ciudades y capitales la reserva central no sale a atacar por tiempo (~10 h) ni por azar (3 % por hora):
     /// esos disparadores existen para que las bases pequeñas vanilla no esperen eternamente, pero una capital
     /// no abandona sus murallas sin motivo. Sigue saliendo si la hieren, si dañan la base, si pierde defensores
-    /// o si tiene hambre.
+    /// o si la mayoría del grupo tiene hambre urgente (vanilla: basta con uno).
     /// </summary>
     [HarmonyPatch(typeof(LordJob_DefendBase), nameof(LordJob_DefendBase.CreateGraph))]
     public static class Patch_LordJob_DefendBase_NoTimer
@@ -32,6 +32,11 @@ namespace LivingFactions.Patches
                 if (transition.target is LordToil_AssaultColony)
                 {
                     transition.triggers.RemoveAll(t => t is Trigger_TicksPassed || t is Trigger_ChanceOnTickInterval);
+                    // Hambre: solo si la mayoría del grupo la tiene (vanilla: basta con uno).
+                    if (transition.triggers.RemoveAll(t => t is Trigger_UrgentlyHungry) > 0)
+                    {
+                        transition.triggers.Add(new LivingFactions.AI.Trigger_LFGarrisonStarving());
+                    }
                 }
             }
         }
