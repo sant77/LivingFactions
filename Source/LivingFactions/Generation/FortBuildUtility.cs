@@ -103,8 +103,9 @@ namespace LivingFactions.Generation
                     edifice.Destroy(DestroyMode.Vanish);
                     cleared++;
                 }
+                // Todo techo natural: el grueso de la montaña y también el de roca delgada de sus bordes.
                 RoofDef roof = c.GetRoof(map);
-                if (roof != null && roof.isThickRoof)
+                if (roof != null && roof.isNatural)
                 {
                     map.roofGrid.SetRoof(c, null);
                 }

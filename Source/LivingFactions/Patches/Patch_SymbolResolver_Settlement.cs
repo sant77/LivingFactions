@@ -22,6 +22,11 @@ namespace LivingFactions.Patches
         private static void Prefix(ref ResolveParams rp)
         {
             pendingWallRect = null;
+            Patch_BasePart_Outdoors_Districts.pending = false;
+            // Las variables de MapGenerator persisten entre bases (p. ej. con la herramienta de prueba): se reinician.
+            MapGenerator.SetVar(DistrictPlanner.StreetCellsVar, new System.Collections.Generic.HashSet<IntVec3>());
+            MapGenerator.SetVar(DistrictPlanner.ReservedCenterVar, CellRect.Empty);
+            MapGenerator.SetVar(OuterWallBuilder.GateInsidesVar, new System.Collections.Generic.List<IntVec3>());
             SettlementTier? tier = WorldComponent_SettlementTiers.TierOfMap(BaseGen.globalSettings.map);
             if (!tier.HasValue)
             {
@@ -72,6 +77,9 @@ namespace LivingFactions.Patches
                     Log.Message($"[Living Factions] Roca despejada dentro de la muralla: {rockCleared} casillas.");
                 }
                 rp.rect = rp.rect.ContractedBy(WallMargin);
+                // Distritos: el interior se traza con calles y manzanas; en la capital el centro queda para la ciudadela.
+                Patch_BasePart_Outdoors_Districts.pending = true;
+                Patch_BasePart_Outdoors_Districts.reserveCenter = tier.Value == SettlementTier.Capital;
                 rp.edgeDefenseTurretsCount ??= 0;
                 // Ancho 3 como mínimo: con ancho 2 SymbolResolver_EdgeDefense fija los morteros en 0.
                 rp.edgeDefenseWidth ??= 3;
