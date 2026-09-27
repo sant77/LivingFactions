@@ -63,6 +63,15 @@ namespace LivingFactions.Generation
             {
                 avenueCells.Add(c);
             }
+            // Calles de los distritos y centro reservado (plaza hasta que exista la ciudadela).
+            if (MapGenerator.TryGetVar(DistrictPlanner.StreetCellsVar, out HashSet<IntVec3> streets))
+            {
+                avenueCells.UnionWith(streets);
+            }
+            if (MapGenerator.TryGetVar(DistrictPlanner.ReservedCenterVar, out CellRect reserved))
+            {
+                avenueCells.UnionWith(reserved.Cells);
+            }
 
             int paved = 0;
             foreach (IntVec3 c in inner)

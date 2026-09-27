@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!--
+    Distritos de ciudades y capitales. Cada manzana recibe uno de estos símbolos y el juego elige una de las
+    piezas de la lista según su peso (selectionWeight) y si encaja (minRectSize y condiciones internas).
+    Las piezas son las vanilla (Rules_BasePart_Outdoors.xml): se pueden ajustar los pesos sin tocar C#.
+      Leaf_Building   edificio que ocupa la manzana (habitaciones: cuarteles, comedor, etc.)
+      Leaf_Farm       cultivos (solo manzanas de hasta 15x15)
+      Leaf_PowerPlant generadores (solo facciones industriales o más, hasta 13x13)
+      Leaf_LandingPad pista de aterrizaje (Imperio, Royalty)
+      LFCourtyard     respaldo: patio vacío (siempre encaja, peso bajo)
+  -->
+
+  <RuleDef>
+    <defName>LF_District_Military</defName>
+    <symbol>lf_district_military</symbol>
+    <resolvers>
+      <li Class="SymbolResolver_BasePart_Outdoors_Leaf_Building">
+        <minRectSize>(4, 4)</minRectSize>
+        <selectionWeight>1</selectionWeight>
+      </li>
+      <li Class="SymbolResolver_BasePart_Outdoors_Leaf_LandingPad" MayRequire="Ludeon.RimWorld.Royalty">
+        <minRectSize>(9, 9)</minRectSize>
+        <selectionWeight>0.3</selectionWeight>
+      </li>
+      <li Class="LivingFactions.Generation.SymbolResolver_LFCourtyard">
+        <selectionWeight>0.02</selectionWeight>
+      </li>
+    </resolvers>
+  </RuleDef>
+
+  <RuleDef>
+    <defName>LF_District_Civil</defName>
+    <symbol>lf_district_civil</symbol>
+    <resolvers>
+      <li Class="SymbolResolver_BasePart_Outdoors_Leaf_Building">
+        <minRectSize>(4, 4)</minRectSize>
+        <selectionWeight>1</selectionWeight>
+      </li>
+      <li Class="SymbolResolver_BasePart_Outdoors_Leaf_Farm">
+        <selectionWeight>0.15</selectionWeight>
+      </li>
+      <li Class="SymbolResolver_BasePart_Outdoors_Leaf_LandingPad" MayRequire="Ludeon.RimWorld.Royalty">
+        <minRectSize>(9, 9)</minRectSize>
+        <selectionWeight>0.3</selectionWeight>
+      </li>
+      <li Class="LivingFactions.Generation.SymbolResolver_LFCourtyard">
+        <selectionWeight>0.08</selectionWeight>
+      </li>
+    </resolvers>
+  </RuleDef>
+
+  <RuleDef>
+    <defName>LF_District_Farm</defName>
+    <symbol>lf_district_farm</symbol>
+    <resolvers>
+      <li Class="SymbolResolver_BasePart_Outdoors_Leaf_Farm">
+        <selectionWeight>1</selectionWeight>
+      </li>
+      <li Class="SymbolResolver_BasePart_Outdoors_Leaf_PowerPlant">
+        <selectionWeight>0.4</selectionWeight>
+      </li>
+      <li Class="SymbolResolver_BasePart_Outdoors_Leaf_Building">
+        <minRectSize>(4, 4)</minRectSize>
+        <selectionWeight>0.15</selectionWeight>
+      </li>
+      <li Class="LivingFactions.Generation.SymbolResolver_LFCourtyard">
+        <selectionWeight>0.05</selectionWeight>
+      </li>
+    </resolvers>
+  </RuleDef>
+
+</Defs>
