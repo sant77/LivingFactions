@@ -91,36 +91,36 @@
   <LivingFactions.FortPieceDef>
     <defName>LF_Citadel</defName>
     <label>ciudadela</label>
-    <description>Fuerte interior de la capital: salón del mando (h), despensa (p), prisión con celdas (j), sala de energía (e) y patio de armas (.). Portones al este y al oeste, donde llegan las avenidas.</description>
-    <anchor>(13,13)</anchor>
+    <description>Ciudadela pentagonal de la capital (como la de Pamplona): salón del mando en la punta norte (h), despensa (p), prisión (j), energía (e) y patio de armas (.). Torretas fuera del muro en las cinco puntas. Portón al sur.</description>
+    <anchor>(14,14)</anchor>
     <rows>
-      <li>"TWWWWWWWWWWWWWWWWWWWWWWWWWT"</li>
-      <li>"WhhhhhhhhhhhhWppppppppppppW"</li>
-      <li>"WhhhhhhhhhhhhWppppppppppppW"</li>
-      <li>"WhhhhhhhhhhhhWppppppppppppW"</li>
-      <li>"WhhhhhhhhhhhhWppppppppppppW"</li>
-      <li>"WhhhhhhhhhhhhWppppppppppppW"</li>
-      <li>"WhhhhhhhhhhhhWppppppppppppW"</li>
-      <li>"WhhhhhhhhhhhhWppppppppppppW"</li>
-      <li>"WhhhhhhhhhhhhWppppppppppppW"</li>
-      <li>"WWWWWWdWWWWWWWWWWWWdWWWWWWW"</li>
-      <li>"W.........................W"</li>
-      <li>"T.........................T"</li>
-      <li>"W.........................W"</li>
-      <li>"D.........................D"</li>
-      <li>"D.........................D"</li>
-      <li>"W.........................W"</li>
-      <li>"T.........................T"</li>
-      <li>"WWWWWWdWWWWWWWWWWWWdWWWWWWW"</li>
-      <li>"WjjjjjjjjjjjjWeeeeeeeeeeeeW"</li>
-      <li>"WWdWWWdWWWdWWWeeeeeeeeeeeeW"</li>
-      <li>"WjjjWjjjWjjjjWeeeeeeeeeeeeW"</li>
-      <li>"WjjjWjjjWjjjjWeeeeeeeeeeeeW"</li>
-      <li>"WjjjWjjjWjjjjWeeeeeeeeeeeeW"</li>
-      <li>"WjjjWjjjWjjjjWeeeeeeeeeeeeW"</li>
-      <li>"WjjjWjjjWjjjjWeeeeeeeeeeeeW"</li>
-      <li>"WjjjWjjjWjjjjWeeeeeeeeeeeeW"</li>
-      <li>"TWWWWWWWWWWWWWWWWWWWWWWWWWT"</li>
+      <li>"              T              "</li>
+      <li>"              W              "</li>
+      <li>"            WWWWW            "</li>
+      <li>"           WhhhhhW           "</li>
+      <li>"         WWhhhhhhhWW         "</li>
+      <li>"        WhhhhhhhhhhhW        "</li>
+      <li>"       WhhhhhhhhhhhhhW       "</li>
+      <li>"     WWhhhhhhhhhhhhhhhWW     "</li>
+      <li>"    WWWhhhWWWWdWWWWhhhWWW    "</li>
+      <li>"   WWWWWWW.........WWWWWWW   "</li>
+      <li>"T WppppppW.........WeeeeeeW T"</li>
+      <li>"  WppppppW.........WeeeeeeW  "</li>
+      <li>"  WppppppW.........WeeeeeeW  "</li>
+      <li>"   WpppppW.........WeeeeeW   "</li>
+      <li>"   Wpppppd.........deeeeeW   "</li>
+      <li>"   WpppppW.........WeeeeeW   "</li>
+      <li>"    WppppW.........WeeeeW    "</li>
+      <li>"    WppppW.........WeeeeW    "</li>
+      <li>"    WWWWWW.........WeeeeW    "</li>
+      <li>"     Wjjjd.........WeeeW     "</li>
+      <li>"     WjjjW.........WeeeW     "</li>
+      <li>"     WjjjW.........WeeeW     "</li>
+      <li>"     WjjjW.........WeeeW     "</li>
+      <li>"      WjjW.........WeeW      "</li>
+      <li>"      WjjW.........WeeW      "</li>
+      <li>"      WWWWWWWWDDWWWWWWW      "</li>
+      <li>"      T               T      "</li>
     </rows>
   </LivingFactions.FortPieceDef>
 </Defs>

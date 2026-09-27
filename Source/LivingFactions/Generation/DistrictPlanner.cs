@@ -30,7 +30,7 @@ namespace LivingFactions.Generation
         private const int StreetWidth = 2;
         private const int MinBlock = 5;
         private const int MaxFarmBlock = 15;   // SymbolResolver_BasePart_Outdoors_Leaf_Farm no acepta más
-        private const int CitadelSize = 26;
+        private const int CitadelSize = 28;   // plantilla LF_Citadel: 29x27
 
         public static void Plan(ResolveParams rp, bool reserveCenter)
         {

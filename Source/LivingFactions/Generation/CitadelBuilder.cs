@@ -6,11 +6,11 @@ using Verse;
 namespace LivingFactions.Generation
 {
     /// <summary>
-    /// Ciudadela en el centro de la capital (plantilla LF_Citadel en Defs/FortPieceDefs). Coloca la plantilla y
+    /// Ciudadela pentagonal en el centro de la capital (plantilla LF_Citadel en Defs/FortPieceDefs). Coloca la plantilla y
     /// amuebla cada sala según la facción:
     /// - h: salón del mando (trono del Imperio con Royalty; mesa y sillas en los demás).
     /// - p: despensa con comida cruda o pemmican (fuente de comida además de las raciones).
-    /// - j: prisión: una cama de prisionero en cada celda (para los colonos capturados, Fase 3).
+    /// - j: prisión: camas de prisionero, una por cada ~6 casillas (para los colonos capturados, Fase 3).
     /// - e: energía: generadores con combustible, baterías, y reservas de combustible y acero para el
     ///   mantenimiento. En tribus (sin electricidad) es un almacén.
     /// </summary>
@@ -131,19 +131,28 @@ namespace LivingFactions.Generation
             remaining.RemoveWhere(c => c.z == corridorZ);
             while (remaining.Count > 0)
             {
-                List<IntVec3> cell = FloodGroup(remaining.First(), remaining);
-                CellRect r = Bounds(cell);
-                // Cama pegada a la pared del fondo (sur), cabecera abajo.
-                IntVec3 bedPos = new IntVec3(r.minX, 0, r.minZ + 1);
-                Thing bed = null;
-                if (FortBuildUtility.TrySpawn(map, ThingDefOf.Bed, StuffFor(ThingDefOf.Bed, stuff), bedPos, Rot4.North, faction))
+                HashSet<IntVec3> group = new HashSet<IntVec3>(FloodGroup(remaining.First(), remaining));
+                // Una cama por cada ~6 casillas, de abajo arriba y dejando una columna libre entre camas.
+                int wanted = System.Math.Max(1, group.Count / 6);
+                int placedHere = 0;
+                foreach (IntVec3 pos in group.OrderBy(c => c.z).ThenBy(c => c.x))
                 {
-                    bed = bedPos.GetFirstThing(map, ThingDefOf.Bed);
-                }
-                if (bed is Building_Bed b)
-                {
-                    b.ForPrisoners = true;
-                    beds++;
+                    if (placedHere >= wanted)
+                    {
+                        break;
+                    }
+                    CellRect footprint = GenAdj.OccupiedRect(pos, Rot4.North, ThingDefOf.Bed.size);
+                    if (!footprint.Cells.All(group.Contains) || footprint.ExpandedBy(1).Cells.Any(c => c.GetFirstThing(map, ThingDefOf.Bed) != null))
+                    {
+                        continue;
+                    }
+                    if (FortBuildUtility.TrySpawn(map, ThingDefOf.Bed, StuffFor(ThingDefOf.Bed, stuff), pos, Rot4.North, faction)
+                        && pos.GetFirstThing(map, ThingDefOf.Bed) is Building_Bed bed)
+                    {
+                        bed.ForPrisoners = true;
+                        beds++;
+                        placedHere++;
+                    }
                 }
             }
             return beds;
