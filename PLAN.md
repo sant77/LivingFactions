@@ -201,7 +201,11 @@ Cada asentamiento NPC tiene un **rango**.
   - En ciudades y capitales la reserva central **no ataca por tiempo (~10 h) ni por azar (3 %/h)**.
     Sale si la hieren, si dañan la base, si pierde defensores o si tiene hambre.
   - Más munición de mortero: +2 pilas (ciudad) o +3 (capital) de 25 proyectiles junto a cada mortero
-    (vanilla: una pila de 5–8).
+    (vanilla: una pila de 5–8), y cañones reforzados de repuesto (2 o 3): el cañón dura 20 disparos y
+    el operador lo cambia solo si hay un repuesto a menos de 40 casillas (`JobDriver_ManTurret`).
+  - Pendiente: las torretas automáticas también gastan el cañón (mini 60 disparos, autocañón 90,
+    francotiradora 30) y nadie las recarga. Unificar con la recarga de generadores: la reserva hace
+    **mantenimiento** (combustible y cañones con acero) desde un almacén.
   - Log en modo desarrollador del motivo por el que un grupo pasa al ataque.
 - [ ] Despensa central (con la infraestructura): única fuente de comida además de las raciones.
   Destruirla o saquearla obliga a la guarnición a salir a pelear.

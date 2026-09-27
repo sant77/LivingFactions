@@ -39,7 +39,8 @@ namespace LivingFactions.Patches
 
     /// <summary>
     /// Vanilla deja una sola pila de 5–8 proyectiles por mortero. Como la guarnición de una ciudad o capital
-    /// ya no sale sola, su respuesta a un asedio es la artillería: pilas extra junto a cada mortero.
+    /// ya no sale sola, su respuesta a un asedio es la artillería: pilas extra y cañones de repuesto junto a
+    /// cada mortero.
     /// </summary>
     [HarmonyPatch(typeof(SymbolResolver_MannedMortar), nameof(SymbolResolver_MannedMortar.Resolve))]
     public static class Patch_MannedMortar_ExtraShells
@@ -67,6 +68,17 @@ namespace LivingFactions.Patches
                 shells.singleThingDef = shell;
                 shells.singleThingStackCount = shell.stackLimit;
                 BaseGen.symbolStack.Push("thing", shells);
+            }
+
+            // El cañón del mortero dura 20 disparos. El operador (JobDriver_ManTurret) lo cambia solo si
+            // encuentra un cañón reforzado a menos de 40 casillas: un repuesto por cada pila extra.
+            if (ThingDefOf.ReinforcedBarrel != null)
+            {
+                ResolveParams barrels = rp;
+                barrels.faction = faction;
+                barrels.singleThingDef = ThingDefOf.ReinforcedBarrel;
+                barrels.singleThingStackCount = extraStacks;
+                BaseGen.symbolStack.Push("thing", barrels);
             }
         }
     }
