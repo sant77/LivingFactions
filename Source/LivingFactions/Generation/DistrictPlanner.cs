@@ -55,6 +55,8 @@ namespace LivingFactions.Generation
             {
                 citadel = CellRect.CenteredOn(center, CitadelSize / 2).ClipInsideRect(rect);
                 MapGenerator.SetVar(ReservedCenterVar, citadel);
+                Map map = BaseGen.globalSettings.map;
+                CitadelBuilder.Build(map, citadel, rp.faction ?? map.ParentFaction);
             }
 
             // Manzanas: los huecos entre calles.

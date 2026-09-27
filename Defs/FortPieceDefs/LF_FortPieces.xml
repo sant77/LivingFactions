@@ -5,7 +5,9 @@
     Piezas de fortificación dibujadas con caracteres. Se pueden editar sin tocar C#.
     Leyenda:
       W  muro            T  mini torreta (en la línea del muro)   H  torreta pesada (bloque 2x2)
-      D  puerta (2 casillas contiguas = puerta doble / de seguridad)
+      D  puerta (2 casillas contiguas = puerta doble / de seguridad)   d  puerta simple
+      Salas (interior con techo; el código las amuebla):
+      h  salón del mando   p  despensa   j  prisión   e  energía
       S  sacos de arena  .  interior: se despeja                  ~  agua poco profunda
       (espacio)  no se toca
     Cada fila va entre comillas para conservar los espacios.
@@ -86,4 +88,39 @@
     </rows>
   </LivingFactions.FortPieceDef>
 
+  <LivingFactions.FortPieceDef>
+    <defName>LF_Citadel</defName>
+    <label>ciudadela</label>
+    <description>Fuerte interior de la capital: salón del mando (h), despensa (p), prisión con celdas (j), sala de energía (e) y patio de armas (.). Portones al este y al oeste, donde llegan las avenidas.</description>
+    <anchor>(13,13)</anchor>
+    <rows>
+      <li>"TWWWWWWWWWWWWWWWWWWWWWWWWWT"</li>
+      <li>"WhhhhhhhhhhhhWppppppppppppW"</li>
+      <li>"WhhhhhhhhhhhhWppppppppppppW"</li>
+      <li>"WhhhhhhhhhhhhWppppppppppppW"</li>
+      <li>"WhhhhhhhhhhhhWppppppppppppW"</li>
+      <li>"WhhhhhhhhhhhhWppppppppppppW"</li>
+      <li>"WhhhhhhhhhhhhWppppppppppppW"</li>
+      <li>"WhhhhhhhhhhhhWppppppppppppW"</li>
+      <li>"WhhhhhhhhhhhhWppppppppppppW"</li>
+      <li>"WWWWWWdWWWWWWWWWWWWdWWWWWWW"</li>
+      <li>"W.........................W"</li>
+      <li>"T.........................T"</li>
+      <li>"W.........................W"</li>
+      <li>"D.........................D"</li>
+      <li>"D.........................D"</li>
+      <li>"W.........................W"</li>
+      <li>"T.........................T"</li>
+      <li>"WWWWWWdWWWWWWWWWWWWdWWWWWWW"</li>
+      <li>"WjjjjjjjjjjjjWeeeeeeeeeeeeW"</li>
+      <li>"WWdWWWdWWWdWWWeeeeeeeeeeeeW"</li>
+      <li>"WjjjWjjjWjjjjWeeeeeeeeeeeeW"</li>
+      <li>"WjjjWjjjWjjjjWeeeeeeeeeeeeW"</li>
+      <li>"WjjjWjjjWjjjjWeeeeeeeeeeeeW"</li>
+      <li>"WjjjWjjjWjjjjWeeeeeeeeeeeeW"</li>
+      <li>"WjjjWjjjWjjjjWeeeeeeeeeeeeW"</li>
+      <li>"WjjjWjjjWjjjjWeeeeeeeeeeeeW"</li>
+      <li>"TWWWWWWWWWWWWWWWWWWWWWWWWWT"</li>
+    </rows>
+  </LivingFactions.FortPieceDef>
 </Defs>
