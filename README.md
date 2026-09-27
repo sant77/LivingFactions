@@ -1,7 +1,7 @@
 # Living Factions
 
 Mod para RimWorld 1.6 (C# + Harmony) que da vida a las facciones NPC.
-Diseño completo en [PLAN.md](PLAN.md); ideas en [IDEAS.md](IDEAS.md).
+Hoja de ruta en [PLAN.md](PLAN.md).
 
 ## Estado
 
@@ -38,6 +38,24 @@ directamente lo que compilas. Se activa en el menú Mods, después de Harmony.
 
 Con el modo desarrollador activo: menú de depuración → **Living Factions → List settlement tiers**
 escribe en el log todos los asentamientos con su rango.
+
+**Living Factions → Measure performance (30 s)** mide durante 30 segundos reales el TPS, el tiempo
+por tick, los pawns del mapa y los datos de la base, y lo escribe en `Player.log`
+(`%USERPROFILE%\AppData\LocalLow\Ludeon Studios\RimWorld by Ludeon Studios\`).
+
+## Flujo de ramas
+
+```
+feature/xxx ──PR──> develop ──PR──> main        (main solo recibe PRs)
+                       ^                 │
+                       └──PR (sync)──────┘       (si main recibe un hotfix)
+```
+
+- **`develop`**: rama de trabajo diaria. Las funcionalidades grandes van en `feature/...`.
+- **`main`**: versiones estables. Está protegida (ruleset `main-requiere-PR`): solo acepta
+  PRs, no permite force-push y no se puede borrar.
+- Para publicar una versión se abre un PR de `develop` a `main`. Si algo entra directo a
+  `main`, se sincroniza con un PR de `main` a `develop`.
 
 ## Código de referencia
 

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!-- Puesto del perímetro: como la orden vanilla "Defend", pero solo come de sus raciones
+       (no busca comida por el mapa) y no trabaja. -->
+  <DutyDef>
+    <defName>LF_HoldPost</defName>
+    <alwaysShowWeapon>true</alwaysShowWeapon>
+    <thinkNode Class="ThinkNode_Priority">
+      <subNodes>
+        <li Class="JobGiver_TakeCombatEnhancingDrug">
+          <onlyIfInDanger>true</onlyIfInDanger>
+        </li>
+        <li Class="JobGiver_AIDefendPoint">
+          <targetAcquireRadius>65</targetAcquireRadius>
+          <targetKeepRadius>72</targetKeepRadius>
+        </li>
+        <li Class="LivingFactions.AI.JobGiver_LFEatRation" />
+        <li Class="JobGiver_SeekSafeTemperature" />
+        <li Class="JobGiver_WanderNearDutyLocation">
+          <wanderRadius>6</wanderRadius>
+          <locomotionUrgencyOutsideRadius>Sprint</locomotionUrgencyOutsideRadius>
+        </li>
+      </subNodes>
+    </thinkNode>
+  </DutyDef>
+
+</Defs>

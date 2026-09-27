@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+
+  <!-- La reserva central (orden vanilla DefendBase) come primero de sus raciones cuando tiene hambre.
+       Se inserta justo después del combate, así que nunca interrumpe una pelea. -->
+  <Operation Class="PatchOperationInsert">
+    <xpath>/Defs/DutyDef[defName="DefendBase"]/thinkNode/subNodes/li[@Class="JobGiver_AIDefendPoint"]</xpath>
+    <order>Append</order>
+    <value>
+      <li Class="LivingFactions.AI.JobGiver_LFEatRation" />
+    </value>
+  </Operation>
+
+</Patch>

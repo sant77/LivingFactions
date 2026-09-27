@@ -11,10 +11,22 @@ namespace LivingFactions
         public float lootMultiplier = 1f;
         public int maxCitiesPerFaction = 3;
         public bool showTierInInspect = true;
+        public bool autoMeasure = true;
+        public bool wavesEnabled = true;
+        public int maxActiveEnemies = 35;
+        public int tribalExtraEnemies = 10;
+        public float settlementAnimalFactor = 0.25f;
+        public float tribalPointsMultiplier = 1.5f;
 
         public override void ExposeData()
         {
             base.ExposeData();
+            Scribe_Values.Look(ref settlementAnimalFactor, "settlementAnimalFactor", 0.25f);
+            Scribe_Values.Look(ref tribalPointsMultiplier, "tribalPointsMultiplier", 1.5f);
+            Scribe_Values.Look(ref wavesEnabled, "wavesEnabled", true);
+            Scribe_Values.Look(ref maxActiveEnemies, "maxActiveEnemies", 35);
+            Scribe_Values.Look(ref tribalExtraEnemies, "tribalExtraEnemies", 10);
+            Scribe_Values.Look(ref autoMeasure, "autoMeasure", true);
             Scribe_Values.Look(ref enabled, "enabled", true);
             Scribe_Values.Look(ref defenderMultiplier, "defenderMultiplier", 1f);
             Scribe_Values.Look(ref lootMultiplier, "lootMultiplier", 1f);
@@ -52,6 +64,9 @@ namespace LivingFactions
             list.Label("LF_Settings_DefenderMultiplier".Translate(Settings.defenderMultiplier.ToStringPercent()));
             Settings.defenderMultiplier = Mathf.Round(list.Slider(Settings.defenderMultiplier, 0.25f, 2f) * 20f) / 20f;
 
+            list.Label("LF_Settings_TribalPoints".Translate(Settings.tribalPointsMultiplier.ToStringPercent()), tooltip: "LF_Settings_TribalPoints_Desc".Translate());
+            Settings.tribalPointsMultiplier = Mathf.Round(list.Slider(Settings.tribalPointsMultiplier, 1f, 2.5f) * 20f) / 20f;
+
             list.Label("LF_Settings_LootMultiplier".Translate(Settings.lootMultiplier.ToStringPercent()));
             Settings.lootMultiplier = Mathf.Round(list.Slider(Settings.lootMultiplier, 0.25f, 2f) * 20f) / 20f;
 
@@ -59,7 +74,26 @@ namespace LivingFactions
             Settings.maxCitiesPerFaction = Mathf.RoundToInt(list.Slider(Settings.maxCitiesPerFaction, 0f, 6f));
 
             list.Gap();
+            list.CheckboxLabeled("LF_Settings_Waves".Translate(), ref Settings.wavesEnabled, "LF_Settings_Waves_Desc".Translate());
+            if (Settings.wavesEnabled)
+            {
+                list.Label("LF_Settings_MaxActive".Translate(Settings.maxActiveEnemies), tooltip: "LF_Settings_MaxActive_Desc".Translate());
+                Settings.maxActiveEnemies = Mathf.RoundToInt(list.Slider(Settings.maxActiveEnemies, 15f, 80f));
+                list.Label("LF_Settings_TribalExtra".Translate(Settings.tribalExtraEnemies));
+                Settings.tribalExtraEnemies = Mathf.RoundToInt(list.Slider(Settings.tribalExtraEnemies, 0f, 30f));
+            }
+
+            list.Label("LF_Settings_AnimalFactor".Translate(Settings.settlementAnimalFactor.ToStringPercent()), tooltip: "LF_Settings_AnimalFactor_Desc".Translate());
+            Settings.settlementAnimalFactor = Mathf.Round(list.Slider(Settings.settlementAnimalFactor, 0f, 1f) * 20f) / 20f;
+
+            list.Gap();
             list.Label("LF_Settings_ExistingNote".Translate());
+
+            if (Prefs.DevMode)
+            {
+                list.Gap();
+                list.CheckboxLabeled("LF_Settings_AutoMeasure".Translate(), ref Settings.autoMeasure, "LF_Settings_AutoMeasure_Desc".Translate());
+            }
 
             list.End();
         }

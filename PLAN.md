@@ -1,167 +1,365 @@
-# Living Factions – Plan del mod
+# Living Factions – Hoja de ruta
 
 Mod para RimWorld 1.6 (C# + Harmony) que da vida a las facciones NPC: jerarquía de asentamientos,
 guerras entre facciones, eventos con propósito y una ruta con final opcional.
 
-- **Juego:** RimWorld 1.6.4871 rev590 + Royalty, Ideology, Biotech, Anomaly, Odyssey
-- **Dependencia:** Harmony (brrainz.harmony, ya instalado desde el Workshop)
-- **Ruta de desarrollo del mod:** `RimWorld\Mods\LivingFactions\` (por crear)
-- **Ideas sin fase asignada:** ver [IDEAS.md](IDEAS.md)
+- **Juego:** RimWorld 1.6 + Royalty, Ideology, Biotech, Anomaly, Odyssey (los DLC son opcionales)
+- **Dependencia:** Harmony (`brrainz.harmony`)
 
 ## Principios
 
-- Todo es **opcional**: cada fase y sistema se activa/desactiva y ajusta en las opciones del mod.
-- Todo se **guarda en la partida**. Compatible con partidas nuevas y existentes (los asentamientos
-  que ya existen reciben rango al cargar).
+- Todo es **opcional**: cada fase y sistema se activa, desactiva y ajusta en las opciones del mod.
+- Todo se **guarda en la partida**. Compatible con partidas nuevas y existentes.
 - El **RNG es parte del diseño**: nada es totalmente predecible, pero la fuerza relativa pesa.
+- **Rendimiento:** la simulación del mundo es abstracta (datos que se revisan de vez en cuando).
+  Solo se generan mapas y pawns reales cuando el jugador participa.
 - Desarrollo **por fases**: cada fase se prueba en el juego antes de pasar a la siguiente.
+- Los números de balance son **iniciales** y se ajustan en las pruebas.
 
-## Cómo funciona vanilla (investigado en el código descompilado)
+## Cómo funciona vanilla
 
 | Aspecto | Vanilla | Dónde |
 |---|---|---|
 | Tamaño de base NPC | 34–38 casillas, igual para todas | `GenStep_Settlement.SettlementSizeRange` |
 | Defensores | 1150–1600 puntos, fijo | `SymbolResolver_Settlement.DefaultPawnsPoints` |
 | Botín | 1800 de valor de mercado, fijo | `SymbolResolver_Settlement.DefaultLootMarketValue` |
-| Perímetro defensivo | ancho 0/2/4 al azar (más probable si tech ≥ industrial) | `SymbolResolver_Settlement.Resolve` |
-| Guerra entre NPCs | no existe; solo cambian goodwill | – |
-| Refugiados (`Hospitality_Refugee`, Royalty) | facción temporal; al final se van o se unen al jugador | `Royalty/Defs/QuestScriptDefs/Script_Hospitality_Refugee.xml` |
+| Guerra entre NPCs | no existe; solo cambia el goodwill | – |
+| Caravanas | te visitan (`TraderCaravanArrival`), encuentros (`CaravanMeeting`), emboscadas a las tuyas (`Ambush`) | no hay caravanas entre NPCs |
+| Refugiados (`Hospitality_Refugee`) | facción temporal; al final se van o se unen a ti | Royalty |
 
 ---
 
 ## Fase 1 – Jerarquía de asentamientos
 
-Cada asentamiento recibe un **rango** guardado en la partida.
+Cada asentamiento NPC tiene un **rango**.
 
-| Rango | Tamaño base | Defensores (pts) | Defensas | Botín |
+| Rango | Tamaño | Defensores (pts) | Defensas | Botín |
 |---|---|---|---|---|
-| Puesto avanzado | ~24–30 | 500–900 | mínimas | bajo |
-| Pueblo | ~34–40 (vanilla) | 1100–1600 | vanilla | vanilla |
-| Ciudad | ~50–60 | 2500–4000 | perímetro, torretas, morteros | alto |
-| **Capital** | ~75–90 | **6000–9000** | murallas, killbox, torretas pesadas, varias líneas, guardia de élite | muy alto, único |
+| Puesto avanzado | 24–30 | 500–900 | mínimas | bajo |
+| Pueblo | 34–40 | 1100–1600 | vanilla | vanilla |
+| Ciudad | 50–60 | 2500–4000 | perímetro, más torretas y morteros, guardias | alto |
+| **Capital** | 76–88 | **6000–9000** | 3 anillos defensivos, murallas, killbox, guardia de élite | muy alto |
 
-> ⚠️ **Valores iniciales, pendientes de balance en pruebas.** Ver "Pendiente de balance".
-
-- **Una capital por facción.** Proporción inicial propuesta: 1 capital + 2–3 ciudades + resto
-  pueblos/puestos (a validar en pruebas).
-- **Dificultad de la capital:** nivel final de partida. Solo se toma con preparación
-  (asedio, morteros, escuadrón de élite). Multiplicador ajustable en opciones.
-- Rango visible en el mapa del mundo (etiqueta/icono + tooltip, ej. "Capital – Nueva Roma").
+- **Una capital por facción.** Su dificultad es de final de partida: solo se toma con preparación.
+- Rango visible en el mapa del mundo.
 - **Estilo por facción:**
-  - Tribus: capital grande y numerosa, empalizadas, sin torretas.
-  - Piratas: fortaleza caótica llena de trampas.
-  - Imperio: salas del trono, varias pistas de aterrizaje, guardia cataphract.
-  - Casos especiales (mecanoides, facciones de DLC) a revisar.
+  - Tribus: capital grande, empalizadas, sin torretas.
+  - Piratas: fortaleza caótica con trampas.
+  - Imperio: salas del trono, pistas de aterrizaje, guardia cataphract.
+- Opciones: activar/desactivar, multiplicador de defensores y botín, máximo de ciudades.
+- **Solo bases en la superficie.** Las bases orbitales de Odyssey (ej. Gremio de Comerciantes)
+  usan otro generador (`SettlementPlatform`) y quedan como en vanilla. Sus rangos propios se harán
+  junto con el mod compañero de naves capitales.
 
-**Fase 1.5 – Especialización:** cada asentamiento tiene además un tipo (minero, agrícola,
-fortaleza, comercial) que cambia su inventario de comercio, su botín y su estilo de defensa.
+**Resultados de las pruebas:**
+- Pueblo (Welthuu): igual a vanilla, como estaba previsto.
+- Ciudad pirata yttakin (53x52, 2833 pts): se siente la diferencia con un pueblo.
+- Capital del Imperio (77x82, 8506 pts): hay diferencia, pero:
+  - Solo hay mini torretas: vanilla fija el tipo en `SymbolResolver_EdgeDefense`
+    (`Turret_MiniTurret`).
+  - Hay lag, probablemente por la cantidad de pawns (50–70).
+  - Los defensores pasan al ataque total casi en cuanto hieres a uno (`LordJob_DefendBase`).
+- Corregido: los guardias del perímetro formaban un grupo aparte y huían solos.
 
-**Puntos técnicos:**
-- `WorldObjectComp` en `Settlement` para guardar el rango.
-- Parches Harmony a `GenStep_Settlement.ScatterAt` (tamaño) y `SymbolResolver_Settlement.Resolve`
-  (puntos de defensores, botín, perímetro).
-- Asignación de rangos al generar el mundo y al cargar partidas antiguas.
+**Rediseño de la defensa (siguiente paso):**
+- **Refuerzos por oleadas** (propuesta del usuario): en ciudades y capitales no están todos los
+  defensores desde el inicio. Una guarnición inicial defiende, y el resto llega en oleadas durante
+  el asalto. Reduce el lag y hace el asalto más interesante. Decidido:
+  - **Origen según la facción** (nunca desde los cuarteles, porque el jugador podría estar ya dentro):
+    - Tribus: a pie desde el borde, en grupos (`EdgeWalkInGroups`).
+    - Piratas: cápsulas en el borde (`EdgeDrop`); la última, en el centro.
+    - Outlanders: a pie desde el borde (`EdgeWalkIn`).
+    - Imperio: cápsulas; la élite, en el centro (`CenterDrop`).
+  - Reparto: guarnición inicial (ciudad 60 %, capital 40 %) + oleadas del 20 % cada una. Umbrales
+    iniciales: ciudad al 40/70 % de pérdidas; capital al 30/55/75 %.
+  - Límite de enemigos a la vez (~35; ~45 para tribus): si se supera, la oleada espera.
+  - Puestos del perímetro (`LordJob_DefendPoint`, ~40 % de la guarnición) en los lados de la base
+    hasta que existan portones, y reserva central (`LordJob_DefendBase`, ~60 %).
+  - **Disparo por pérdidas:** cada oleada llega cuando la guarnición pierde cierto % de defensores.
+  - **Cantidades iniciales:** ciudad con guarnición del 60 % y 1–2 oleadas; capital con guarnición
+    del 40 % y 3 oleadas (la última de élite, guardia del líder).
+  - ⚠️ **Tribus:** su fortaleza es el número. El límite de pawns no debe quitarles eso: tendrán más
+    oleadas y/o un límite más alto con unidades baratas, en vez de menos pawns.
+- **Defensa distribuida:** en vanilla todos los defensores (también los guardias del perímetro)
+  defienden el centro de la base (`LordJob_DefendBase` → `rp.rect.CenterCell`) y el perímetro
+  queda vacío. Propuesta:
+  - Puestos del perímetro: defienden su sector y los portones.
+  - Reserva central junto al líder: acude donde se rompe la línea.
+  - Oleadas de refuerzo.
+- **Medición base** (capital de Cerro mongol, 77x88, 8291 pts): a velocidad x1, 25 FPS y
+  47/60 TPS antes del combate. Ya hay lag sin combate.
+- **Línea base con la medición automática** (capital de El imperio caído, 86x86, 6351 pts,
+  67 enemigos humanos en pie, velocidad x1):
+  - Calma: 4.48 ms por tick (máx. 31.9), 57 FPS.
+  - Combate: 4.34 ms por tick (máx. 17.3), 40 FPS.
+  - A x3 (360 TPS) hace falta ≤ 2.8 ms por tick: correría al ~60 %.
+  - Cada pawn cuesta ~0.05–0.06 ms/tick. **Objetivo: ~30–35 enemigos a la vez en el mapa
+    (~2.5 ms/tick).** Encaja con una guarnición del 40 % más oleadas.
+- **Torretas pesadas:** en ciudades y capitales, parte de las torretas pasan a autocañón
+  (`Turret_Autocannon`) y francotiradora (`Turret_Sniper`). Solo con tecnología industrial o mayor.
+- **Límite de pawns en el mapa:** los puntos que sobran se convierten en fortificaciones (torretas
+  pesadas, morteros, muros) o en oleadas.
+- **Calidad sobre cantidad:** preferir unidades élite en lugar de muchos soldados rasos.
+- **Opción de rendimiento** en los ajustes del mod.
+- **Medir antes y después** con Dubs Performance Analyzer (ya instalado).
+
+**Estado:**
+- [x] Rangos, tamaño, defensores, botín y perímetro.
+- [x] Opciones y acción de depuración.
+- [x] Pruebas de pueblo, ciudad y capital.
+- [x] Rediseño de la defensa implementado: oleadas, puestos del perímetro, reserva central, torretas pesadas y límite de enemigos a la vez.
+- [x] Prueba del rediseño a x3 y comparación con la línea base. **Validado por el usuario:** los
+  defensores se comportan bien, comen sus raciones y están bien armados.
+  - Prueba 1 (capital outlander de Ithium del suroeste, x1): las torretas pesadas funcionan, las 3
+    oleadas llegaron a los umbrales (33/60/80 %), 4 puestos de ~3 pawns y reserva de 26. Guarnición
+    de 45 pawns con 3383 pts. **69 animales salvajes** en el mapa (115 pawns en total): calma 4.46 ms/tick.
+    La medición de combate no es fiable (el juego estuvo pausado casi todo el tiempo).
+  - Corregido: las oleadas se iban "satisfechas con los daños" (`canTimeoutOrFlee` en
+    `LordJob_AssaultColony`) y los puestos de ~3 pawns huían tras 1–2 bajas (huida automática de
+    vanilla por grupo). Ahora en la capital nadie huye; en la ciudad solo puede huir la reserva central.
+  - Animales salvajes reducidos al 25 % en los mapas de bases NPC (ajustable). El límite por número
+    de pawns queda para después, según la próxima medición.
+- [ ] El líder de la facción vive en su capital y la defiende.
+- [ ] Rango visible en el mapa del mundo (icono o marca).
+- [ ] Estructura de la capital (decisiones del usuario):
+  - **Sin killbox.** Defensas generales: muralla, **zonas de tiro** (terreno despejado cubierto por
+    varias torretas) y **zonas de concentración** (puntos de reunión detrás de los portones).
+  - La muralla no debe impedir el fuego de torretas ni morteros. En RimWorld las paredes bloquean la
+    línea de visión: torretas en **bastiones** que ocupan el lugar del muro, **sacos de arena** detrás
+    de la muralla para los defensores, y morteros dentro (disparan en arco).
+  - Portones con la **puerta de seguridad de Anomaly** (`SecurityDoor`: 2x1, 800 HP, necesita
+    energía) si está activo; si no, puertas normales.
+  - La muralla es un retraso, no la defensa: el jugador puede abrir un hueco. **Defensa en
+    profundidad:** los puestos salen a atacar, segunda muralla en el recinto central, torretas y
+    sacos también dentro.
+  - Ciudades: muralla y portones, **sin recinto central**. Pueblos y puestos avanzados: como en
+    vanilla. Portones: 2 en ciudades, 3–4 en capitales.
+  - Recinto central, distritos y estilo por facción: de acuerdo.
+  - Capital de ~110 en el mapa normal de 250 (primera prueba). Si hay lag, reducir más los animales.
+- [x] Muralla exterior (primera versión): capital ~110, bastiones con torretas en la línea del muro,
+  portones con puerta de seguridad, zona de tiro. Corregido: sin morteros con ancho de perímetro 2.
+  - Prueba: "ya va tomando forma de capital", pero **la muralla con torretas repartidas no es
+    eficiente**: 32 torretas en ~440 casillas, solo 2–3 disparan a la vez; se destruyen desde fuera de
+    su alcance; todo está en la primera línea.
+- [ ] **Fortificaciones por estilo** — traza italiana implementada (falta probar): plantillas en
+  `Defs/FortPieceDefs` (`FortPieceDef`, se editan sin C#), herramienta "Generate test base" para
+  inspeccionar. Pendiente: empalizada, pukará, ciudadela.
+  - Suelos: `CityPaver` (avenidas desde los portones, plaza central, pavimento por facción). Prueba:
+    mejor que la tierra, pero desorganizado: se mezclaban calles vanilla, puentes sobre pantano y el
+    pavimento nuevo, y la capital cayó sobre montaña. Corregido: pavimento unificado sobre calles y
+    puentes; ciudades y capitales evitan sitios con más del 15 % de roca (filtro tolerante); mini
+    torreta donde no alcanza la pesada.
+  - **Siguiente: distritos con cuadrícula de calles** (Palmanova, Muller): primero las calles y
+    después los edificios en manzanas, en vez de la partición aleatoria de BaseGen.
+  (inspiración del usuario, imágenes en `Inspiracion/`, no se suben):
+  - **Traza italiana** (Palmanova, Charleville, Pamplona, Muller) para industriales o más:
+    - Baluartes en punta con torretas en los flancos (fuego a lo largo del muro): son los puntos fuertes.
+    - Revellín delante de cada portón.
+    - Foso de agua poco profunda (ralentiza).
+    - Glacis (zona de tiro despejada).
+    - La ciudadela es el recinto central de la capital.
+    - Trazado interior en cuadrícula.
+    - Fuerte contra el asalto; débil contra la artillería y los zapadores.
+  - **Empalizada, estilo Ruapekapeka** (Māori, 1845), para tribus en bosque o llanura:
+    - 2–3 empalizadas de madera con trincheras (sacos o barricadas) detrás.
+    - Búnkeres con **techo grueso**: en vanilla un mortero que cae sobre techo grueso se destruye
+      sin daño (`Projectile.ImpactSomething`).
+    - Bosque conservado alrededor como cobertura.
+    - Fuerte contra el bombardeo; débil contra el fuego.
+  - **Pukará** (andino, incas, mapuche en la Guerra de Arauco), para tribus en terreno rocoso o
+    montañoso:
+    - Anillos concéntricos de **piedra local**; aprovecha la roca natural.
+    - Sin búnkeres.
+    - Fuerte contra el fuego y el asalto; débil contra la artillería.
+  - Tribus en general: trampas de púas (`TrapSpike`) en los accesos y terreno pantanoso.
+  - Decidido: foso siempre de **agua poco profunda**. Búnkeres de la empalizada **solo en ciudades y
+    capitales**. Se empieza por la **traza italiana**.
+  - **Inflamabilidad:** material según el estilo; las puertas de madera son un punto débil a evitar
+    o a dejar a propósito.
+  - Además (acordado): segunda línea de torretas, reacción garantizada al atacar un punto fuerte y
+    tiradores de largo alcance en los puntos fuertes.
+- [ ] Energía: los generadores de leña duran ~3.4 días (75 de leña, 22/día). BaseGen los llena una vez
+  (`refuel`) y nadie los recarga. Decidido: que no se acabe tan fácil. **Mezcla de fuentes** (solar y
+  eólica con baterías, que no se agotan, más algunos generadores de combustible), **almacén de
+  combustible** en la base y la reserva central **recarga** los generadores cuando bajan (tarea de
+  recarga vanilla; costo de rendimiento insignificante). Destruir el almacén apaga solo los de
+  combustible.
+- [ ] Habitaciones nuevas: prisión, armería, hospital, cuartel del líder.
+- [x] Puestos que salen a atacar y raciones (probado):
+  - Los puestos (`LordJob_LFPerimeterPost`) mantienen la posición, pero salen a atacar si hieren a
+    uno de ellos, si el jugador daña edificios de la base, si pierden un tercio, si tienen hambre
+    urgente o si el asedio dura más de 2 días.
+  - Vanilla: la orden de defensa incluye comer (`SatisfyBasicNeeds`, dentro de 16 casillas), pero los
+    defensores no tienen comida, así que se morían de hambre en asedios largos.
+  - Cada defensor de ciudad o capital lleva unos 2 días de raciones (tribus: pemmican; resto: comida
+    de supervivencia). Comen **solo** de sus raciones (`JobGiver_LFEatRation`), no del mapa.
+  - Prueba 3 (capital outlander de Moikgol-pernil): raciones para 44 defensores, 4 puestos de ~3
+    y reserva de 25. **Calma a x3: 2.49 ms/tick, 298/360 TPS (83 %)** con 66 pawns (19 animales):
+    por debajo del objetivo de 2.8 ms. Combate (medido a x1): 4.89 ms/tick, máx. 68 ms. El combate
+    sigue siendo pesado.
+- [x] Asedio (implementado, falta probar):
+  - En ciudades y capitales la reserva central **no ataca por tiempo (~10 h) ni por azar (3 %/h)**.
+    Sale si la hieren, si dañan la base, si pierde defensores o si tiene hambre.
+  - Más munición de mortero: +2 pilas (ciudad) o +3 (capital) de 25 proyectiles junto a cada mortero
+    (vanilla: una pila de 5–8), y cañones reforzados de repuesto (2 o 3): el cañón dura 20 disparos y
+    el operador lo cambia solo si hay un repuesto a menos de 40 casillas (`JobDriver_ManTurret`).
+  - Pendiente: las torretas automáticas también gastan el cañón (mini 60 disparos, autocañón 90,
+    francotiradora 30) y nadie las recarga. Unificar con la recarga de generadores: la reserva hace
+    **mantenimiento** (combustible y cañones con acero) desde un almacén.
+  - Log en modo desarrollador del motivo por el que un grupo pasa al ataque.
+- [ ] Despensa central (con la infraestructura): única fuente de comida además de las raciones.
+  Destruirla o saquearla obliga a la guarnición a salir a pelear.
+- [ ] Escudo antimortero en la capital (con la infraestructura): edificio propio basado en
+  `CompProperties_ProjectileInterceptor` (como `ShieldGeneratorMortar` de Royalty, radio 25), siempre
+  activo y con consumo de energía. Contramedidas: EMP, destruirlo o cortarle la energía. Requiere los
+  gráficos de Royalty u Odyssey.
+- [ ] Energía por facción: químico (piratas), eólico (outlanders), geotérmico (capitales con
+  géiser), molino (ríos). Central de energía protegida en el recinto central, que el jugador puede
+  atacar para apagar las torretas. Vanilla: `GenStep_Power` conecta todo lo que necesita energía
+  y crea solares o baterías; BaseGen solo coloca plantas solares o de leña.
+- [ ] Estilo por facción.
+- [ ] Botín único de capital.
+
+### Fase 1.5 – Especialización e ideología de las bases
+
+- **Especialización:** minero, agrícola, fortaleza o comercial. Cambia el inventario de comercio,
+  el botín y el estilo de defensa.
+- **Ideología de la facción** (con Ideology) en la base:
+  - Bases mecanoides: un **mecanizador** con su ejército.
+  - Bases de árboles Gauranlen: llenas de árboles y **dríadas que defienden**. En vanilla los NPC
+    nunca usan árboles ni dríadas: BaseGen no los genera y las misiones excluyen a las dríadas
+    (`!RaceProps.Dryad`). El meme de árboles de una facción NPC no cambia su base.
+  - La ideología afecta el armamento y las defensas.
 
 ---
 
-## Fase 2 – Guerra entre facciones (simulación abstracta)
+## Fase 2 – Guerra y diplomacia entre facciones
 
-**Fuerza de facción** = suma de pesos de sus asentamientos por rango, ajustada por nivel tecnológico.
+**Fuerza de facción** = suma de sus asentamientos según el rango, ajustada por nivel tecnológico.
+El nivel tecnológico de las facciones es **estático**.
 
 **Tick de guerra** (periódico):
-1. Una facción hostil elige como objetivo una base enemiga **cercana** (distancia en el mundo).
-2. Resolución por **fuerza relativa + RNG**: probabilidad = curva logística de
-   (atacante / defensor), con siempre una posibilidad de sorpresa (~5–10 %).
-3. Resultados: **repelido** · **baja de rango** · **conquistada** (cambia de facción) ·
-   **arrasada** (ruinas).
+1. Una facción hostil elige como objetivo una base enemiga cercana.
+2. Resolución por **fuerza relativa + RNG** (curva logística y un % de sorpresa).
+3. Resultados: repelido · baja de rango · conquistada · arrasada.
 
-**Expansión:** las facciones fundan puestos avanzados, y los puestos crecen con el tiempo
-(puesto → pueblo → ciudad).
+**Expansión:** las facciones fundan puestos avanzados, y los puestos crecen con el tiempo.
 
-**Anti-bola de nieve:**
-- Bonificación defensiva fuerte para las capitales.
-- "Moral de resistencia" para facciones debilitadas.
-- Límite de bases por facción.
-- Enfriamientos entre ataques.
-- Mínimo de facciones vivas.
+**Anti-bola de nieve:** bonificación defensiva de las capitales, moral de resistencia,
+límite de bases, enfriamientos y un mínimo de facciones vivas.
 
-**Diplomacia entre NPCs:** alianzas, tratados de paz y traiciones. Tus colonos con buena
-habilidad Social deben pesar en esto (negociar, mediar), para darle más importancia a la
-socialización. Diseño en [IDEAS.md](IDEAS.md).
+**Personalidad de facción:** sale sesgada por tipo de facción, con RNG, y puede cambiar con el líder.
+- Saqueadora: más raids (ej. piratas).
+- Expansionista: se expande más (ej. Imperio).
+- Comerciante: más caravanas.
+- Defensiva: bases más fortificadas.
+
+**Diplomacia:** alianzas, tratados de paz y traiciones entre facciones NPC. La habilidad Social de
+tus colonos y tu líder pesan en las negociaciones.
+
+**Caída de capital:** la facción nombra una nueva capital, sufre un malus temporal y puede caer
+en crisis.
 
 **Crónica de guerra:** pestaña con el historial de batallas, conquistas y tratados.
+**Noticias:** cartas con los hechos importantes (configurable).
 
-**Noticias:** cartas con resumen ("Los Piratas Sangrientos arrasaron Villanueva, ciudad del
-Imperio"). Opción: todas / solo importantes.
-
-**Caída de capital:** la facción nombra una nueva capital entre sus ciudades, sufre un malus
-temporal y puede entrar en crisis.
-
-### Refugiados que fundan colonia propia (opcional, cuidar balance)
-
-Al terminar bien una misión de refugiados, en vez de unirse al jugador **pueden** (con
-probabilidad) fundar un **puesto avanzado** propio: una facción menor aliada, o un puesto de una
-facción aliada existente.
-
-- **Contrapesos:**
-  - Sin recompensa directa grande.
-  - Empiezan débiles y otras facciones pueden atacarlos y destruirlos.
-  - Límite de 1–2 activos.
-  - Solo si la misión terminó sin muertes.
-- **Beneficio:** socio comercial, ayuda o regalos ocasionales. Si los atacan, recibes una misión
-  de defensa (Fase 3).
-- ⚠️ Pendiente de diseño fino para no desbalancear.
+**Refugiados que fundan colonia (opcional):** al terminar bien una misión de refugiados, pueden
+fundar un puesto avanzado propio en lugar de unirse a ti. Es débil, lo pueden atacar, hay un límite
+de 1–2 activos y solo ocurre si la misión terminó sin muertes.
 
 ---
 
 ## Fase 3 – Eventos y misiones con propósito
 
-Eventos que nacen de la guerra de la Fase 2:
-
-- **Petición de ayuda:** un aliado pide defender su base atacada. Si ayudas, resiste y ganas
-  goodwill; si no, se decide por RNG.
-- **Refugiados de guerra:** al caer una ciudad llegan refugiados (reutiliza hospitalidad).
+- **Petición de ayuda:** un aliado pide defender su base atacada.
+- **Refugiados de guerra:** llegan refugiados cuando cae una ciudad.
 - **Botín de guerra:** ventana de tiempo para saquear una base debilitada tras un asedio.
-- **Contratos:** una facción te paga por atacar una base de su enemigo. (Tú eres el
-  contratado. Contratar mercenarios NPC queda descartado por balance.)
-- **Presión militar:** las facciones en guerra contigo o que ganan terreno atacan con más fuerza.
-- **Mediación:** misión de conversaciones de paz entre dos facciones NPC.
-- Más misiones: ver [IDEAS.md](IDEAS.md).
+- **Contratos:** una facción te paga por atacar una base de su enemigo.
+- **Presión militar:** las facciones en guerra o que ganan terreno atacan con más fuerza.
+- **Mediación:** conversaciones de paz entre dos facciones NPC.
+- **Rescate en zona de guerra:** rescatar a alguien en un mapa donde pelean dos facciones.
+- **Recompensa por un líder** de facción: capturarlo o eliminarlo.
+- **Líderes capturados:**
+  - Ofertas de rescate (con valor que baja con el tiempo).
+  - Raid para rescatarlo.
+  - Si es de una facción aliada, te piden rescatarlo.
+  - Si no se resuelve a tiempo, la facción nombra otro líder y el capturado pasa a ser un
+    prisionero normal.
+- **Colonos capturados en un asalto fallido** (espejo de los líderes capturados):
+  - **Problema vanilla:** un colono incapacitado pero vivo mantiene abierto el mapa
+    (`MapPawns.IsValidColonyPawn`). El secuestro al cerrar el mapa casi nunca ocurre: los caídos se
+    desangran mientras los defensores los ignoran.
+  - **Cierre forzado con tiempo de rescate:** si ya no queda ningún colono consciente en el mapa,
+    empieza una cuenta atrás (por defecto 12 h de juego, ajustable), avisada con una carta. En ese
+    tiempo el jugador puede enviar otra caravana o cápsulas para rescatarlos. Si nadie llega, el
+    mapa se cierra y los caídos pasan a ser prisioneros de esa base.
+  - ⚠️ 12 h es demasiado: la mayoría moriría desangrada. Por definir entre 3–4 h, o 3–4 h con los
+    caídos estabilizados.
+  - **Mejora posterior: captura visible.** Los defensores cargan a los caídos a la prisión de la
+    base y los curan, pero solo cuando no hay combate cerca. Se basa en `JobGiver_Kidnap`,
+    `JobDriver_CarryDownedPawn` y `JobDriver_TendPatient`, más dos tareas nuevas en la duty
+    `DefendBase`. Se hace después de la habitación de prisión (Fase 1). Dificultad media:
+    ~300–400 líneas y 2–3 rondas de prueba.
+  - El mod guarda **en qué base** está cada prisionero, y esa base se marca en el mapa del mundo.
+  - Formas de recuperarlo:
+    - Rescate pagado (requiere consola de comunicaciones).
+    - Canje por un prisionero suyo (requiere consola).
+    - **Misión de rescate armada** contra esa base (**no** requiere consola).
+  - Si no lo recuperas, se une a ellos y puede aparecer en raids contra ti.
+- **Caravanas NPC entre asentamientos:** escoltarlas o emboscarlas. Son datos abstractos con un
+  máximo de 3–5 activas y pawns solo si intervienes. Si llegan, el destino crece; si las emboscas,
+  cambia el goodwill.
 
 ---
 
-## Fase 4 – Ruta con final (opcional, desactivada por defecto)
+## Fase 4 – Progresión del jugador y final (opcional, desactivada por defecto)
 
-Como los finales vanilla, el clímax ofrece **dos opciones**. Estructura propuesta:
+**Progresión:**
+- La **capital del jugador** es su colonia principal.
+- **Líder del jugador:** un sistema parecido al rol de líder de Ideology, propio del mod.
+- Un **disparador** por riqueza y número de asentamientos propios desbloquea la expansión, nuevos
+  eventos y la ruta al final. Una colonia recién empezada no puede expandirse.
 
-- **Dos rutas para llegar al clímax:**
-  - **Conquista** ("Hegemonía"): tomar o destruir las capitales hostiles.
-  - **Coalición** ("Pacificador"): unir a las facciones restantes en una alianza.
-- **Arco por etapas:**
-  - Se revela tu ambición y las facciones reaccionan.
-  - Se forma una coalición en tu contra (o a tu favor).
-  - Asalto final a la última capital, o defensa final.
-- **Elección final (2 opciones):**
-  - **A) Terminar la partida:** créditos + texto final generado con la historia de la partida.
-  - **B) Seguir jugando:** el mundo cambia de forma permanente (ej. eres la hegemonía,
-    nuevo equilibrio). **Sin vasallos.**
-- ⚠️ Pendiente definir condiciones exactas.
+**Final:**
+- Dos rutas: **Conquista** (tomar las capitales hostiles) o **Coalición** (unir a las facciones).
+- Arco por etapas: tu ambición se revela, se forma una coalición y llega el asalto o la defensa final.
+- **Elección final**, como en los finales vanilla:
+  - **A)** Terminar la partida con créditos y una crónica de la historia.
+  - **B)** Seguir jugando en un mundo cambiado.
 
 ---
 
-## Pendiente de balance (se decide probando)
+## Mods compañeros
 
-- [ ] Tamaños y puntos de defensores por rango.
-- [ ] Proporción de rangos por facción (¿1 capital + 2–3 ciudades?).
-- [ ] Frecuencia del tick de guerra y velocidad de expansión.
-- [ ] Curva de probabilidad de la resolución y % de sorpresa.
-- [ ] Probabilidad y límites de la colonia de refugiados.
-- [ ] Condiciones del final.
+Mods aparte, compatibles con Living Factions, que también funcionan solos.
+
+### Leyendas
+
+Los actos de los colonos los marcan con **títulos permanentes**:
+- **Héroe** para quien destruye la anomalía y **Participante** para los demás.
+- **Corrompido** si la toman.
+- **Conquistador**, **Libertador**, **Superviviente**.
+
+**Efectos:** sutiles en combate y comercio. Interacción nueva "contar historias de guerra" que da
+buen ánimo. Boost **fuerte** en negociaciones.
+
+**Interacciones más ricas:**
+- Vínculos por hechos compartidos: hermanos de armas, deuda de vida, rivalidad.
+- Conversaciones sobre hechos concretos y recuerdos que duran años.
+
+### Naves capitales
+
+Gravships de Odyssey como capital móvil de una facción. Incluye rangos para las bases orbitales
+(plataformas más grandes y mejor defendidas).
+
+---
 
 ## Orden de trabajo
 
-1. [ ] Crear el proyecto C# (`RimWorld\Mods\LivingFactions\`), About.xml, dependencia de Harmony.
-2. [ ] Fase 1, luego prueba en juego y balance.
-3. [ ] Fase 2, luego prueba y balance.
-4. [ ] Fase 3.
-5. [ ] Fase 4.
+1. [x] Proyecto C#, About.xml, Harmony, repositorio.
+2. [ ] Fase 1: pruebas y balance, estilo por facción.
+3. [ ] Fase 1.5
+4. [ ] Fase 2
+5. [ ] Fase 3
+6. [ ] Fase 4
+7. [ ] Mods compañeros

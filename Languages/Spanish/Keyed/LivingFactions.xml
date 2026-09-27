@@ -14,4 +14,18 @@
   <LF_Settings_LootMultiplier>Multiplicador de botín: {0}</LF_Settings_LootMultiplier>
   <LF_Settings_MaxCities>Máximo de ciudades por facción: {0}</LF_Settings_MaxCities>
   <LF_Settings_ExistingNote>Los rangos se asignan al crear el mundo o al cargar una partida por primera vez con el mod. Los cambios de ciudades máximas solo afectan a mundos nuevos.</LF_Settings_ExistingNote>
+  <LF_Settings_AutoMeasure>(Pruebas) Medir rendimiento automáticamente en bases NPC</LF_Settings_AutoMeasure>
+  <LF_Settings_AutoMeasure_Desc>Solo en modo desarrollador. Mide 30 s al entrar a una base NPC y otros 30 s cuando los defensores pasan al ataque. El resultado va a Player.log.</LF_Settings_AutoMeasure_Desc>
+  <LF_Settings_Waves>Refuerzos por oleadas en ciudades y capitales</LF_Settings_Waves>
+  <LF_Settings_Waves_Desc>Solo una parte de los defensores está desde el inicio; el resto llega en oleadas cuando la guarnición sufre bajas. Reduce el lag. Afecta a bases generadas después del cambio.</LF_Settings_Waves_Desc>
+  <LF_Settings_MaxActive>Máximo de enemigos en pie a la vez: {0}</LF_Settings_MaxActive>
+  <LF_Settings_MaxActive_Desc>Si hay más enemigos en pie, la siguiente oleada espera. Valores más bajos mejoran el rendimiento.</LF_Settings_MaxActive_Desc>
+  <LF_Settings_TribalExtra>Enemigos extra permitidos para tribus: {0}</LF_Settings_TribalExtra>
+  <LF_WaveLetterLabel>Refuerzos enemigos ({0}/{1})</LF_WaveLetterLabel>
+  <LF_WaveLetterText>Llegan refuerzos de {0} para defender su base: {1} combatientes.</LF_WaveLetterText>
+  <LF_WaveLetterTextLast>Llega la última oleada de {0}: {1} combatientes. Si cae, la base caerá con ella.</LF_WaveLetterTextLast>
+  <LF_Settings_AnimalFactor>Animales salvajes en mapas de bases NPC: {0}</LF_Settings_AnimalFactor>
+  <LF_Settings_AnimalFactor_Desc>Porcentaje de la cantidad normal del bioma. Menos animales mejora el rendimiento al atacar bases. Afecta a mapas generados después del cambio.</LF_Settings_AnimalFactor_Desc>
+  <LF_Settings_TribalPoints>Puntos de defensores tribales: {0}</LF_Settings_TribalPoints>
+  <LF_Settings_TribalPoints_Desc>Las tribus no tienen torretas ni morteros; su fuerza es el número. Multiplica los puntos de su guarnición y sus oleadas.</LF_Settings_TribalPoints_Desc>
 </LanguageData>
