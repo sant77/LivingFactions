@@ -213,6 +213,11 @@ Cada asentamiento NPC tiene un **rango**.
   - Log en modo desarrollador del motivo por el que un grupo pasa al ataque.
 - [x] Ciudadela pentagonal (plantilla `LF_Citadel`): salón, despensa, prisión, energía y patio;
   despensa como fuente de comida; técnicos que recargan generadores y cañones. Probado.
+- [x] Comandante de la capital con guardia de élite en el salón del mando, anunciado con una carta al
+  llegar. El líder real queda para la Fase 3.
+- [ ] Escudo antimortero en la ciudadela (pospuesto por el usuario).
+- [ ] Mantenimiento: hoy los técnicos toman combustible y acero de cualquier sitio del mapa; ¿solo del
+  almacén de la ciudadela?
 - [x] Corregido: la reserva salía por "hambre urgente" con comida de sobra (vanilla basta con un pawn
   hambriento). Guarnición y oleadas nacen alimentadas; en ciudades y capitales solo salen si la mayoría
   tiene hambre urgente (`Trigger_LFGarrisonStarving`).
