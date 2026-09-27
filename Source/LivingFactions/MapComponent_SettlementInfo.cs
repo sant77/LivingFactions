@@ -34,6 +34,8 @@ namespace LivingFactions
 
         // Ciudadela: casillas de la despensa (única fuente de comida además de las raciones).
         public List<IntVec3> pantryCells = new List<IntVec3>();
+        // Ciudadela: salón del mando (donde está el comandante con su guardia).
+        public List<IntVec3> hallCells = new List<IntVec3>();
 
         // Mantenimiento: edificios recargables de la facción (se refresca cada cierto tiempo, no se guarda).
         private List<Building> refuelables = new List<Building>();
@@ -77,11 +79,13 @@ namespace LivingFactions
             Scribe_Values.Look(ref garrisonInitial, "garrisonInitial");
             Scribe_Values.Look(ref garrisonCounted, "garrisonCounted");
             Scribe_Collections.Look(ref pantryCells, "pantryCells", LookMode.Value);
+            Scribe_Collections.Look(ref hallCells, "hallCells", LookMode.Value);
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
                 garrison ??= new List<Pawn>();
                 garrison.RemoveAll(p => p == null);
                 pantryCells ??= new List<IntVec3>();
+                hallCells ??= new List<IntVec3>();
             }
         }
 

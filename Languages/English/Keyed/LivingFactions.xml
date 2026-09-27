@@ -28,4 +28,5 @@
   <LF_Settings_AnimalFactor_Desc>Percentage of the biome normal amount. Fewer animals improves performance when attacking bases. Affects maps generated after the change.</LF_Settings_AnimalFactor_Desc>
   <LF_Settings_TribalPoints>Tribal defender points: {0}</LF_Settings_TribalPoints>
   <LF_Settings_TribalPoints_Desc>Tribes have no turrets or mortars; their strength is numbers. Multiplies the points of their garrison and waves.</LF_Settings_TribalPoints_Desc>
+  <LF_CommanderNick>Commander {0}</LF_CommanderNick>
 </LanguageData>
