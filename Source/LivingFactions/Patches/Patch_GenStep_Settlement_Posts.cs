@@ -44,7 +44,7 @@ namespace LivingFactions.Patches
             MapComponent_SettlementInfo info = map.GetComponent<MapComponent_SettlementInfo>();
             if (tier.Value == SettlementTier.Capital && info != null)
             {
-                CommanderSpawner.Spawn(map, faction, info.hallCells);
+                info.commander = CommanderSpawner.Spawn(map, faction, info.hallCells);
             }
             int rationed = GiveRations(map, faction);
             if (Prefs.DevMode)

@@ -18,16 +18,16 @@ namespace LivingFactions.Generation
         private const float HallDefendRadius = 8f;
         private const float HallWanderRadius = 3f;
 
-        public static void Spawn(Map map, Faction faction, List<IntVec3> hallCells)
+        public static Pawn Spawn(Map map, Faction faction, List<IntVec3> hallCells)
         {
             if (faction == null || hallCells.NullOrEmpty())
             {
-                return;
+                return null;
             }
             List<PawnKindDef> elite = EliteKinds(faction);
             if (elite.Count == 0)
             {
-                return;
+                return null;
             }
             IntVec3 center = hallCells.OrderBy(c => c.DistanceToSquared(Centroid(hallCells))).First();
 
@@ -56,6 +56,7 @@ namespace LivingFactions.Generation
             {
                 Log.Message($"[Living Factions] Comandante: {commander.LabelShort} ({commander.kindDef.defName}) con {GuardCount} guardias ({string.Join(", ", group.Skip(1).Select(p => p.kindDef.defName))}).");
             }
+            return commander;
         }
 
         /// <summary>Tipos de combate de la facción, del más fuerte al más débil.</summary>

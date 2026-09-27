@@ -29,4 +29,5 @@
   <LF_Settings_TribalPoints>Tribal defender points: {0}</LF_Settings_TribalPoints>
   <LF_Settings_TribalPoints_Desc>Tribes have no turrets or mortars; their strength is numbers. Multiplies the points of their garrison and waves.</LF_Settings_TribalPoints_Desc>
   <LF_CommanderNick>Commander {0}</LF_CommanderNick>
+  <LF_CommanderLetter>The citadel of {0} is defended by {1} ({2}) and an elite guard, in the command hall.</LF_CommanderLetter>
 </LanguageData>

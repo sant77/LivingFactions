@@ -36,6 +36,9 @@ namespace LivingFactions
         public List<IntVec3> pantryCells = new List<IntVec3>();
         // Ciudadela: salón del mando (donde está el comandante con su guardia).
         public List<IntVec3> hallCells = new List<IntVec3>();
+        // Comandante de la capital: se anuncia con una carta al llegar.
+        public Pawn commander;
+        private bool commanderAnnounced;
 
         // Mantenimiento: edificios recargables de la facción (se refresca cada cierto tiempo, no se guarda).
         private List<Building> refuelables = new List<Building>();
@@ -80,6 +83,8 @@ namespace LivingFactions
             Scribe_Values.Look(ref garrisonCounted, "garrisonCounted");
             Scribe_Collections.Look(ref pantryCells, "pantryCells", LookMode.Value);
             Scribe_Collections.Look(ref hallCells, "hallCells", LookMode.Value);
+            Scribe_References.Look(ref commander, "commander");
+            Scribe_Values.Look(ref commanderAnnounced, "commanderAnnounced");
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
                 garrison ??= new List<Pawn>();
@@ -103,6 +108,10 @@ namespace LivingFactions
             if (WavesPending)
             {
                 CheckWaves();
+            }
+            if (!commanderAnnounced)
+            {
+                AnnounceCommander();
             }
             if (Prefs.DevMode && LivingFactionsMod.Settings.autoMeasure)
             {
@@ -210,6 +219,27 @@ namespace LivingFactions
                 Log.Message($"[Living Factions] Oleada {wavesSent}/{TotalWaves} de {faction.Name}: {pawns.Count} pawns, {pointsPerWave:F0} pts, " +
                     $"llegada {parms.raidArrivalMode.defName}, pérdidas de la guarnición {LossFraction().ToStringPercent()}.");
             }
+        }
+
+        /// <summary>Carta al llegar: quién defiende la ciudadela. Al hacer clic, la cámara va al comandante.</summary>
+        private void AnnounceCommander()
+        {
+            if (commander == null || !commander.Spawned || commander.Dead)
+            {
+                commanderAnnounced = true;
+                return;
+            }
+            // Espera a que lleguen los colonos del jugador.
+            if (map.mapPawns.FreeColonistsSpawnedCount == 0)
+            {
+                return;
+            }
+            commanderAnnounced = true;
+            Faction faction = commander.Faction;
+            Find.LetterStack.ReceiveLetter(
+                commander.LabelShort,
+                "LF_CommanderLetter".Translate(faction?.NameColored ?? "", commander.LabelShort, commander.kindDef.label),
+                LetterDefOf.NeutralEvent, new LookTargets(commander), faction);
         }
 
         // ---------------- Mantenimiento ----------------
