@@ -1,0 +1,34 @@
+# Changelog
+
+Formato: [versionado semántico](https://semver.org/lang/es/). `0.x` = en desarrollo.
+
+## [0.1.0] – 2026-09-26
+
+Primera versión de la Fase 1 (jerarquía de asentamientos).
+
+### Añadido
+- Rangos de asentamiento: puesto avanzado, pueblo, ciudad y capital, con tamaño, defensores, botín
+  y perímetro según el rango. Una capital por facción.
+- Refuerzos por oleadas en ciudades y capitales, con llegada según la facción.
+- Defensa distribuida: puestos del perímetro y reserva central. Los puestos salen a atacar si los
+  hieren, si dañan la base, si pierden defensores, si tienen hambre o tras 2 días.
+- Raciones para los defensores; solo comen de ellas.
+- Traza italiana para facciones industriales o más: baluartes, portones con revellín, foso y glacis.
+- Piezas de fortificación dibujadas en XML (`Defs/FortPieceDefs`).
+- Suelos, avenidas y suelos de interior por facción.
+- Asedio: la reserva de ciudades y capitales no sale por tiempo ni azar; morteros con munición extra
+  y cañones de repuesto.
+- Opciones del mod: multiplicadores de defensores, botín y puntos tribales, oleadas, límite de
+  enemigos a la vez, animales salvajes.
+- Herramientas de depuración: listar rangos, medir rendimiento, generar base de prueba, log del
+  motivo de ataque.
+
+### Cambiado
+- Menos animales salvajes (25 %) en los mapas de bases NPC.
+- Ciudades y capitales evitan sitios con mucha roca y despejan la roca dentro de la muralla.
+
+### Corregido
+- Los guardias del perímetro huían solos.
+- Las oleadas se retiraban "satisfechas con los daños".
+- Morteros ausentes en bases con muralla.
+- Puertas eléctricas y paneles solares en bases tribales.
