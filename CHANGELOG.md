@@ -15,6 +15,12 @@ Formato: [versionado semántico](https://semver.org/lang/es/). `0.x` = en desarr
   recargan generadores y cañones de torretas.
 - Comandante de la capital con guardia de élite en el salón del mando.
 
+### Cambiado
+- Los asentamientos empiezan en pueblo (pueblo, ciudad, capital); los puestos avanzados serán parte de
+  la expansión de las facciones (Fase 2). Las partidas anteriores se convierten solas.
+- Sin cuenta atrás de detección (raids de 4 días) en ciudades y capitales: ya tienen oleadas.
+- Los técnicos solo usan el combustible y el acero del almacén de la ciudadela.
+
 ### Corregido
 - Suelo de madera al aire libre bajo el techo de roca delgado de las montañas.
 - La reserva salía a atacar por "hambre urgente" con comida de sobra: la guarnición nace alimentada y

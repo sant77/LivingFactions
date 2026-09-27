@@ -36,6 +36,8 @@ namespace LivingFactions
         public List<IntVec3> pantryCells = new List<IntVec3>();
         // Ciudadela: salón del mando (donde está el comandante con su guardia).
         public List<IntVec3> hallCells = new List<IntVec3>();
+        // Ciudadela: sala de energía, el almacén de combustible y acero del mantenimiento.
+        public List<IntVec3> depotCells = new List<IntVec3>();
         // Comandante de la capital: se anuncia con una carta al llegar.
         public Pawn commander;
         private bool commanderAnnounced;
@@ -83,6 +85,7 @@ namespace LivingFactions
             Scribe_Values.Look(ref garrisonCounted, "garrisonCounted");
             Scribe_Collections.Look(ref pantryCells, "pantryCells", LookMode.Value);
             Scribe_Collections.Look(ref hallCells, "hallCells", LookMode.Value);
+            Scribe_Collections.Look(ref depotCells, "depotCells", LookMode.Value);
             Scribe_References.Look(ref commander, "commander");
             Scribe_Values.Look(ref commanderAnnounced, "commanderAnnounced");
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
@@ -91,6 +94,7 @@ namespace LivingFactions
                 garrison.RemoveAll(p => p == null);
                 pantryCells ??= new List<IntVec3>();
                 hallCells ??= new List<IntVec3>();
+                depotCells ??= new List<IntVec3>();
             }
         }
 

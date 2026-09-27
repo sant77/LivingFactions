@@ -40,6 +40,7 @@ namespace LivingFactions.Generation
             {
                 info.pantryCells = new List<IntVec3>(Room(footprint, 'p'));
                 info.hallCells = new List<IntVec3>(Room(footprint, 'h'));
+                info.depotCells = new List<IntVec3>(Room(footprint, 'e'));
             }
             int beds = FurnishPrison(map, Room(footprint, 'j'), faction, wallStuff);
             string energy = industrial ? FurnishPowerRoom(map, Room(footprint, 'e'), faction) : StockStorehouse(map, Room(footprint, 'e'));

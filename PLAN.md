@@ -216,17 +216,17 @@ Cada asentamiento NPC tiene un **rango**.
 - [x] Comandante de la capital con guardia de élite en el salón del mando, anunciado con una carta al
   llegar. El líder real queda para la Fase 3.
 - [ ] Escudo antimortero en la ciudadela (pospuesto por el usuario).
-- [ ] Mantenimiento: hoy los técnicos toman combustible y acero de cualquier sitio del mapa; ¿solo del
-  almacén de la ciudadela?
+- [x] Mantenimiento solo desde el almacén de la ciudadela (decidido).
 - [x] Corregido: la reserva salía por "hambre urgente" con comida de sobra (vanilla basta con un pawn
   hambriento). Guarnición y oleadas nacen alimentadas; en ciudades y capitales solo salen si la mayoría
   tiene hambre urgente (`Trigger_LFGarrisonStarving`).
-- [ ] **Por decidir: detección de caravana.** Vanilla (`Settlement.PostMapGenerate`) inicia una cuenta
+- [x] **Detección de caravana: quitada en ciudades y capitales** (decidido; los pueblos la mantienen). Vanilla (`Settlement.PostMapGenerate`) inicia una cuenta
   atrás de 4 días (`TimedDetectionRaids`) al entrar a cualquier base NPC; al terminar llegan raids al mapa.
   Choca con los asedios largos de capitales. Opciones: dejarlo, alargarlo (ej. 8 días) o quitarlo en
   ciudades y capitales (ya tienen oleadas). Propuesta: quitarlo.
-- [ ] **Por decidir: reestructurar rangos (planteamiento del usuario).** Los asentamientos empezarían en
-  **pueblo** (pueblo, ciudad, capital). Los **puestos avanzados** pasarían a usar los puestos que vanilla
+- [x] **Rangos reestructurados (decidido):** los asentamientos empiezan en **pueblo** (pueblo, ciudad,
+  capital); los de partidas anteriores con rango de puesto avanzado pasan a pueblo.
+- [ ] **Puestos avanzados (Fase 2):** Los **puestos avanzados** pasarían a usar los puestos que vanilla
   ya tiene (`SitePartDef Outpost`, `GenStep_Outpost`), que hoy solo aparecen de forma esporádica en
   misiones (campamento de bandidos, amenazas de recompensa) y caducan. Propuesta:
   - Puestos permanentes de cada facción en el mapa del mundo, cerca de sus asentamientos.

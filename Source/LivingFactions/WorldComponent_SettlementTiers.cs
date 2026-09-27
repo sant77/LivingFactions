@@ -39,6 +39,11 @@ namespace LivingFactions
         {
             base.FinalizeInit(fromLoad);
             RemoveMissingSettlements();
+            // Partidas anteriores a 0.2: los asentamientos con rango de puesto avanzado pasan a pueblo.
+            foreach (int id in tiers.Keys.Where(id => tiers[id] == SettlementTier.Outpost).ToList())
+            {
+                tiers[id] = SettlementTier.Town;
+            }
             // Mundo nuevo o partida anterior al mod: asignar rangos a todas las facciones.
             foreach (Faction faction in Find.FactionManager.AllFactionsListForReading)
             {
@@ -151,17 +156,18 @@ namespace LivingFactions
                         tiers[s.ID] = SettlementTier.City;
                         pending.Remove(s);
                     }
+                    // Los asentamientos empiezan en pueblo: los puestos avanzados serán otra cosa (Fase 2).
                     foreach (Settlement s in pending)
                     {
-                        tiers[s.ID] = Rand.Chance(0.6f) ? SettlementTier.Town : SettlementTier.Outpost;
+                        tiers[s.ID] = SettlementTier.Town;
                     }
                 }
                 else
                 {
-                    // Asentamientos nuevos en una facción ya establecida: empiezan como puesto avanzado.
+                    // Asentamientos nuevos en una facción ya establecida: empiezan como pueblo.
                     foreach (Settlement s in pending)
                     {
-                        tiers[s.ID] = SettlementTier.Outpost;
+                        tiers[s.ID] = SettlementTier.Town;
                     }
                 }
             }
