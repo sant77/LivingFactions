@@ -2,6 +2,17 @@
 
 Formato: [versionado semántico](https://semver.org/lang/es/). `0.x` = en desarrollo.
 
+## [Sin publicar]
+
+### Añadido
+- Distritos en ciudades y capitales: cuadrícula de calles (avenidas por los ejes y calles cada
+  14–18 casillas) con manzanas militares, civiles y agrícolas. La capital reserva el centro para la
+  ciudadela. Pesos editables en `Defs/RuleDefs/LF_Districts.xml`.
+- Formas de edificios: en L, claustro con patio, varios edificios con callejones y retranqueados.
+
+### Corregido
+- Suelo de madera al aire libre bajo el techo de roca delgado de las montañas.
+
 ## [0.1.0] – 2026-09-26
 
 Primera versión de la Fase 1 (jerarquía de asentamientos).

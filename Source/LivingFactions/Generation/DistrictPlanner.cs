@@ -86,7 +86,7 @@ namespace LivingFactions.Generation
             {
                 foreach ((CellRect block, DistrictType blockType) in blocks.Where(b => b.type == type))
                 {
-                    foreach (CellRect part in type == DistrictType.Farm ? SplitForFarms(block) : new[] { block })
+                    foreach (CellRect part in type == DistrictType.Farm ? SplitForFarms(block) : BuildingShapes.Parts(block, type))
                     {
                         ResolveParams blockParams = rp;
                         blockParams.rect = part;
