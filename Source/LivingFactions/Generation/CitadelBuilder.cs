@@ -34,6 +34,12 @@ namespace LivingFactions.Generation
             bool industrial = faction != null && faction.def.techLevel >= TechLevel.Industrial;
             FurnishHall(map, Room(footprint, 'h'), faction, wallStuff);
             int food = StockPantry(map, Room(footprint, 'p'), faction);
+            // La despensa es la única fuente de comida de los defensores además de sus raciones.
+            MapComponent_SettlementInfo info = WorldComponent_SettlementTiers.GeneratingTestBase ? null : map.GetComponent<MapComponent_SettlementInfo>();
+            if (info != null)
+            {
+                info.pantryCells = new List<IntVec3>(Room(footprint, 'p'));
+            }
             int beds = FurnishPrison(map, Room(footprint, 'j'), faction, wallStuff);
             string energy = industrial ? FurnishPowerRoom(map, Room(footprint, 'e'), faction) : StockStorehouse(map, Room(footprint, 'e'));
 
@@ -168,7 +174,7 @@ namespace LivingFactions.Generation
             int generators = PlaceSeveral(map, cells, generator, Rot4.North, faction, 2);
             int batteries = PlaceSeveral(map, cells, ThingDefOf.Battery, Rot4.North, faction, 3);
             int fuelStock = PlaceStacks(map, cells, fuel, 3);
-            int steel = PlaceStacks(map, cells, ThingDefOf.Steel, 2);
+            int steel = PlaceStacks(map, cells, ThingDefOf.Steel, 4);
             return $"energía ({generators} generadores de {fuel.label}, {batteries} baterías, {fuelStock} de combustible, {steel} de acero)";
         }
 

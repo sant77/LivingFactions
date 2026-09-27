@@ -32,6 +32,14 @@ namespace LivingFactions
         private int garrisonInitial;
         private bool garrisonCounted;
 
+        // Ciudadela: casillas de la despensa (única fuente de comida además de las raciones).
+        public List<IntVec3> pantryCells = new List<IntVec3>();
+
+        // Mantenimiento: edificios recargables de la facción (se refresca cada cierto tiempo, no se guarda).
+        private List<Building> refuelables = new List<Building>();
+        private int refuelablesTick = -99999;
+        private const int RefuelablesRefreshTicks = 2000;
+
         // Medición automática (solo modo desarrollador). No se guarda: se repite al recargar.
         private int ticksOnMap;
         private bool measuredCalm;
@@ -68,10 +76,12 @@ namespace LivingFactions
             Scribe_Collections.Look(ref garrison, "garrison", LookMode.Reference);
             Scribe_Values.Look(ref garrisonInitial, "garrisonInitial");
             Scribe_Values.Look(ref garrisonCounted, "garrisonCounted");
+            Scribe_Collections.Look(ref pantryCells, "pantryCells", LookMode.Value);
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
                 garrison ??= new List<Pawn>();
                 garrison.RemoveAll(p => p == null);
+                pantryCells ??= new List<IntVec3>();
             }
         }
 
@@ -188,6 +198,30 @@ namespace LivingFactions
             {
                 Log.Message($"[Living Factions] Oleada {wavesSent}/{TotalWaves} de {faction.Name}: {pawns.Count} pawns, {pointsPerWave:F0} pts, " +
                     $"llegada {parms.raidArrivalMode.defName}, pérdidas de la guarnición {LossFraction().ToStringPercent()}.");
+            }
+        }
+
+        // ---------------- Mantenimiento ----------------
+
+        /// <summary>Edificios de la facción con combustible o cañón recargable (generadores, torretas, morteros).</summary>
+        public List<Building> Refuelables
+        {
+            get
+            {
+                if (Find.TickManager.TicksGame - refuelablesTick > RefuelablesRefreshTicks)
+                {
+                    refuelablesTick = Find.TickManager.TicksGame;
+                    refuelables.Clear();
+                    Faction faction = Faction;
+                    foreach (Building b in map.listerBuildings.allBuildingsNonColonist)
+                    {
+                        if (b.Faction == faction && b.TryGetComp<CompRefuelable>() != null)
+                        {
+                            refuelables.Add(b);
+                        }
+                    }
+                }
+                return refuelables;
             }
         }
 
