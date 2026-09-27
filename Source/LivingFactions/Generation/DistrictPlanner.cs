@@ -30,7 +30,7 @@ namespace LivingFactions.Generation
         private const int StreetWidth = 2;
         private const int MinBlock = 5;
         private const int MaxFarmBlock = 15;   // SymbolResolver_BasePart_Outdoors_Leaf_Farm no acepta más
-        private const int CitadelSize = 26;
+        private const int CitadelSize = 28;   // plantilla LF_Citadel: 29x27
 
         public static void Plan(ResolveParams rp, bool reserveCenter)
         {
@@ -55,6 +55,8 @@ namespace LivingFactions.Generation
             {
                 citadel = CellRect.CenteredOn(center, CitadelSize / 2).ClipInsideRect(rect);
                 MapGenerator.SetVar(ReservedCenterVar, citadel);
+                Map map = BaseGen.globalSettings.map;
+                CitadelBuilder.Build(map, citadel, rp.faction ?? map.ParentFaction);
             }
 
             // Manzanas: los huecos entre calles.

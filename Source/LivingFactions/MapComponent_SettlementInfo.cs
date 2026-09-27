@@ -32,6 +32,19 @@ namespace LivingFactions
         private int garrisonInitial;
         private bool garrisonCounted;
 
+        // Ciudadela: casillas de la despensa (única fuente de comida además de las raciones).
+        public List<IntVec3> pantryCells = new List<IntVec3>();
+        // Ciudadela: salón del mando (donde está el comandante con su guardia).
+        public List<IntVec3> hallCells = new List<IntVec3>();
+        // Comandante de la capital: se anuncia con una carta al llegar.
+        public Pawn commander;
+        private bool commanderAnnounced;
+
+        // Mantenimiento: edificios recargables de la facción (se refresca cada cierto tiempo, no se guarda).
+        private List<Building> refuelables = new List<Building>();
+        private int refuelablesTick = -99999;
+        private const int RefuelablesRefreshTicks = 2000;
+
         // Medición automática (solo modo desarrollador). No se guarda: se repite al recargar.
         private int ticksOnMap;
         private bool measuredCalm;
@@ -68,10 +81,16 @@ namespace LivingFactions
             Scribe_Collections.Look(ref garrison, "garrison", LookMode.Reference);
             Scribe_Values.Look(ref garrisonInitial, "garrisonInitial");
             Scribe_Values.Look(ref garrisonCounted, "garrisonCounted");
+            Scribe_Collections.Look(ref pantryCells, "pantryCells", LookMode.Value);
+            Scribe_Collections.Look(ref hallCells, "hallCells", LookMode.Value);
+            Scribe_References.Look(ref commander, "commander");
+            Scribe_Values.Look(ref commanderAnnounced, "commanderAnnounced");
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
                 garrison ??= new List<Pawn>();
                 garrison.RemoveAll(p => p == null);
+                pantryCells ??= new List<IntVec3>();
+                hallCells ??= new List<IntVec3>();
             }
         }
 
@@ -89,6 +108,10 @@ namespace LivingFactions
             if (WavesPending)
             {
                 CheckWaves();
+            }
+            if (!commanderAnnounced)
+            {
+                AnnounceCommander();
             }
             if (Prefs.DevMode && LivingFactionsMod.Settings.autoMeasure)
             {
@@ -177,6 +200,13 @@ namespace LivingFactions
                 return;
             }
 
+            foreach (Pawn pawn in pawns)
+            {
+                if (pawn.needs?.food != null)
+                {
+                    pawn.needs.food.CurLevel = pawn.needs.food.MaxLevel;
+                }
+            }
             parms.raidArrivalMode.Worker.Arrive(pawns, parms);
             LordMaker.MakeNewLord(faction, new LordJob_AssaultColony(faction, canKidnap: false, canTimeoutOrFlee: false, sappers: false, useAvoidGridSmart: false, canSteal: false), map, pawns);
 
@@ -188,6 +218,51 @@ namespace LivingFactions
             {
                 Log.Message($"[Living Factions] Oleada {wavesSent}/{TotalWaves} de {faction.Name}: {pawns.Count} pawns, {pointsPerWave:F0} pts, " +
                     $"llegada {parms.raidArrivalMode.defName}, pérdidas de la guarnición {LossFraction().ToStringPercent()}.");
+            }
+        }
+
+        /// <summary>Carta al llegar: quién defiende la ciudadela. Al hacer clic, la cámara va al comandante.</summary>
+        private void AnnounceCommander()
+        {
+            if (commander == null || !commander.Spawned || commander.Dead)
+            {
+                commanderAnnounced = true;
+                return;
+            }
+            // Espera a que lleguen los colonos del jugador.
+            if (map.mapPawns.FreeColonistsSpawnedCount == 0)
+            {
+                return;
+            }
+            commanderAnnounced = true;
+            Faction faction = commander.Faction;
+            Find.LetterStack.ReceiveLetter(
+                commander.LabelShort,
+                "LF_CommanderLetter".Translate(faction?.NameColored ?? "", commander.LabelShort, commander.kindDef.label),
+                LetterDefOf.NeutralEvent, new LookTargets(commander), faction);
+        }
+
+        // ---------------- Mantenimiento ----------------
+
+        /// <summary>Edificios de la facción con combustible o cañón recargable (generadores, torretas, morteros).</summary>
+        public List<Building> Refuelables
+        {
+            get
+            {
+                if (Find.TickManager.TicksGame - refuelablesTick > RefuelablesRefreshTicks)
+                {
+                    refuelablesTick = Find.TickManager.TicksGame;
+                    refuelables.Clear();
+                    Faction faction = Faction;
+                    foreach (Building b in map.listerBuildings.allBuildingsNonColonist)
+                    {
+                        if (b.Faction == faction && b.TryGetComp<CompRefuelable>() != null)
+                        {
+                            refuelables.Add(b);
+                        }
+                    }
+                }
+                return refuelables;
             }
         }
 

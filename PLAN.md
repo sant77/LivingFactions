@@ -211,6 +211,29 @@ Cada asentamiento NPC tiene un **rango**.
     francotiradora 30) y nadie las recarga. Unificar con la recarga de generadores: la reserva hace
     **mantenimiento** (combustible y cañones con acero) desde un almacén.
   - Log en modo desarrollador del motivo por el que un grupo pasa al ataque.
+- [x] Ciudadela pentagonal (plantilla `LF_Citadel`): salón, despensa, prisión, energía y patio;
+  despensa como fuente de comida; técnicos que recargan generadores y cañones. Probado.
+- [x] Comandante de la capital con guardia de élite en el salón del mando, anunciado con una carta al
+  llegar. El líder real queda para la Fase 3.
+- [ ] Escudo antimortero en la ciudadela (pospuesto por el usuario).
+- [ ] Mantenimiento: hoy los técnicos toman combustible y acero de cualquier sitio del mapa; ¿solo del
+  almacén de la ciudadela?
+- [x] Corregido: la reserva salía por "hambre urgente" con comida de sobra (vanilla basta con un pawn
+  hambriento). Guarnición y oleadas nacen alimentadas; en ciudades y capitales solo salen si la mayoría
+  tiene hambre urgente (`Trigger_LFGarrisonStarving`).
+- [ ] **Por decidir: detección de caravana.** Vanilla (`Settlement.PostMapGenerate`) inicia una cuenta
+  atrás de 4 días (`TimedDetectionRaids`) al entrar a cualquier base NPC; al terminar llegan raids al mapa.
+  Choca con los asedios largos de capitales. Opciones: dejarlo, alargarlo (ej. 8 días) o quitarlo en
+  ciudades y capitales (ya tienen oleadas). Propuesta: quitarlo.
+- [ ] **Por decidir: reestructurar rangos (planteamiento del usuario).** Los asentamientos empezarían en
+  **pueblo** (pueblo, ciudad, capital). Los **puestos avanzados** pasarían a usar los puestos que vanilla
+  ya tiene (`SitePartDef Outpost`, `GenStep_Outpost`), que hoy solo aparecen de forma esporádica en
+  misiones (campamento de bandidos, amenazas de recompensa) y caducan. Propuesta:
+  - Puestos permanentes de cada facción en el mapa del mundo, cerca de sus asentamientos.
+  - En la Fase 2 serían la herramienta de expansión: una facción funda puestos y un puesto puede crecer
+    hasta pueblo; también son los primeros objetivos de las guerras entre facciones.
+  - Atacarlos da combates pequeños y botín modesto; destruirlos frena la expansión de la facción.
+  - Pendiente: cuántos por facción, si caducan y cómo se ven en el mapa del mundo.
 - [ ] Despensa central (con la infraestructura): única fuente de comida además de las raciones.
   Destruirla o saquearla obliga a la guarnición a salir a pelear.
 - [ ] Escudo antimortero en la capital (con la infraestructura): edificio propio basado en

@@ -10,6 +10,8 @@ namespace LivingFactions.Generation
     {
         public readonly HashSet<IntVec3> structure = new HashSet<IntVec3>();
         public readonly HashSet<IntVec3> interior = new HashSet<IntVec3>();
+        /// <summary>Casillas de cada sala (letra minúscula de la plantilla: h, p, j, e).</summary>
+        public readonly Dictionary<char, List<IntVec3>> rooms = new Dictionary<char, List<IntVec3>>();
         public int miniTurrets;
         public int heavyTurrets;
     }
@@ -57,11 +59,25 @@ namespace LivingFactions.Generation
                 list.Add(cell);
             }
 
-            // Orden: despejar el interior, muros y sacos, agua, torretas y por último puertas.
+            // Orden: despejar el interior y las salas, muros y sacos, agua, torretas y por último puertas.
             foreach (IntVec3 c in Get(byType, '.'))
             {
                 FortBuildUtility.ClearCell(map, c);
                 footprint.interior.Add(c);
+            }
+            foreach (char room in RoomTypes)
+            {
+                foreach (IntVec3 c in Get(byType, room))
+                {
+                    FortBuildUtility.ClearCell(map, c);
+                    footprint.interior.Add(c);
+                    map.roofGrid.SetRoof(c, RoofDefOf.RoofConstructed);
+                    if (!footprint.rooms.TryGetValue(room, out List<IntVec3> cells))
+                    {
+                        footprint.rooms[room] = cells = new List<IntVec3>();
+                    }
+                    cells.Add(c);
+                }
             }
             foreach (IntVec3 c in Get(byType, 'W'))
             {
@@ -125,7 +141,14 @@ namespace LivingFactions.Generation
                 }
             }
             PlaceDoors(map, Get(byType, 'D'), faction, wallStuff, footprint);
+            foreach (IntVec3 c in Get(byType, 'd'))
+            {
+                FortBuildUtility.TrySpawn(map, ThingDefOf.Door, wallStuff, c, Rot4.North, faction);
+                footprint.structure.Add(c);
+            }
         }
+
+        public const string RoomTypes = "hpje";
 
         private static IEnumerable<IntVec3> Get(Dictionary<char, List<IntVec3>> byType, char type)
         {

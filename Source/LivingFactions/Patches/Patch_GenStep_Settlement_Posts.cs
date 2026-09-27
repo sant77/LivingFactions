@@ -40,6 +40,12 @@ namespace LivingFactions.Patches
                 MapGenerator.TryGetVar(OuterWallBuilder.GateInsidesVar, out List<IntVec3> gates);
                 CityPaver.Pave(map, rect.ContractedBy(1), faction, gates ?? new List<IntVec3>());
             }
+            // Capital: comandante y guardia en el salón de la ciudadela (antes de las raciones, para que también las lleven).
+            MapComponent_SettlementInfo info = map.GetComponent<MapComponent_SettlementInfo>();
+            if (tier.Value == SettlementTier.Capital && info != null)
+            {
+                info.commander = CommanderSpawner.Spawn(map, faction, info.hallCells);
+            }
             int rationed = GiveRations(map, faction);
             if (Prefs.DevMode)
             {
@@ -113,6 +119,8 @@ namespace LivingFactions.Patches
                 {
                     continue;
                 }
+                // Guarnición bien alimentada: vanilla genera el nivel de comida al azar y alguno nacía hambriento.
+                pawn.needs.food.CurLevel = pawn.needs.food.MaxLevel;
                 Thing food = ThingMaker.MakeThing(ration);
                 food.stackCount = count;
                 if (pawn.inventory.innerContainer.TryAdd(food))
