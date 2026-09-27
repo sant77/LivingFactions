@@ -80,8 +80,9 @@ namespace LivingFactions.Generation
                 {
                     continue;
                 }
-                // Dentro de los edificios (techo construido): suelo de interior donde BaseGen dejó tierra.
-                bool indoors = c.Roofed(map);
+                // Dentro de los edificios (techo construido, no natural): suelo de interior donde BaseGen dejó tierra.
+                RoofDef cellRoof = c.GetRoof(map);
+                bool indoors = cellRoof != null && !cellRoof.isNatural;
                 TerrainDef floor = indoors ? indoor : avenueCells.Contains(c) ? avenue : general;
                 if (floor != null && CanPave(map, c, indoors))
                 {
@@ -125,7 +126,7 @@ namespace LivingFactions.Generation
         private static bool CanPave(Map map, IntVec3 c, bool indoors)
         {
             RoofDef roof = c.GetRoof(map);
-            if (c.GetEdifice(map) != null || (roof != null && roof.isThickRoof))
+            if (c.GetEdifice(map) != null || (roof != null && roof.isNatural))
             {
                 return false;
             }
