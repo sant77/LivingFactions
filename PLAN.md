@@ -149,8 +149,12 @@ Cada asentamiento NPC tiene un **rango**.
     pavimento nuevo, y la capital cayó sobre montaña. Corregido: pavimento unificado sobre calles y
     puentes; ciudades y capitales evitan sitios con más del 15 % de roca (filtro tolerante); mini
     torreta donde no alcanza la pesada.
-  - **Siguiente: distritos con cuadrícula de calles** (Palmanova, Muller): primero las calles y
-    después los edificios en manzanas, en vez de la partición aleatoria de BaseGen.
+  - [x] **Distritos con cuadrícula de calles** (Palmanova, Muller): avenidas por los ejes, calles cada
+    14–18 casillas, manzanas militares, civiles y agrícolas; centro de la capital reservado para la
+    ciudadela. Pesos en `Defs/RuleDefs/LF_Districts.xml`. Probado.
+  - [x] Formas de edificios: L, claustro, varios con callejones y retranqueados. Probado ("mejoró").
+  - [ ] Mejora futura: más formas de edificio, por ejemplo **circulares** (torres, rotondas), en T, en U.
+  - [ ] Mejora futura: más granjas (hoy solo las esquinas) y despejar la roca bajo baluartes y foso.
   (inspiración del usuario, imágenes en `Inspiracion/`, no se suben):
   - **Traza italiana** (Palmanova, Charleville, Pamplona, Muller) para industriales o más:
     - Baluartes en punta con torretas en los flancos (fuego a lo largo del muro): son los puntos fuertes.
