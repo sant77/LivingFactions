@@ -156,6 +156,7 @@ namespace LivingFactions.Patches
                 return;
             }
             CellRect wallRect = pendingWallRect.Value;
+            TribalFort? tribalFort = pendingTribalFort;
             pendingWallRect = null;
             pendingTribalFort = null;
             Map map = BaseGen.globalSettings.map;
@@ -166,9 +167,9 @@ namespace LivingFactions.Patches
                 Faction faction = rp.faction ?? map.ParentFaction;
                 TierData data = TierData.For(tier.Value);
                 // Tribus: anillos elípticos (pukará o empalizada). Resto: traza italiana.
-                if (pendingTribalFort.HasValue)
+                if (tribalFort.HasValue)
                 {
-                    TribalFortBuilder.Build(map, wallRect, faction, data, pendingTribalFort.Value);
+                    TribalFortBuilder.Build(map, wallRect, faction, data, tribalFort.Value);
                 }
                 else if (data.bastionPiece == null)
                 {
