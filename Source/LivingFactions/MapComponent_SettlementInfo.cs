@@ -40,6 +40,11 @@ namespace LivingFactions
         public List<IntVec3> hallCells = new List<IntVec3>();
         // Ciudadela: sala de energía, el almacén de combustible y acero del mantenimiento.
         public List<IntVec3> depotCells = new List<IntVec3>();
+        // Tribus: puntos de emboscada pendientes (se activan cuando un colono se acerca).
+        public List<IntVec3> ambushPoints = new List<IntVec3>();
+        public float pointsPerAmbush;
+        private const float AmbushTriggerRadius = 12f;
+
         // Comandante de la capital: se anuncia con una carta al llegar.
         public Pawn commander;
         private bool commanderAnnounced;
@@ -90,6 +95,8 @@ namespace LivingFactions
             Scribe_Collections.Look(ref hallCells, "hallCells", LookMode.Value);
             Scribe_Collections.Look(ref depotCells, "depotCells", LookMode.Value);
             Scribe_References.Look(ref commander, "commander");
+            Scribe_Collections.Look(ref ambushPoints, "ambushPoints", LookMode.Value);
+            Scribe_Values.Look(ref pointsPerAmbush, "pointsPerAmbush");
             Scribe_Values.Look(ref commanderAnnounced, "commanderAnnounced");
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
@@ -98,6 +105,7 @@ namespace LivingFactions
                 pantryCells ??= new List<IntVec3>();
                 hallCells ??= new List<IntVec3>();
                 depotCells ??= new List<IntVec3>();
+                ambushPoints ??= new List<IntVec3>();
             }
         }
 
@@ -119,6 +127,10 @@ namespace LivingFactions
             if (!commanderAnnounced)
             {
                 AnnounceCommander();
+            }
+            if (ambushPoints.Count > 0)
+            {
+                CheckAmbushes();
             }
             if (Prefs.DevMode && LivingFactionsMod.Settings.autoMeasure)
             {
@@ -231,6 +243,64 @@ namespace LivingFactions
             {
                 Log.Message($"[Living Factions] Oleada {wavesSent}/{TotalWaves} de {faction.Name}: {pawns.Count} pawns, {pointsPerWave:F0} pts, " +
                     $"llegada {parms.raidArrivalMode.defName}, pérdidas de la guarnición {LossFraction().ToStringPercent()}.");
+            }
+        }
+
+        /// <summary>Emboscada tribal: al acercarse un colono a un punto, aparecen guerreros desde la cobertura.</summary>
+        private void CheckAmbushes()
+        {
+            Faction faction = Faction;
+            if (faction == null || !faction.HostileTo(Faction.OfPlayer))
+            {
+                return;
+            }
+            List<Pawn> colonists = map.mapPawns.FreeColonistsSpawned.Where(p => !p.Downed).ToList();
+            if (colonists.Count == 0)
+            {
+                return;
+            }
+            for (int i = ambushPoints.Count - 1; i >= 0; i--)
+            {
+                IntVec3 point = ambushPoints[i];
+                Pawn target = colonists.FirstOrDefault(p => p.Position.InHorDistOf(point, AmbushTriggerRadius));
+                if (target == null)
+                {
+                    continue;
+                }
+                ambushPoints.RemoveAt(i);
+                SpawnAmbush(faction, point, target);
+            }
+        }
+
+        private void SpawnAmbush(Faction faction, IntVec3 point, Pawn target)
+        {
+            PawnGroupMakerParms parms = new PawnGroupMakerParms
+            {
+                groupKind = PawnGroupKindDefOf.Combat,
+                tile = map.Tile,
+                faction = faction,
+                points = System.Math.Max(pointsPerAmbush, faction.def.MinPointsToGeneratePawnGroup(PawnGroupKindDefOf.Combat))
+            };
+            List<Pawn> pawns = PawnGroupMakerUtility.GeneratePawns(parms).ToList();
+            if (pawns.Count == 0)
+            {
+                return;
+            }
+            foreach (Pawn pawn in pawns)
+            {
+                if (pawn.needs?.food != null)
+                {
+                    pawn.needs.food.CurLevel = pawn.needs.food.MaxLevel;
+                }
+                IntVec3 cell = CellFinder.RandomClosewalkCellNear(point, map, 4);
+                GenSpawn.Spawn(pawn, cell, map);
+            }
+            LordMaker.MakeNewLord(faction, new LordJob_AssaultColony(faction, canKidnap: false, canTimeoutOrFlee: false, sappers: false, useAvoidGridSmart: false, canSteal: false), map, pawns);
+            Find.LetterStack.ReceiveLetter("LF_AmbushLabel".Translate(), "LF_AmbushText".Translate(faction.NameColored, pawns.Count, target.LabelShort),
+                LetterDefOf.ThreatBig, new LookTargets(pawns), faction);
+            if (Prefs.DevMode)
+            {
+                Log.Message($"[Living Factions] Emboscada de {faction.Name}: {pawns.Count} guerreros ({pointsPerAmbush:F0} pts) junto a {target.LabelShort}.");
             }
         }
 

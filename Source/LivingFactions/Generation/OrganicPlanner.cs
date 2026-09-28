@@ -68,6 +68,10 @@ namespace LivingFactions.Generation
             // Chozas.
             HashSet<IntVec3> blocked = new HashSet<IntVec3>(paths);
             blocked.UnionWith(centerRect.ExpandedBy(HutGap).Cells);
+            if (MapGenerator.TryGetVar(TribalDefenses.BlockedCellsVar, out HashSet<IntVec3> defenses))
+            {
+                blocked.UnionWith(defenses);
+            }
             int area = village.Bounds.Area;
             int wanted = Mathf.RoundToInt(area * Mathf.PI / 4f / CellsPerHut);
             IntRange hutSize = reserveCenter ? new IntRange(5, 11) : new IntRange(5, 9);

@@ -29,6 +29,7 @@ namespace LivingFactions.Patches
             MapGenerator.SetVar(DistrictPlanner.StreetCellsVar, new System.Collections.Generic.HashSet<IntVec3>());
             MapGenerator.SetVar(DistrictPlanner.ReservedCenterVar, CellRect.Empty);
             MapGenerator.SetVar(OuterWallBuilder.GateInsidesVar, new System.Collections.Generic.List<IntVec3>());
+            MapGenerator.SetVar(TribalDefenses.BlockedCellsVar, new System.Collections.Generic.HashSet<IntVec3>());
             SettlementTier? tier = WorldComponent_SettlementTiers.TierOfMap(BaseGen.globalSettings.map);
             if (!tier.HasValue)
             {

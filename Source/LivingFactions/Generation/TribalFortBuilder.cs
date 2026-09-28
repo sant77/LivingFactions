@@ -105,6 +105,7 @@ namespace LivingFactions.Generation
             int rings = Mathf.Max(1, data.tribalRings);
             int gates = Mathf.Max(2, data.gates);
             List<IntVec3> gateInsides = new List<IntVec3>();
+            List<HashSet<IntVec3>> ringOpenings = new List<HashSet<IntVec3>>();
             int walls = 0;
 
             for (int i = 0; i < rings; i++)
@@ -138,6 +139,7 @@ namespace LivingFactions.Generation
                     }
                 }
 
+                ringOpenings.Add(openings);
                 foreach (IntVec3 c in cells)
                 {
                     if (!c.InBounds(map))
@@ -153,6 +155,15 @@ namespace LivingFactions.Generation
                         walls++;
                     }
                 }
+            }
+
+            // Trincheras, búnkeres, trampas y puntos de emboscada.
+            TribalDefenses.Build(map, rect, faction, data, fort, stuff, ringOpenings, out List<IntVec3> ambushPoints);
+            MapComponent_SettlementInfo info = WorldComponent_SettlementTiers.GeneratingTestBase ? null : map.GetComponent<MapComponent_SettlementInfo>();
+            if (info != null)
+            {
+                info.ambushPoints = ambushPoints;
+                info.pointsPerAmbush = data.tribalAmbushPoints * LivingFactionsMod.Settings.tribalPointsMultiplier * LivingFactionsMod.Settings.defenderMultiplier;
             }
 
             // La aldea va dentro del anillo interior, con un margen.

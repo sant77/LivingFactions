@@ -45,6 +45,10 @@ namespace LivingFactions
         // Tribus: anillos elípticos concéntricos (pukará de piedra o empalizada de madera).
         public int tribalRings = 2;
         public const int TribalRingSpacing = 4;
+        public int tribalBunkers = 2;          // solo empalizada
+        public int tribalTraps = 12;
+        public int tribalAmbushes = 3;
+        public float tribalAmbushPoints = 300f;  // se suman a la guarnición y las oleadas
 
         // Traza italiana (facciones industriales o más): piezas dibujadas en Defs/FortPieceDefs.
         public string bastionPiece;
@@ -116,7 +120,11 @@ namespace LivingFactions
             walled = true,
             gates = 4,
             bastionPiece = "LF_Bastion_Large",
-            tribalRings = 3
+            tribalRings = 3,
+            tribalBunkers = 4,
+            tribalTraps = 24,
+            tribalAmbushes = 5,
+            tribalAmbushPoints = 400f
         };
 
         public static TierData For(SettlementTier tier)

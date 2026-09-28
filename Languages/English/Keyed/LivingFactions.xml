@@ -30,4 +30,6 @@
   <LF_Settings_TribalPoints_Desc>Tribes have no turrets or mortars; their strength is numbers. Multiplies the points of their garrison and waves.</LF_Settings_TribalPoints_Desc>
   <LF_CommanderNick>Commander {0}</LF_CommanderNick>
   <LF_CommanderLetter>The citadel of {0} is defended by {1} ({2}) and an elite guard, in the command hall.</LF_CommanderLetter>
+  <LF_AmbushLabel>Ambush!</LF_AmbushLabel>
+  <LF_AmbushText>Warriors of {0} leap out of hiding and attack {2}: {1} fighters.</LF_AmbushText>
 </LanguageData>
