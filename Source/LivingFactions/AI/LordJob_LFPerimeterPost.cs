@@ -44,7 +44,7 @@ namespace LivingFactions.AI
 
     /// <summary>
     /// Puesto del perímetro. Mantiene la posición, pero sale a atacar si:
-    /// hieren a alguien del puesto, el jugador daña edificios de la base, el puesto pierde a un tercio,
+    /// hieren a alguien del puesto, cualquier enemigo daña edificios de la base, el puesto pierde a un tercio,
     /// pasa hambre urgente (se acabaron las raciones) o el asedio se alarga.
     /// Nunca huye (defiende su propia base).
     /// </summary>
@@ -55,16 +55,24 @@ namespace LivingFactions.AI
         private IntVec3 point;
         private float defendRadius;
         private float wanderRadius;
+        // Ajustes para la guardia del comandante: sin salida por tiempo (-1) y salida segura si hieren a uno.
+        private int siegeTicks = SiegeTicksBeforeSally;
+        private float harmChance = 0.5f;
+        private float lostFraction = 0.34f;
 
         public LordJob_LFPerimeterPost()
         {
         }
 
-        public LordJob_LFPerimeterPost(IntVec3 point, float defendRadius, float wanderRadius)
+        public LordJob_LFPerimeterPost(IntVec3 point, float defendRadius, float wanderRadius,
+            int siegeTicks = SiegeTicksBeforeSally, float harmChance = 0.5f, float lostFraction = 0.34f)
         {
             this.point = point;
             this.defendRadius = defendRadius;
             this.wanderRadius = wanderRadius;
+            this.siegeTicks = siegeTicks;
+            this.harmChance = harmChance;
+            this.lostFraction = lostFraction;
         }
 
         public override bool AddFleeToil => false;
@@ -78,11 +86,14 @@ namespace LivingFactions.AI
             graph.AddToil(assault);
 
             Transition sally = new Transition(hold, assault);
-            sally.AddTrigger(new Trigger_PawnHarmed(0.5f));
-            sally.AddTrigger(new Trigger_ChanceOnPlayerHarmNPCBuilding(0.3f));
-            sally.AddTrigger(new Trigger_FractionPawnsLost(0.34f));
-            sally.AddTrigger(new Trigger_UrgentlyHungry());
-            sally.AddTrigger(new Trigger_TicksPassed(SiegeTicksBeforeSally));
+            sally.AddTrigger(new Trigger_PawnHarmed(harmChance));
+            sally.AddTrigger(new Trigger_LFBaseAttacked(0.3f));
+            sally.AddTrigger(new Trigger_FractionPawnsLost(lostFraction));
+            sally.AddTrigger(new Trigger_LFGarrisonStarving());
+            if (siegeTicks > 0)
+            {
+                sally.AddTrigger(new Trigger_TicksPassed(siegeTicks));
+            }
             sally.AddPostAction(new TransitionAction_WakeAll());
             graph.AddTransition(sally);
             return graph;
@@ -94,6 +105,9 @@ namespace LivingFactions.AI
             Scribe_Values.Look(ref point, "point");
             Scribe_Values.Look(ref defendRadius, "defendRadius");
             Scribe_Values.Look(ref wanderRadius, "wanderRadius");
+            Scribe_Values.Look(ref siegeTicks, "siegeTicks", SiegeTicksBeforeSally);
+            Scribe_Values.Look(ref harmChance, "harmChance", 0.5f);
+            Scribe_Values.Look(ref lostFraction, "lostFraction", 0.34f);
         }
     }
 }

@@ -59,7 +59,7 @@ namespace LivingFactions
             {
                 foreach (char c in row.Trim('"'))
                 {
-                    if ("WTHDS.~ ".IndexOf(c) < 0)
+                    if ("WTHDSd.~ hpje".IndexOf(c) < 0)
                     {
                         yield return $"carácter desconocido '{c}' en la fila \"{row}\"";
                     }

@@ -25,7 +25,9 @@ namespace LivingFactions.Patches
             { typeof(Trigger_ChanceOnPlayerHarmNPCBuilding), "el jugador dañó un edificio de la base" },
             { typeof(Trigger_FractionPawnsLost), "perdieron parte del grupo" },
             { typeof(Trigger_UrgentlyHungry), "hambre urgente" },
-            { typeof(Trigger_OnClamor), "habilidad psíquica ruidosa cerca" }
+            { typeof(Trigger_OnClamor), "habilidad psíquica ruidosa cerca" },
+            { typeof(Trigger_LFGarrisonStarving), "la mayoría del grupo tiene hambre urgente (sin raciones ni despensa)" },
+            { typeof(Trigger_LFBaseAttacked), "un enemigo dañó un edificio de la base" }
         };
 
         [HarmonyPatch]

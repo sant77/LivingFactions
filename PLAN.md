@@ -149,8 +149,12 @@ Cada asentamiento NPC tiene un **rango**.
     pavimento nuevo, y la capital cayó sobre montaña. Corregido: pavimento unificado sobre calles y
     puentes; ciudades y capitales evitan sitios con más del 15 % de roca (filtro tolerante); mini
     torreta donde no alcanza la pesada.
-  - **Siguiente: distritos con cuadrícula de calles** (Palmanova, Muller): primero las calles y
-    después los edificios en manzanas, en vez de la partición aleatoria de BaseGen.
+  - [x] **Distritos con cuadrícula de calles** (Palmanova, Muller): avenidas por los ejes, calles cada
+    14–18 casillas, manzanas militares, civiles y agrícolas; centro de la capital reservado para la
+    ciudadela. Pesos en `Defs/RuleDefs/LF_Districts.xml`. Probado.
+  - [x] Formas de edificios: L, claustro, varios con callejones y retranqueados. Probado ("mejoró").
+  - [ ] Mejora futura: más formas de edificio, por ejemplo **circulares** (torres, rotondas), en T, en U.
+  - [ ] Mejora futura: más granjas (hoy solo las esquinas) y despejar la roca bajo baluartes y foso.
   (inspiración del usuario, imágenes en `Inspiracion/`, no se suben):
   - **Traza italiana** (Palmanova, Charleville, Pamplona, Muller) para industriales o más:
     - Baluartes en punta con torretas en los flancos (fuego a lo largo del muro): son los puntos fuertes.
@@ -207,6 +211,29 @@ Cada asentamiento NPC tiene un **rango**.
     francotiradora 30) y nadie las recarga. Unificar con la recarga de generadores: la reserva hace
     **mantenimiento** (combustible y cañones con acero) desde un almacén.
   - Log en modo desarrollador del motivo por el que un grupo pasa al ataque.
+- [x] Ciudadela pentagonal (plantilla `LF_Citadel`): salón, despensa, prisión, energía y patio;
+  despensa como fuente de comida; técnicos que recargan generadores y cañones. Probado.
+- [x] Comandante de la capital con guardia de élite en el salón del mando, anunciado con una carta al
+  llegar. El líder real queda para la Fase 3.
+- [ ] Escudo antimortero en la ciudadela (pospuesto por el usuario).
+- [x] Mantenimiento solo desde el almacén de la ciudadela (decidido).
+- [x] Corregido: la reserva salía por "hambre urgente" con comida de sobra (vanilla basta con un pawn
+  hambriento). Guarnición y oleadas nacen alimentadas; en ciudades y capitales solo salen si la mayoría
+  tiene hambre urgente (`Trigger_LFGarrisonStarving`).
+- [x] **Detección de caravana: quitada en ciudades y capitales** (decidido; los pueblos la mantienen). Vanilla (`Settlement.PostMapGenerate`) inicia una cuenta
+  atrás de 4 días (`TimedDetectionRaids`) al entrar a cualquier base NPC; al terminar llegan raids al mapa.
+  Choca con los asedios largos de capitales. Opciones: dejarlo, alargarlo (ej. 8 días) o quitarlo en
+  ciudades y capitales (ya tienen oleadas). Propuesta: quitarlo.
+- [x] **Rangos reestructurados (decidido):** los asentamientos empiezan en **pueblo** (pueblo, ciudad,
+  capital); los de partidas anteriores con rango de puesto avanzado pasan a pueblo.
+- [ ] **Puestos avanzados (Fase 2):** Los **puestos avanzados** pasarían a usar los puestos que vanilla
+  ya tiene (`SitePartDef Outpost`, `GenStep_Outpost`), que hoy solo aparecen de forma esporádica en
+  misiones (campamento de bandidos, amenazas de recompensa) y caducan. Propuesta:
+  - Puestos permanentes de cada facción en el mapa del mundo, cerca de sus asentamientos.
+  - En la Fase 2 serían la herramienta de expansión: una facción funda puestos y un puesto puede crecer
+    hasta pueblo; también son los primeros objetivos de las guerras entre facciones.
+  - Atacarlos da combates pequeños y botín modesto; destruirlos frena la expansión de la facción.
+  - Pendiente: cuántos por facción, si caducan y cómo se ven en el mapa del mundo.
 - [ ] Despensa central (con la infraestructura): única fuente de comida además de las raciones.
   Destruirla o saquearla obliga a la guarnición a salir a pelear.
 - [ ] Escudo antimortero en la capital (con la infraestructura): edificio propio basado en

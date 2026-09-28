@@ -2,6 +2,36 @@
 
 Formato: [versionado semántico](https://semver.org/lang/es/). `0.x` = en desarrollo.
 
+## [0.2.0] – 2026-09-27
+
+Distritos, ciudadela y comandante.
+
+### Añadido
+- Distritos en ciudades y capitales: cuadrícula de calles (avenidas por los ejes y calles cada
+  14–18 casillas) con manzanas militares, civiles y agrícolas. La capital reserva el centro para la
+  ciudadela. Pesos editables en `Defs/RuleDefs/LF_Districts.xml`.
+- Formas de edificios: en L, claustro con patio, varios edificios con callejones y retranqueados.
+- Ciudadela pentagonal en el centro de la capital: salón del mando, despensa, prisión, energía y patio
+  de armas, con torretas en las cinco puntas. Plantilla editable (`LF_Citadel`).
+- Los defensores comen de la despensa cuando se les acaban las raciones; técnicos de la reserva
+  recargan generadores y cañones de torretas.
+- Comandante de la capital con guardia de élite en el salón del mando.
+
+### Cambiado
+- Los asentamientos empiezan en pueblo (pueblo, ciudad, capital); los puestos avanzados serán parte de
+  la expansión de las facciones (Fase 2). Las partidas anteriores se convierten solas.
+- Sin cuenta atrás de detección (raids de 4 días) en ciudades y capitales: ya tienen oleadas.
+- Los técnicos solo usan el combustible y el acero del almacén de la ciudadela.
+
+### Corregido
+- Los defensores ignoraban a otros enemigos (mecanoides, otras facciones) que destruían sus defensas:
+  ahora salen si cualquier enemigo daña edificios de la base, no solo el jugador.
+- Las oleadas retrasadas por el límite de enemigos llegaban una tras otra: ahora hay al menos 1 hora
+  de juego entre oleadas.
+- Suelo de madera al aire libre bajo el techo de roca delgado de las montañas.
+- La reserva salía a atacar por "hambre urgente" con comida de sobra: la guarnición nace alimentada y
+  solo sale si la mayoría tiene hambre.
+
 ## [0.1.0] – 2026-09-26
 
 Primera versión de la Fase 1 (jerarquía de asentamientos).
