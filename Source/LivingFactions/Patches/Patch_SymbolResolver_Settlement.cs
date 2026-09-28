@@ -18,10 +18,12 @@ namespace LivingFactions.Patches
 
         // Rectángulo completo de la base (con muralla) pendiente de construir en el Postfix.
         private static CellRect? pendingWallRect;
+        private static TribalFort? pendingTribalFort;
 
         private static void Prefix(ref ResolveParams rp)
         {
             pendingWallRect = null;
+            pendingTribalFort = null;
             Patch_BasePart_Outdoors_Districts.pending = false;
             // Las variables de MapGenerator persisten entre bases (p. ej. con la herramienta de prueba): se reinician.
             MapGenerator.SetVar(DistrictPlanner.StreetCellsVar, new System.Collections.Generic.HashSet<IntVec3>());
@@ -67,17 +69,32 @@ namespace LivingFactions.Patches
             // Muralla: el resto de la base se genera dentro; las torretas van en los bastiones de la
             // muralla (detrás de un muro no verían nada) y el perímetro vanilla queda como línea interior de sacos.
             CellRect fullRect = rp.rect;
+            bool tribal = FactionStyleUtility.StyleOf(rp.faction ?? map.ParentFaction) == FactionStyle.Tribal;
             if (data.walled && rp.rect.Width > WallMargin * 4 && rp.rect.Height > WallMargin * 4)
             {
                 pendingWallRect = rp.rect;
-                // Antes de construir: sin roca natural dentro (ni bajo la muralla), así nada queda cortado.
-                int rockCleared = FortBuildUtility.ClearNaturalRock(map, rp.rect.ExpandedBy(1));
-                if (Prefs.DevMode && rockCleared > 0)
+                pendingTribalFort = tribal ? TribalFortBuilder.Choose(map, rp.rect) : (TribalFort?)null;
+                // Antes de construir: sin roca natural dentro, así nada queda cortado. El pukará la conserva:
+                // se construye sobre el cerro y la roca le sirve de muro.
+                if (pendingTribalFort != TribalFort.Pukara)
                 {
-                    Log.Message($"[Living Factions] Roca despejada dentro de la muralla: {rockCleared} casillas.");
+                    int rockCleared = FortBuildUtility.ClearNaturalRock(map, rp.rect.ExpandedBy(1));
+                    if (Prefs.DevMode && rockCleared > 0)
+                    {
+                        Log.Message($"[Living Factions] Roca despejada dentro de la muralla: {rockCleared} casillas.");
+                    }
                 }
-                rp.rect = rp.rect.ContractedBy(WallMargin);
-                // Distritos: el interior se traza con calles y manzanas; en la capital el centro queda para la ciudadela.
+                if (tribal)
+                {
+                    // Anillos elípticos: sin la línea rectangular de sacos (las tribus no tienen torretas ni morteros).
+                    rp.rect = rp.rect.ContractedBy(TribalFortBuilder.VillageInset(data));
+                    rp.edgeDefenseWidth ??= 0;
+                }
+                else
+                {
+                    rp.rect = rp.rect.ContractedBy(WallMargin);
+                }
+                // Distritos: cuadrícula (o aldea orgánica en las tribus); en la capital el centro queda reservado.
                 Patch_BasePart_Outdoors_Districts.pending = true;
                 Patch_BasePart_Outdoors_Districts.reserveCenter = tier.Value == SettlementTier.Capital;
                 rp.edgeDefenseTurretsCount ??= 0;
@@ -140,6 +157,7 @@ namespace LivingFactions.Patches
             }
             CellRect wallRect = pendingWallRect.Value;
             pendingWallRect = null;
+            pendingTribalFort = null;
             Map map = BaseGen.globalSettings.map;
             SettlementTier? tier = WorldComponent_SettlementTiers.TierOfMap(map);
             if (tier.HasValue)
@@ -147,8 +165,12 @@ namespace LivingFactions.Patches
                 // Se construye ya, antes de que se resuelvan los símbolos del interior (que usan el rectángulo reducido).
                 Faction faction = rp.faction ?? map.ParentFaction;
                 TierData data = TierData.For(tier.Value);
-                // Tribus: muralla simple por ahora (empalizada y pukará vendrán después).
-                if (FactionStyleUtility.StyleOf(faction) == FactionStyle.Tribal || data.bastionPiece == null)
+                // Tribus: anillos elípticos (pukará o empalizada). Resto: traza italiana.
+                if (pendingTribalFort.HasValue)
+                {
+                    TribalFortBuilder.Build(map, wallRect, faction, data, pendingTribalFort.Value);
+                }
+                else if (data.bastionPiece == null)
                 {
                     OuterWallBuilder.Build(map, wallRect, faction, data);
                 }

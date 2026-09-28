@@ -92,7 +92,7 @@ namespace LivingFactions.Generation
                     {
                         ResolveParams blockParams = rp;
                         blockParams.rect = part;
-                        BaseGen.symbolStack.Push(SymbolFor(type), blockParams);
+                        BaseGen.symbolStack.Push(SymbolForType(type), blockParams);
                     }
                 }
             }
@@ -197,7 +197,7 @@ namespace LivingFactions.Generation
             return done;
         }
 
-        private static string SymbolFor(DistrictType type)
+        public static string SymbolForType(DistrictType type)
         {
             switch (type)
             {

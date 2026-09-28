@@ -17,14 +17,18 @@ namespace LivingFactions.Generation
     public static class CitadelBuilder
     {
         public const string PieceName = "LF_Citadel";
+        public const string TribalPieceName = "LF_GreatHall";
         private const float PantryNutrition = 100f;
 
         public static void Build(Map map, CellRect rect, Faction faction)
         {
-            FortPieceDef piece = DefDatabase<FortPieceDef>.GetNamedSilentFail(PieceName);
+            // Las tribus tienen un gran salón circular en vez de la ciudadela pentagonal.
+            bool tribal = FactionStyleUtility.StyleOf(faction) == FactionStyle.Tribal;
+            string pieceName = tribal ? TribalPieceName : PieceName;
+            FortPieceDef piece = DefDatabase<FortPieceDef>.GetNamedSilentFail(pieceName);
             if (piece == null)
             {
-                Log.Warning($"[Living Factions] Falta la pieza {PieceName}; el centro queda como plaza.");
+                Log.Warning($"[Living Factions] Falta la pieza {pieceName}; el centro queda como plaza.");
                 return;
             }
             ThingDef wallStuff = FortBuildUtility.WallStuffFor(faction);
@@ -44,10 +48,20 @@ namespace LivingFactions.Generation
             }
             int beds = FurnishPrison(map, Room(footprint, 'j'), faction, wallStuff);
             string energy = industrial ? FurnishPowerRoom(map, Room(footprint, 'e'), faction) : StockStorehouse(map, Room(footprint, 'e'));
+            if (tribal)
+            {
+                // Hogar en el centro del patio.
+                List<IntVec3> patio = footprint.interior.Where(c => c.GetRoof(map) == null).ToList();
+                if (patio.Count > 0)
+                {
+                    IntVec3 hearth = patio.OrderBy(c => c.DistanceToSquared(rect.CenterCell)).First();
+                    FortBuildUtility.TrySpawn(map, ThingDefOf.Campfire, null, hearth, Rot4.North, faction);
+                }
+            }
 
             if (Prefs.DevMode)
             {
-                Log.Message($"[Living Factions] Ciudadela: salón, despensa ({food} de comida), prisión ({beds} celdas), {energy}.");
+                Log.Message($"[Living Factions] {(tribal ? "Gran salón" : "Ciudadela")}: salón, despensa ({food} de comida), prisión ({beds} celdas), {energy}.");
             }
         }
 

@@ -22,7 +22,14 @@ namespace LivingFactions.Patches
                 return true;
             }
             pending = false;
-            DistrictPlanner.Plan(rp, reserveCenter);
+            if (FactionStyleUtility.StyleOf(rp.faction ?? BaseGen.globalSettings.map.ParentFaction) == FactionStyle.Tribal)
+            {
+                OrganicPlanner.Plan(rp, reserveCenter);
+            }
+            else
+            {
+                DistrictPlanner.Plan(rp, reserveCenter);
+            }
             return false;
         }
     }

@@ -17,7 +17,7 @@ namespace LivingFactions.Generation
         public static void Pave(Map map, CellRect inner, Faction faction, IEnumerable<IntVec3> gateInsides)
         {
             FactionStyle style = FactionStyleUtility.StyleOf(faction);
-            string localStone = LocalStoneName(map, inner.CenterCell);
+            string localStone = FortBuildUtility.LocalStoneName(map);
             TerrainDef general;
             TerrainDef avenue;
             TerrainDef indoor;
@@ -101,21 +101,6 @@ namespace LivingFactions.Generation
         private static TerrainDef Named(string defName)
         {
             return DefDatabase<TerrainDef>.GetNamedSilentFail(defName);
-        }
-
-        /// <summary>Nombre de la piedra de la región (Granite, Marble, ...) para losas y baldosas.</summary>
-        private static string LocalStoneName(Map map, IntVec3 cell)
-        {
-            TerrainDef rock = RimWorld.BaseGen.BaseGenUtility.RegionalRockTerrainDef(map.Tile, false);
-            string name = rock?.defName ?? "";
-            foreach (string stone in new[] { "Granite", "Limestone", "Marble", "Sandstone", "Slate" })
-            {
-                if (name.Contains(stone))
-                {
-                    return stone;
-                }
-            }
-            return "Sandstone";
         }
 
         /// <summary>

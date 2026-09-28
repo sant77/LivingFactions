@@ -123,4 +123,35 @@
       <li>"      T               T      "</li>
     </rows>
   </LivingFactions.FortPieceDef>
+  <LivingFactions.FortPieceDef>
+    <defName>LF_GreatHall</defName>
+    <label>gran salón</label>
+    <description>Centro de las capitales tribales: gran salón circular del jefe (h), patio con hogar (.), prisión (j), despensa (p) y almacén (e). Entrada al sur.</description>
+    <anchor>(11,11)</anchor>
+    <rows>
+      <li>"       WWWWWWWWW       "</li>
+      <li>"     WWhhhhhhhhhWW     "</li>
+      <li>"    WhhhhhhhhhhhhhW    "</li>
+      <li>"   WhhhhhhhhhhhhhhhW   "</li>
+      <li>"  WhhhhhhhhhhhhhhhhhW  "</li>
+      <li>" WhhhhhhhhhhhhhhhhhhhW "</li>
+      <li>" WhhhhhhhhhhhhhhhhhhhW "</li>
+      <li>"WhhhhhhhhhhhhhhhhhhhhhW"</li>
+      <li>"WhhhhhhhhhhhhhhhhhhhhhW"</li>
+      <li>"WhhhhhhWWWWdWWWWWWWWWWW"</li>
+      <li>"WWWWWWW...............W"</li>
+      <li>"Wjjjjjd...............W"</li>
+      <li>"WjjjjjW...............W"</li>
+      <li>"WjjjjjW...............W"</li>
+      <li>"WWWWWWWWWWW..WWWWWWWWWW"</li>
+      <li>"WWppppppppd..deeeeeeeWW"</li>
+      <li>" WppppppppW..WeeeeeeeW "</li>
+      <li>" WppppppppW..WeeeeeeeW "</li>
+      <li>"  WpppppppW..WeeeeeeW  "</li>
+      <li>"   WppppppW..WeeeeeW   "</li>
+      <li>"    WpppppW..WeeeeW    "</li>
+      <li>"     WWpppW..WeeWW     "</li>
+      <li>"       WWWWDDWWW       "</li>
+    </rows>
+  </LivingFactions.FortPieceDef>
 </Defs>

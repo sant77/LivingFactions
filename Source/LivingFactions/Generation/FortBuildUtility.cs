@@ -140,6 +140,21 @@ namespace LivingFactions.Generation
             }
         }
 
+        /// <summary>Nombre de la piedra de la región (Granite, Marble, ...) para bloques, losas y baldosas.</summary>
+        public static string LocalStoneName(Map map)
+        {
+            TerrainDef rock = RimWorld.BaseGen.BaseGenUtility.RegionalRockTerrainDef(map.Tile, false);
+            string name = rock?.defName ?? "";
+            foreach (string stone in new[] { "Granite", "Limestone", "Marble", "Sandstone", "Slate" })
+            {
+                if (name.Contains(stone))
+                {
+                    return stone;
+                }
+            }
+            return "Sandstone";
+        }
+
         public static ThingDef WallStuffFor(Faction faction)
         {
             return FactionStyleUtility.StyleOf(faction) == FactionStyle.Tribal
