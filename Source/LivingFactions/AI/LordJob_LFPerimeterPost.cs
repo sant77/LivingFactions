@@ -44,7 +44,7 @@ namespace LivingFactions.AI
 
     /// <summary>
     /// Puesto del perímetro. Mantiene la posición, pero sale a atacar si:
-    /// hieren a alguien del puesto, el jugador daña edificios de la base, el puesto pierde a un tercio,
+    /// hieren a alguien del puesto, cualquier enemigo daña edificios de la base, el puesto pierde a un tercio,
     /// pasa hambre urgente (se acabaron las raciones) o el asedio se alarga.
     /// Nunca huye (defiende su propia base).
     /// </summary>
@@ -87,7 +87,7 @@ namespace LivingFactions.AI
 
             Transition sally = new Transition(hold, assault);
             sally.AddTrigger(new Trigger_PawnHarmed(harmChance));
-            sally.AddTrigger(new Trigger_ChanceOnPlayerHarmNPCBuilding(0.3f));
+            sally.AddTrigger(new Trigger_LFBaseAttacked(0.3f));
             sally.AddTrigger(new Trigger_FractionPawnsLost(lostFraction));
             sally.AddTrigger(new Trigger_LFGarrisonStarving());
             if (siegeTicks > 0)

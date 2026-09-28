@@ -37,6 +37,11 @@ namespace LivingFactions.Patches
                     {
                         transition.triggers.Add(new LivingFactions.AI.Trigger_LFGarrisonStarving());
                     }
+                    // Edificios dañados: por cualquier enemigo, no solo el jugador (mecanoides, otras facciones).
+                    if (transition.triggers.RemoveAll(t => t is Trigger_ChanceOnPlayerHarmNPCBuilding) > 0)
+                    {
+                        transition.triggers.Add(new LivingFactions.AI.Trigger_LFBaseAttacked(0.4f));
+                    }
                 }
             }
         }

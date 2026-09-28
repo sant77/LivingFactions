@@ -22,6 +22,10 @@ Formato: [versionado semántico](https://semver.org/lang/es/). `0.x` = en desarr
 - Los técnicos solo usan el combustible y el acero del almacén de la ciudadela.
 
 ### Corregido
+- Los defensores ignoraban a otros enemigos (mecanoides, otras facciones) que destruían sus defensas:
+  ahora salen si cualquier enemigo daña edificios de la base, no solo el jugador.
+- Las oleadas retrasadas por el límite de enemigos llegaban una tras otra: ahora hay al menos 1 hora
+  de juego entre oleadas.
 - Suelo de madera al aire libre bajo el techo de roca delgado de las montañas.
 - La reserva salía a atacar por "hambre urgente" con comida de sobra: la guarnición nace alimentada y
   solo sale si la mayoría tiene hambre.

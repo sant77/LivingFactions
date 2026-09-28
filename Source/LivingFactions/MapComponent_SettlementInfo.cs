@@ -28,6 +28,8 @@ namespace LivingFactions
         public float[] waveThresholds = new float[0];
         public float pointsPerWave;
         private int wavesSent;
+        private int lastWaveTick = -99999;
+        private const int MinTicksBetweenWaves = GenDate.TicksPerHour;
         private List<Pawn> garrison = new List<Pawn>();
         private int garrisonInitial;
         private bool garrisonCounted;
@@ -80,6 +82,7 @@ namespace LivingFactions
             }
             Scribe_Values.Look(ref pointsPerWave, "pointsPerWave");
             Scribe_Values.Look(ref wavesSent, "wavesSent");
+            Scribe_Values.Look(ref lastWaveTick, "lastWaveTick", -99999);
             Scribe_Collections.Look(ref garrison, "garrison", LookMode.Reference);
             Scribe_Values.Look(ref garrisonInitial, "garrisonInitial");
             Scribe_Values.Look(ref garrisonCounted, "garrisonCounted");
@@ -150,6 +153,11 @@ namespace LivingFactions
             {
                 return;
             }
+            // Si el límite de enemigos retrasó una oleada, la siguiente no llega pegada a ella.
+            if (Find.TickManager.TicksGame - lastWaveTick < MinTicksBetweenWaves)
+            {
+                return;
+            }
             int maxActive = LivingFactionsMod.Settings.maxActiveEnemies + (style == FactionStyle.Tribal ? LivingFactionsMod.Settings.tribalExtraEnemies : 0);
             if (ActiveEnemies(faction) >= maxActive)
             {
@@ -177,6 +185,7 @@ namespace LivingFactions
         {
             bool lastWave = wavesSent == TotalWaves - 1;
             wavesSent++;
+            lastWaveTick = Find.TickManager.TicksGame;
 
             IncidentParms parms = new IncidentParms
             {
