@@ -2,7 +2,9 @@
 
 Formato: [versionado semántico](https://semver.org/lang/es/). `0.x` = en desarrollo.
 
-## [Sin publicar]
+## [0.2.0] – 2026-09-27
+
+Distritos, ciudadela y comandante.
 
 ### Añadido
 - Distritos en ciudades y capitales: cuadrícula de calles (avenidas por los ejes y calles cada
