@@ -31,7 +31,10 @@ namespace LivingFactions.Generation
                 Log.Warning($"[Living Factions] Falta la pieza {pieceName}; el centro queda como plaza.");
                 return;
             }
-            ThingDef wallStuff = FortBuildUtility.WallStuffFor(faction);
+            // El gran salón del jefe es de piedra local aunque la empalizada sea de madera.
+            ThingDef wallStuff = tribal
+                ? DefDatabase<ThingDef>.GetNamedSilentFail("Blocks" + FortBuildUtility.LocalStoneName(map)) ?? FortBuildUtility.WallStuffFor(faction)
+                : FortBuildUtility.WallStuffFor(faction);
             FortFootprint footprint = new FortFootprint();
             FortPieceStamper.Stamp(map, piece, rect.CenterCell, 0, faction, wallStuff, null, footprint);
 
