@@ -182,6 +182,20 @@ Cada asentamiento NPC tiene un **rango**.
     o a dejar a propósito.
   - Además (acordado): segunda línea de torretas, reacción garantizada al atacar un punto fuerte y
     tiradores de largo alcance en los puntos fuertes.
+- [x] **Estilos tribales, paso 1** (rama `feature/tribus`): anillos elípticos concéntricos (2 en ciudades,
+  3 en capitales) con entradas escalonadas; **pukará** de piedra local en terreno rocoso (conserva la
+  roca) y **empalizada** de madera en bosque o llanura; **aldea orgánica** (chozas variadas, caminos de
+  tierra, granjas en la periferia, fogatas); **gran salón** circular de piedra en la capital (plantilla
+  `LF_GreatHall`) con el jefe. Probado.
+- [x] **Estilos tribales, paso 2** (implementado, falta probar): trincheras de barricadas, búnkeres de
+  piedra con techo grueso (solo empalizada), trampas de púas y **emboscadas** (puntos con cobertura fuera
+  del anillo exterior que se activan al acercarse un colono; se suman a guarnición y oleadas).
+- [ ] **Búnkeres sin uso:** los defensores no se refugian en ellos (vanilla no tiene una tarea de
+  "refugiarse del bombardeo"). Opciones: que los puestos del perímetro se instalen en los búnkeres, o una
+  tarea propia que lleve a la reserva a los búnkeres cuando caen morteros cerca.
+- [ ] Balance tribal: el usuario percibe pocos defensores aunque la capital tribal ya tiene ~139 frente a
+  ~92 del Imperio (dispersión, oleadas de a una, guerreros frágiles). Emboscadas sumadas por ahora; revisar
+  si salen de las oleadas.
 - [ ] Energía: los generadores de leña duran ~3.4 días (75 de leña, 22/día). BaseGen los llena una vez
   (`refuel`) y nadie los recarga. Decidido: que no se acabe tan fácil. **Mezcla de fuentes** (solar y
   eólica con baterías, que no se agotan, más algunos generadores de combustible), **almacén de

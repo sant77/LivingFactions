@@ -2,6 +2,17 @@
 
 Formato: [versionado semántico](https://semver.org/lang/es/). `0.x` = en desarrollo.
 
+## [Sin publicar]
+
+### Añadido
+- Estilos tribales en ciudades y capitales: anillos elípticos concéntricos con entradas escalonadas;
+  pukará de piedra local en terreno rocoso y empalizada de madera en bosque o llanura.
+- Aldea orgánica tribal: chozas de tamaños variados, caminos de tierra, granjas en la periferia y
+  fogatas.
+- Gran salón circular de piedra en las capitales tribales (plantilla `LF_GreatHall`), con el jefe, patio
+  con hogar, despensa, almacén y prisión.
+- Trincheras, búnkeres con techo grueso (inmunes a morteros), trampas de púas y emboscadas tribales.
+
 ## [0.2.0] – 2026-09-27
 
 Distritos, ciudadela y comandante.
